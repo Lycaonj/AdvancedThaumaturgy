@@ -36,10 +36,8 @@ import net.minecraftforge.common.ForgeDirection;
 public class TileThaumicFertilizer extends TileEntity implements IAspectContainer
 {
 	
-	private static Aspect aspect = Aspect.WATER;
-	private float current = 0F;
-	private float max = 64.0F;
 	private int ticktracker = 0;
+	private AspectList aspects = null;
 	
 	private int fertilizechance = 20;
 	
@@ -49,9 +47,12 @@ public class TileThaumicFertilizer extends TileEntity implements IAspectContaine
     private ArrayList<Vector3F> blockstomonitor = null;
     private int arrayposition = 0;
     
+    private float aquapool = 0.0f;
+    private float herbapool = 0.0f;
+    
     public TileThaumicFertilizer()
     {
-    	
+    	aspects = new AspectList();
     }
     
     @Override
@@ -81,6 +82,28 @@ public class TileThaumicFertilizer extends TileEntity implements IAspectContaine
     	
     }
     
+    private void refillPoolsIfNeeded()
+    {
+    	boolean changed = false;
+    	if (aquapool < 1 && aspects.getAmount(Aspect.WATER) > 0)
+    	{
+    		aspects.remove(Aspect.WATER, 1);
+    		aquapool++;
+    		changed = true;
+    	}
+    	
+    	if (herbapool < 1 && aspects.getAmount(Aspect.PLANT) > 0)
+    	{
+    		aspects.remove(Aspect.PLANT, 1);
+    		herbapool++;
+    		changed = true;
+    	}
+    	
+    	if (changed)
+    		worldObj.markBlockForUpdate(xCoord,  yCoord,  zCoord);
+    		
+    }
+    
     @Override
     public void updateEntity()
     {
@@ -94,19 +117,34 @@ public class TileThaumicFertilizer extends TileEntity implements IAspectContaine
     	if (blockstomonitor == null)
     		return;
     	
-    	/*AdvThaum.proxy.createCustomParticle(worldObj, xCoord - 8, yCoord, zCoord - 8, 0f, .1f, 0f, 0xFFFF0000);
-    	AdvThaum.proxy.createCustomParticle(worldObj, xCoord - 8, yCoord, zCoord + 8, 0f, .1f, 0f, 0xFFFF0000);
-    	AdvThaum.proxy.createCustomParticle(worldObj, xCoord + 8, yCoord, zCoord - 8, 0f, .1f, 0f, 0xFFFF0000);
-    	AdvThaum.proxy.createCustomParticle(worldObj, xCoord + 8, yCoord, zCoord + 8, 0f, .1f, 0f, 0xFFFF0000);*/
+    	if (AdvThaum.debug)
+    	{
+	    	AdvThaum.proxy.createCustomParticle(worldObj, xCoord - 8, yCoord, zCoord - 8, 0f, .1f, 0f, 0xFFFF0000);
+	    	AdvThaum.proxy.createCustomParticle(worldObj, xCoord - 8, yCoord, zCoord + 8, 0f, .1f, 0f, 0xFFFF0000);
+	    	AdvThaum.proxy.createCustomParticle(worldObj, xCoord + 8, yCoord, zCoord - 8, 0f, .1f, 0f, 0xFFFF0000);
+	    	AdvThaum.proxy.createCustomParticle(worldObj, xCoord + 8, yCoord, zCoord + 8, 0f, .1f, 0f, 0xFFFF0000);
+    	}
     	
-    	if (((int)current < (int)max) && ticktracker % 2 == 0)
+    	if (aspects.getAmount(Aspect.WATER) < 64 && ticktracker % 2 == 0)
     	{
     		TileJarFillable jar = AdvThaum.proxy.findEssentiaJar(worldObj, Aspect.WATER, this, 16, 2, 16);
     		if (jar != null && jar.amount > 0)
 			{
     			jar.takeFromContainer(Aspect.WATER, 1);
     			AdvThaum.proxy.createParticle(jar, xCoord, yCoord, zCoord, Aspect.WATER.getColor());
-    			current +=1;
+    			aspects.add(Aspect.WATER, 1);
+    			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+			}
+    	}
+    	
+    	if (aspects.getAmount(Aspect.PLANT) < 64 && ticktracker % 2 == 0)
+    	{
+    		TileJarFillable jar = AdvThaum.proxy.findEssentiaJar(worldObj, Aspect.PLANT, this, 16, 2, 16);
+    		if (jar != null && jar.amount > 0)
+			{
+    			jar.takeFromContainer(Aspect.PLANT, 1);
+    			AdvThaum.proxy.createParticle(jar, xCoord, yCoord, zCoord, Aspect.PLANT.getColor());
+    			aspects.add(Aspect.PLANT, 1);
     			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			}
     	}
@@ -118,8 +156,7 @@ public class TileThaumicFertilizer extends TileEntity implements IAspectContaine
         
         ticktracker = 0;
   
-        if ((int)current == 0) // don't scan if we can't afford to do anything
-            return;
+        refillPoolsIfNeeded();
         
         int triggermeta = 4;
              
@@ -143,14 +180,7 @@ public class TileThaumicFertilizer extends TileEntity implements IAspectContaine
         {
         	if (basemeta <= triggermeta)
         	{
-                int reqtofullyhydrate = 7 - basemeta;
-                float costtofullyhydrate = costperhydration * Math.min(reqtofullyhydrate, current);
-                
-                worldObj.setBlockMetadataWithNotify(cx, cy, cz, 7, 3);
-                	
-                current -= costtofullyhydrate;
-                
-                AdvThaum.proxy.createParticle(worldObj, xCoord + 0.5F, yCoord + 1, zCoord + 0.5F, (float)cx + 0.5F, (float)cy + 1, (float)cz + 0.5F, 0xFF00FFFF);
+                hydrate(cx, cy, cz);
         	}
             
             if (block != null)
@@ -223,10 +253,10 @@ public class TileThaumicFertilizer extends TileEntity implements IAspectContaine
         }
         
     }
-   
+
     private void spreadVineFrom(int x, int y, int z)
     {
-    	if (current < costperfertilize)
+    	if (herbapool < costperfertilize)
     		return;
     		
     	Block block = Block.blocksList[worldObj.getBlockId(x,  y,  z)];
@@ -275,7 +305,7 @@ public class TileThaumicFertilizer extends TileEntity implements IAspectContaine
     
     private void spreadLilypadFrom(int x, int y, int z)
     {
-    	if (current < costperfertilize)
+    	if (herbapool < costperfertilize)
     		return;
     		
     	Block block = Block.blocksList[worldObj.getBlockId(x,  y,  z)];
@@ -331,7 +361,7 @@ public class TileThaumicFertilizer extends TileEntity implements IAspectContaine
     
     private void growFruitFromStem(int x, int y, int z)
     {
-    	if (current < costperfertilize)
+    	if (herbapool < costperfertilize)
     		return;
     		
     	Block block = Block.blocksList[worldObj.getBlockId(x,  y,  z)];
@@ -398,19 +428,28 @@ public class TileThaumicFertilizer extends TileEntity implements IAspectContaine
          }
     }
     
+    private void hydrate(int x, int y, int z)
+    {
+    	if (aquapool < costperhydration)
+    		return;
+    	int basemeta = worldObj.getBlockMetadata(x,  y,  z);
+    	worldObj.setBlockMetadataWithNotify(x, y, z, basemeta + 1, 3);
+        AdvThaum.proxy.createParticle(worldObj, xCoord + 0.5F, yCoord + 1, zCoord + 0.5F, (float)x + 0.5F, (float)y + 1, (float)z + 0.5F, 0xFF00FFFF);	
+    }
+    
     private void fertilize(int x, int y, int z)
     {
-    	if (current > costperfertilize && ItemDye.applyBonemeal(new ItemStack(Item.dyePowder, 1, 0), worldObj, x, y, z, new FakePlayer(worldObj, "advthaumPlayer")))
+    	if (herbapool > costperfertilize && ItemDye.applyBonemeal(new ItemStack(Item.dyePowder, 1, 0), worldObj, x, y, z, new FakePlayer(worldObj, "advthaumPlayer")))
     	{
     		AdvThaum.proxy.createParticle(worldObj, xCoord + 0.5f, yCoord + 0.7f, zCoord + 0.5f, x, y, z, Aspect.SLIME.getColor());
     		AdvThaum.proxy.createSparkleBurst(worldObj, x + 0.5F, y + 0.5F, z + 0.5F, 8, 0xFF00FF00);
-    		current -= costperfertilize;
+    		herbapool -= costperfertilize;
     	}
     }
     
     private void spreadMushroomFrom(int x, int y, int z)
     {
-    	if (current <= costperfertilize)
+    	if (herbapool < costperfertilize)
     		return;
     	
     	Block block = Block.blocksList[worldObj.getBlockId(x,  y,  z)];
@@ -476,19 +515,15 @@ public class TileThaumicFertilizer extends TileEntity implements IAspectContaine
     public void writeToNBT(NBTTagCompound nbt)
     {
         super.writeToNBT(nbt);
-        nbt.setString("essentianame", aspect == null ? "null" : aspect.getName().toLowerCase());
-        nbt.setFloat("essentiacurr", current);
-        nbt.setFloat("essentiamax", max);
+        aspects.writeToNBT(nbt);
     }
     
     @Override
     public void readFromNBT(NBTTagCompound nbt)
     {
         super.readFromNBT(nbt);	
-        if (nbt.getString("essentianame") != "null")
-        	aspect = Aspect.getAspect(nbt.getString("essentianame").toLowerCase());
-        current = nbt.getFloat("essentiacurr");
-        max = nbt.getFloat("essentiamax");
+        aspects = new AspectList();
+        aspects.readFromNBT(nbt);
     }
  
     @Override
@@ -504,27 +539,15 @@ public class TileThaumicFertilizer extends TileEntity implements IAspectContaine
     {
         this.readFromNBT(pkt.data);
     }
-    
-    public float getStoredEssentia()
-    {
-    	return current;
-    }
-    
-    public float getMaxEssentia()
-    {
-    	return max;
-    }
 
 	@Override
 	public int addToContainer(Aspect aspect, int amount)
 	{
-		if (aspect != Aspect.WATER)
+		if (aspect != Aspect.WATER && aspect != Aspect.PLANT)
 			return 0;
-		
-		int added = (int)Math.min(current + amount, max - current);
-		
+		aspects.add(aspect, amount);
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-		return added;
+		return amount;
 	}
 
 	@Override
@@ -544,13 +567,13 @@ public class TileThaumicFertilizer extends TileEntity implements IAspectContaine
 	@Override
 	public boolean doesContainerContainAmount(Aspect aspect, int amount)
 	{
-		return ((aspect == Aspect.WATER) && ((int)current >= amount));
+		return aspects.getAmount(aspect) >= amount;
 	}
 
 	@Override
 	public AspectList getAspects()
 	{
-		return (new AspectList().add(Aspect.WATER, (int)current));
+		return aspects;
 	}
 
 	@Override
@@ -572,12 +595,11 @@ public class TileThaumicFertilizer extends TileEntity implements IAspectContaine
 	@Override
 	public boolean takeFromContainer(Aspect aspect, int amount)
 	{
-		if (aspect != Aspect.WATER)
+		if (aspect != Aspect.WATER && aspect != Aspect.PLANT)
 			return false;
-		if (amount < (int)current)
-			return false;
+		int amt = aspects.getAmount(aspect) - aspects.remove(aspect, amount).getAmount(aspect) * -1;
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-		return true;
+		return amt == amount;
 	}
 
 	@Override
