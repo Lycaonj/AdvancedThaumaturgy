@@ -91,7 +91,7 @@ public class ClientProxy extends CommonProxy
         ClientRegistry.bindTileEntitySpecialRenderer(TileFluxDissipator.class, renderer);
         
         TileEntitySpecialRenderer special = new BlockEtherealJarRenderer();
-        // TODO: Fix this +256 hack
+
         MinecraftForgeClient.registerItemRenderer(AdvThaum.itemEtherealJar.itemID, new ItemEtherealJarRenderer((BlockEtherealJarRenderer)special));
         ClientRegistry.bindTileEntitySpecialRenderer(TileEtherealJar.class, special);
         
