@@ -105,6 +105,8 @@ public class AdvThaum
 	
 	private static Logger logger = Logger.getLogger("Advanced Thaumaturgy");
 	
+	public static boolean debug = false;
+	
 	 @EventHandler
      public void preInit(FMLPreInitializationEvent event)
 	 {
