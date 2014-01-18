@@ -1,9 +1,20 @@
+Build 17
+Fixed wand tooltip to correctly show vis discount from armor, and not the current Ignis modifier
+Added Herba as a requirement for the actual fertilization component of the fertilizer.  Watering still requires Aqua, of course
+Added beginnings of wand pommels.  Currently only available via the creative menu.
+Added [AT] tag to AT research
+Fixed bug with flux dissipator where it was acting derpy with goo/gas, and not saving contained vitium between save/load
+Fixed fertilizer and flux dissipator to not insta-break and drop no block.
+Fixed bug with flux ventilator where you could not remove vitium with a phial.
+Fixed depth rendering bug with the flux dissipator orb
+Increased the rate at which the flux ventilator converts liquid goo to gas.
+
 Build 16
 Removed red marker particles from the fertilizer.  Oops, debug code!
 Reduced fertilizer chance to non-debug levels
 Fixed FloatyLineFX crash on dedicated servers.  One of these days, it WILL work. I promise!
 Fixed variable swap that was causing node modification to freeze upon 'eating' an essence from a pedestal.
-Removed debug code fromw wand
+Removed debug code from wand
 Added a config option to use the classic TC4 wand tooltip.  You can also see this tooltip by holding Shift
 
 Build 15
