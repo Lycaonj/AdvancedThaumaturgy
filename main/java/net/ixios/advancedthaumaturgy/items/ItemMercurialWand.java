@@ -323,7 +323,18 @@ public class ItemMercurialWand extends ItemWandCasting
 		TileInfusionMatrix im = (TileInfusionMatrix)te;
 		
     	if (getPommelType(stack) == ItemPommel.POMMEL_STABILIZER)
-    		AdvThaum.proxy.tickmanager.beginMonitoring(im);
+    	{
+    		if (!im.active)
+    		{
+    			AdvThaum.proxy.tickmanager.beginMonitoring(im);
+    		}
+    		else
+    		{
+    			int currinstability = ReflectionHelper.getPrivateValue(TileInfusionMatrix.class, im, "instability");
+    			player.addChatMessage("Instability: " + currinstability);
+    			return true;
+    		}
+    	}
     	
     	return super.onItemUseFirst(stack, player, world, x, y, z, side, hitX, hitY, hitZ);
     }
