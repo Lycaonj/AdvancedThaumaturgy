@@ -1,0 +1,51 @@
+# block names
+tile.at.modifier.name=Node Modifier
+tile.at.modifier.desc=Allows you to slowly modify jarred|nodes using various essentia types.
+
+tile.at.fertilizer.name=Thaumic Fertilizer
+tile.at.fertilizer.desc=Keeps a 8x8 area of farmland hydrated,|and randomly fertilizes any|saplings or crops.
+
+item.at.mercurialrod.name=Mercurial Rod
+item.at.mercurialrod.desc=A length of crystallized silverwood,|veined with gleaming rivulets|of solidified quicksilver.
+
+item.at.mercurialwand.name=Mercurial Crystal Wand
+
+tile.at.creativenode.name=Creative Node
+tile.at.creativenode.desc=Places a node that contains 100 of each|primal aspect, and never drains.|Creative Only
+
+tile.at.etherealjar.name=Ethereal Jar
+tile.at.etherealjar.desc=A slightly advanced version of the|Warded Jar, capable of holding 256 essentia.
+
+tile.at.essentiaengine.name=Essentia Engine
+tile.at.essentiaengine.desc=Consumes various types of essentia|from nearby jars to produce energy.
+
+tile.at.ventilator.name=Flux Ventilator
+tile.at.ventilator.desc=Breaks down flux goo into flux gas, and flux gas into harmless materials.  Sometimes, it can recover a bit of Vitium.
+
+at.research.mercurialcore.title=Mercurial Rod
+at.research.mercurialcore.desc=Five, five, five rods in one!
+at.research.mercurialcore.pg1=You've discovered a way to infuse a nether star, liquid quicksilver and the essence of multiple silverwood wand cores into a new core that can hold much larger amounts of vis.<BR><LINE><BR>"What a delightful find!  The Wither had in it's possession (I avoid thinking about what it's made of, exactly) an intricate, beautiful crystal of some sort.  After peering through  my Thaumometer at this jewel for days on end, I discovered a way to infuse the crystal and several silverwood cores, along with some quicksilver, into a remarkable"
+at.research.mercurialcore.pg2="wand core capable of storing vast amounts of vis.\n\nThis will certainly make node collecting easier, as well as clear up some room in my already-crowded satchel.\n\nThe creation process is marvelously complex; the infusion altar shuddered and nearly exploded upon my first attempt to craft this beauty.  The essentia required to stabilize the infusion is quite excessive; I must restock my supplies posthaste..."
+
+at.research.mercurialwand.title=Mercurial Crystal Wand
+at.research.mercurialwand.desc=(Almost) all the vis!
+at.research.mercurialwand.pg1=The fruits of long hours of experimenting, resource collecting, and a significant amount of flux goo and gas cleanup, explosions, lightning zaps, and disintegrated caps gleams before you in all it's remarkable glory.  The Mercurial Wand, capable of storing enough vis to last the entire day.  Not only that, the wand can be enhanced and upgraded via various other infusion recipes.<BR><LINE><BR>"At last, it is done, and it is a breathtaking thing to behold.  Sunlight glints off of the gleaming crystal rod, and reflects sharply
+at.research.mercurialwand.pg2=off of the solidified quicksilver inlaid in intricate patterns upon the handle.  I am the envy of thaumaturgists everywhere, but I will not hoard this knowledge to myself.  Discoveries such as this can benefit everyone, and I am no knowledge hoarder."
+
+at.research.nodemodifier.title=Node Modifier
+at.research.nodemodifier.desc=They're not all bad...
+at.research.nodemodifier.pg1=After intently studying the releationship between vis and essentia, you have deduced a method to change the very nature of aura nodes.  Simply place the required essentia nearby, then place the required essences on nearby pedestals.  Finally, place a jarred node on the modifier and right click the modifier to open the GUI.  Essentia and essence types can be viewed by selecting an operation.<BR>Pedestal placement must be within 4 blocks, but is not required to be symmetrical like the infusion altar pedestals.  An example setup is provided on the Mystical Construct page.
+at.research.nodemodifier.pg2="I knew it!  They are not all lost!  While the practice of jarring nodes more often than not tends to weaken them to the point of being nearly useless, they are still salvagable, albeit with some essentia and a few essences.  After some more work, I have discovered a way to increase the node's maximum aspect amount, as well as actually adding an aspect to a node.  Brilliant!"
+
+at.research.fertilizer.title=Thaumic Fertilizer
+at.research.fertilizer.desc=Ermahgerd, WERTER SPERLINKLURZ!
+at.research.fertilizer.pg1=While not what one would call 'advanced', you have cobbled together a device that consumes the extra Aqua essentia you have laying about to water and fertilize an 8x8 swath of farmland or saplings around the sprinkler.  Because it is not directly fueled with bonemeal, the fertilization process is random, but it does occur often enough to merit the active collection of Aqua essentia.<BR><LINE><BR>"It is an invention of convenience, not of cutting edge experiementation, but it does keep those blasted golems busy."
+
+at.research.etherealhar.title=Ethereal Jar
+at.research.etherealjar.desc=
+at.research.etherealjar.pg1=You've found that by modifying the recipe for Warded Jars a bit and incorporating Vacuous, you can increase the amount of essentia that you can store in a single jar.<BR><LINE><BR>"A fellow colleague, Xander, brought up a subject that is a bit of a thorn in every thaumaturge's side.  While we can impart just enough intelligence to a golem to make them somewhat useful, it oftentimes is not quite enough for them to rise above that bar where they would cease to be flat out stupid.  The conversation moved on specifically to our alchemy 
+at.research.etherealjar.pg2=golems, who had a tendency to fill essentia jars haphazardly.  We glanced out the window at the small golem-managed farms I had set up outside, then to the chests stuffed full of essentia jars, and a sort of mashup discussion ensued.  We realized we could likely merge the hungry chest and warded jars into a useful contraption that would simplify our essentia storage.  Sure, there are pipes, but watching a golem slave away is so much more entertaining."
+
+at.research.essentiaengine.title=Essentia Engine
+at.research.essentiaengine.desc=Essentia-lly free power!
+at.research.essentiaengine.pg1=They're everywhere.  Jars and jar... and JARS of essentia.  Now, something to use up some of it.<BR>Produces 10mj/t, 1800 mj total per coal equivalent. (yes, recipe needs nerfed - Lyc)<LINE>"I simply can't tolerate dumping excess essentia into the air, but there is not much to use some of it for.  Until now.  This little 'engine' should burn off most of my excess Ignis, Arbor, Herba, and even Saxum.  Perhaps in time, I can modify it to use other types."

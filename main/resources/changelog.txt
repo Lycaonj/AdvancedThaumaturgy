@@ -1,0 +1,31 @@
+Build 16
+Removed red marker particles from the fertilizer.  Oops, debug code!
+Reduced fertilizer chance to non-debug levels
+Fixed FloatyLineFX crash on dedicated servers.  One of these days, it WILL work. I promise!
+Fixed variable swap that was causing node modification to freeze upon 'eating' an essence from a pedestal.
+Removed debug code fromw wand
+Added a config option to use the classic TC4 wand tooltip.  You can also see this tooltip by holding Shift
+
+Build 15
+Changed several block materials to dirt to allow block drops when using any tool to break it, and not just picks
+Redid the Node Modifier thaumonomicon pages to better explain and illustrate the new node modifier mechanics.
+
+Build 14
+Extended the fertilizer to support any crop or sapling that extends BlockCrops, BlockStem, BlockSapling.  This should inherently add lots of mod support by default (if the mod author codes their crops and saplings correctly!)
+Extended the fertilizer to work on reeds, cacti, and mana beans
+Extended the fertilizer to spread mushrooms and lilypads
+Fixed RenderManager crash when using the mod on a dedicated server
+
+Build 13
+Swapped out node modifier model for a lower poly count version.
+Fixed the crazy text in the mercurial wand tooltip (damn you, UTF-8!)
+Fixed the fertilizer.  Oops.
+Set the correct research flags for the fertilizer.
+Made the node modifier slightly more sturdy; the slightest touch should no longer break it
+Fixed the 'break' texture on the node modifier
+Node modifier no longer plays failure sound if it doesn't actually fail an operation
+Added particle effects to modifier while it's active
+Added the ethereal jar, stores 256 essentia (creative only at the moment, needs testing)
+Gave some items and blocks more sane aspects when scanned.
+Added in the flux ventilator for testing (creative only at the moment)
+Fixed config code to actually allow disabling of features.  Everything related to this is now under the "Feature Control" group in the config

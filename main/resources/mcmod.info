@@ -1,0 +1,16 @@
+[
+{
+  "modid": "advthaum",
+  "name": "Advanced Thaumaturgy",
+  "description": "Extending the endgame of Thaumcraft!",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "http://ixios.net/advthaum/",
+  "updateUrl": "",
+  "authors": ["Lycaon (IGN: LycaonX)"],
+  "credits": "Azanor, for Thaumcrft. Vazkii for inspiration. XanderGryphon, LordIllyohs for support. Le_Alchemist for proving that living beings can indeed be dumber than a rock.",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": [thaumcraft]
+}
+]
