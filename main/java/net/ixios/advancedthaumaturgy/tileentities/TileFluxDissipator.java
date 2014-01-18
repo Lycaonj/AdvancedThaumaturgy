@@ -38,10 +38,8 @@ public class TileFluxDissipator extends TileEntity implements IAspectContainer
 	
 		tickcount++;
 		
-		if (tickcount < 60)
+		if (tickcount % 20 != 0)
 			return;
-		
-		tickcount = 0;
 		
 		for (int cx = xCoord - 12; cx < xCoord + 12; cx++)
 		{
@@ -53,11 +51,11 @@ public class TileFluxDissipator extends TileEntity implements IAspectContainer
 				
 					if (blockid == ConfigBlocks.blockFluxGoo.blockID)
 					{
-						worldObj.playSoundEffect(cx, cy, cz, "liquid.swim", 1F, 1.0F);
+						worldObj.playSoundEffect(cx, cy, cz, "liquid.swim", 0.3F, 1.0F);
 						worldObj.setBlock(cx,  cy,  cz, ConfigBlocks.blockFluxGas.blockID);
 						return;
 					}
-					else if (blockid == ConfigBlocks.blockFluxGas.blockID)
+					else if (blockid == ConfigBlocks.blockFluxGas.blockID && tickcount % 60 == 0)
 					{
 						Vector3F src = new Vector3F(xCoord + 0.5F, yCoord + 1F, zCoord + 0.5F);
 						
