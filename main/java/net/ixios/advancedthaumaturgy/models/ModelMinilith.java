@@ -65,7 +65,7 @@ public class ModelMinilith implements IModelContainer
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glDepthMask(false);
         
-		GL11.glColor4f(clrR, clrG, clrB, 0.4F);
+		GL11.glColor4f(clrR, clrG, clrB, 0.3F);
 		
 		long time = Minecraft.getMinecraft().theWorld.getWorldTime();
 		 
