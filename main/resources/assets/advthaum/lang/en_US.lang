@@ -14,6 +14,7 @@ tile.at.creativenode.name=Creative Node
 tile.at.creativenode.desc=Places a node that contains 100 of each|primal aspect, and never drains.|Creative Only
 
 tile.at.etherealjar.name=Ethereal Jar
+item.at.etherealjar.name=Ethereal Jar
 tile.at.etherealjar.desc=A slightly advanced version of the|Warded Jar, capable of holding 256 essentia.
 
 tile.at.essentiaengine.name=Essentia Engine
@@ -21,6 +22,8 @@ tile.at.essentiaengine.desc=Consumes various types of essentia|from nearby jars 
 
 tile.at.ventilator.name=Flux Ventilator
 tile.at.ventilator.desc=Breaks down flux goo into flux gas, and flux gas into harmless materials.  Sometimes, it can recover a bit of Vitium.
+
+item.at.voidcage.name=Wand Focus: Void Cage
 
 at.research.mercurialcore.title=Mercurial Rod
 at.research.mercurialcore.desc=Five, five, five rods in one!
@@ -48,4 +51,9 @@ at.research.etherealjar.pg2=golems, who had a tendency to fill essentia jars hap
 
 at.research.essentiaengine.title=Essentia Engine
 at.research.essentiaengine.desc=Essentia-lly free power!
-at.research.essentiaengine.pg1=They're everywhere.  Jars and jar... and JARS of essentia.  Now, something to use up some of it.<BR>Produces 10mj/t, 1800 mj total per coal equivalent. (yes, recipe needs nerfed - Lyc)<LINE>"I simply can't tolerate dumping excess essentia into the air, but there is not much to use some of it for.  Until now.  This little 'engine' should burn off most of my excess Ignis, Arbor, Herba, and even Saxum.  Perhaps in time, I can modify it to use other types."
+at.research.essentiaengine.pg1=They're everywhere.  Jars and jars... and JARS of essentia.  Now, something to use up some of it.<BR>Produces 10mj/t, 1800 mj total per coal equivalent. (yes, recipe needs nerfed - Lyc)<LINE>"I simply can't tolerate dumping excess essentia into the air, but there is not much to use some of it for.  Until now.  This little 'engine' should burn off most of my excess Ignis, Arbor, Herba, and even Saxum.  Perhaps in time, I can modify it to use other types."
+
+at.research.voidcage.title=Wand Focus Void Cage
+at.research.voidcage.desc=?
+at.research.voidcage.withtt.pg1=Impressed by the usefulness of the Dislocation Focus, you have concocted a method to imbue one with enough magic to temporarily support life inside whatever space the focus crams a block into.<BR><LINE><BR>"Add a little Aer to allow the subject to breathe, some Messis and Aqua to support proper digestion, and X to slow the creature's metabolism to near nothing, so to preserve their life.  It's probably not a great idea to leave the subject inside the Focus for too long, the void seethes with Vitium and it tends to corrupt the target before too long."
+at.research.voidcage.nott.pg1=You have concocted a method to imbue a crystal with enough magic to temporarily support life inside a small pocket void.<BR><LINE><BR>"Add a little Aer to allow the subject to breathe, some Messis and Aqua to support proper digestion, and X to slow the creature's metabolism to near nothing, so to preserve their life.  It's probably not a great idea to leave the subject inside the Focus for too long, the void seethes with Vitium and it tends to corrupt the target before too long."
