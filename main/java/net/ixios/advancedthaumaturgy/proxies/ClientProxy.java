@@ -92,7 +92,7 @@ public class ClientProxy extends CommonProxy
         
         TileEntitySpecialRenderer special = new BlockEtherealJarRenderer();
         // TODO: Fix this +256 hack
-        MinecraftForgeClient.registerItemRenderer(AdvThaum.itemEtherealJar.itemID + 256, new ItemEtherealJarRenderer((BlockEtherealJarRenderer)special));
+        MinecraftForgeClient.registerItemRenderer(AdvThaum.itemEtherealJar.itemID, new ItemEtherealJarRenderer((BlockEtherealJarRenderer)special));
         ClientRegistry.bindTileEntitySpecialRenderer(TileEtherealJar.class, special);
         
         MinecraftForgeClient.registerItemRenderer(BlockCreativeNode.blockID, new ItemNodeRenderer());
