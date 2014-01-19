@@ -131,7 +131,7 @@ public class TileThaumicFertilizer extends TileEntity implements IAspectContaine
     		if (jar != null && jar.amount > 0)
 			{
     			jar.takeFromContainer(Aspect.WATER, 1);
-    			AdvThaum.proxy.createParticle(jar, xCoord, yCoord, zCoord, Aspect.WATER.getColor());
+    			AdvThaum.proxy.createParticle(jar, xCoord + 0.5f, yCoord + 1f, zCoord + 0.5f, Aspect.WATER.getColor());
     			aspects.add(Aspect.WATER, 1);
     			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			}
@@ -143,7 +143,7 @@ public class TileThaumicFertilizer extends TileEntity implements IAspectContaine
     		if (jar != null && jar.amount > 0)
 			{
     			jar.takeFromContainer(Aspect.PLANT, 1);
-    			AdvThaum.proxy.createParticle(jar, xCoord, yCoord, zCoord, Aspect.PLANT.getColor());
+    			AdvThaum.proxy.createParticle(jar, xCoord + 0.5f, yCoord + 1f, zCoord + 0.5f, Aspect.PLANT.getColor());
     			aspects.add(Aspect.PLANT, 1);
     			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			}
