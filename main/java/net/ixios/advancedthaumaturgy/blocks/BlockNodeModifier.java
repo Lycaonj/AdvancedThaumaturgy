@@ -84,7 +84,7 @@ public class BlockNodeModifier extends BlockContainer implements IWandable
 		 
 		 ATResearchItem ri = new ATResearchItem("NODEMODIFIER", "BASICS",
 					(new AspectList()).add(Aspect.AURA, 1).add(Aspect.SENSES, 1).add(Aspect.MAGIC, 1),
-					-5, 6, 2,
+					-5, 6, 4,
 					new ItemStack(this));
 			ri.setTitle("at.research.nodemodifier.title");
 			ri.setInfo("at.research.nodemodifier.desc");
