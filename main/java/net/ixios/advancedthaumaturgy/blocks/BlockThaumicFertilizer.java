@@ -62,7 +62,7 @@ public class BlockThaumicFertilizer extends BlockContainer
         // to the right od research table
         ATResearchItem ri = new ATResearchItem("FERTILIZER", "ARTIFICE",
 				(new AspectList()).add(Aspect.PLANT, 1).add(Aspect.WATER, 1).add(Aspect.AIR, 1).add(Aspect.CROP, 1),
-				5, 4, 0,
+				5, 4, 3,
 				new ItemStack(this));
 		ri.setTitle("at.research.fertilizer.title");
 		ri.setInfo("at.research.fertilizer.desc");
