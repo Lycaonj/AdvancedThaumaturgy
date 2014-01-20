@@ -11,9 +11,9 @@ public class ATResearchItem extends ResearchItem
 	private String title = "";
 	private String info = "";
 
-	public ATResearchItem(String key, String something, AspectList tags, int column, int row, int instability , ItemStack icon)
+	public ATResearchItem(String key, String tab, AspectList tags, int column, int row, int difficulty , ItemStack icon)
 	{
-		super(key, something, tags, column, row, instability, icon);
+		super(key, tab, tags, column, row, difficulty, icon);
 	}
 
 	@Override
