@@ -77,7 +77,7 @@ public class BlockEtherealJar extends BlockJar
      // add research
       ATResearchItem ri = new ATResearchItem("ETHEREALJAR", "BASICS",
     		  (new AspectList()).add(Aspect.AIR, 50).add(Aspect.ENTROPY, 50),
-             -10, 2, 2,
+             -10, 2, 3,
              new ItemStack(AdvThaum.itemEtherealJar, 1, 0));
      ri.setTitle("at.research.etherealjar.title");
      ri.setInfo("at.research.etherealjar.desc");
