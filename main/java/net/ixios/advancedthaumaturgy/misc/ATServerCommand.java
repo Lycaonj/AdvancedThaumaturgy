@@ -38,7 +38,7 @@ public class ATServerCommand implements ICommand
 	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender sender)
 	{
-		return ((EntityPlayer)sender).capabilities.isCreativeMode || MinecraftServer.getServer().getConfigurationManager().getOps().contains(sender.getCommandSenderName());
+		return ((EntityPlayer)sender).capabilities.isCreativeMode || Utilities.isOp(sender.getCommandSenderName());
 	}
 
 	@Override
