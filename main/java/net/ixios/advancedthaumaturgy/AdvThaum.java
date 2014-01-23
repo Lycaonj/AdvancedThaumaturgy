@@ -1,10 +1,10 @@
 package net.ixios.advancedthaumaturgy;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
-
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 
 import net.ixios.advancedthaumaturgy.blocks.BlockCreativeNode;
 import net.ixios.advancedthaumaturgy.blocks.BlockEssentiaEngine;
@@ -25,6 +25,7 @@ import net.ixios.advancedthaumaturgy.misc.ATCreativeTab;
 import net.ixios.advancedthaumaturgy.misc.ATEventHandler;
 import net.ixios.advancedthaumaturgy.misc.ATServerCommand;
 import net.ixios.advancedthaumaturgy.misc.ArcingDamageManager;
+import net.ixios.advancedthaumaturgy.misc.Utilities;
 import net.ixios.advancedthaumaturgy.proxies.CommonProxy;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -34,7 +35,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import thaumcraft.api.ThaumcraftApi;
@@ -44,6 +47,7 @@ import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.wands.WandRod;
 import thaumcraft.api.wands.WandTriggerRegistry;
 import thaumcraft.common.Thaumcraft;
+import thaumcraft.common.tiles.TileInfusionMatrix;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
@@ -55,6 +59,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
@@ -293,19 +298,24 @@ public class AdvThaum
 			 
 		 config.save();
 		 
-		// ConfigItems.itemInkwell.setMaxDamage(400);
-		 BiMap<Class<? extends Entity>, EntityRegistration> registrations = ObfuscationReflectionHelper.getPrivateValue(EntityRegistry.class, EntityRegistry.instance(), "entityClassRegistrations");
-		 
-		 for (Class<? extends Entity> e : registrations.keySet())
-		 {
-			 
-		 }
      }
 	 
 	 @EventHandler
-	  public void serverLoad(FMLServerStartingEvent event)
-	  {
+	 public void serverLoad(FMLServerStartingEvent event)
+	 {
 		 event.registerServerCommand(new ATServerCommand());
-	  }
+	 }
+	 
+	 @EventHandler
+	 public void serverStarted(FMLServerStartingEvent event)
+	 {
+		 proxy.loadData();
+	 }
+	 
+	 @EventHandler 
+	 public void serverStopping(FMLServerStoppingEvent event)
+	 {
+		 proxy.saveData();	
+	 }
 }
 
