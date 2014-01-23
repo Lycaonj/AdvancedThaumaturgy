@@ -58,28 +58,23 @@ public class ModelMinilith implements IModelContainer
 		GL11.glPushMatrix();
 		
 		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
-		GL11.glDisable(GL11.GL_CULL_FACE);
+				GL11.glDisable(GL11.GL_CULL_FACE);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glDepthMask(false);
-        
+        	
 		GL11.glColor4f(clrR, clrG, clrB, 0.3F);
 		
-		long time = Minecraft.getMinecraft().theWorld.getWorldTime();
+		long ticks = Minecraft.getMinecraft().renderViewEntity.ticksExisted;
 		 
-		double val = Math.sin(time / 5) / 40;
+		float h = (float) (Math.sin(ticks % 32767.0F / 16.0F) * 0.05F);
 		
-		GL11.glTranslated(0f, val, 0f);
+		GL11.glTranslated(0f, h, 0f);
 		 
 		model.renderOnly("Sphere");
 		
-		GL11.glDepthMask(true);
-        
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glEnable(GL11.GL_CULL_FACE);
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glDisable(GL11.GL_BLEND);
 	
 		GL11.glPopMatrix();
