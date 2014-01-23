@@ -8,6 +8,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
+import thaumcraft.api.aspects.IEssentiaContainerItem;
 import thaumcraft.api.crafting.InfusionRecipe;
 import thaumcraft.api.crafting.ShapedArcaneRecipe;
 import thaumcraft.api.research.ResearchPage;
@@ -22,6 +23,7 @@ import net.ixios.advancedthaumaturgy.AdvThaum;
 import net.ixios.advancedthaumaturgy.items.ItemEtherealJar;
 import net.ixios.advancedthaumaturgy.misc.ATResearchItem;
 import net.ixios.advancedthaumaturgy.tileentities.TileEtherealJar;
+import net.ixios.advancedthaumaturgy.tileentities.TileFluxDissipator;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -94,48 +96,81 @@ public class BlockEtherealJar extends BlockJar
     }
     
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ)
-    {
-    	TileEntity te = world.getBlockTileEntity(x,  y,  z);
-    	if (te == null || !(te instanceof TileEtherealJar))
-    		return false;
-    		
-    	TileEtherealJar jar = (TileEtherealJar)te;
-    	ItemStack helditem = player.getHeldItem();
-    	
-    	if (helditem == null || !(helditem.getItem() instanceof ItemEssence))
-    		return false;
-    	
-    	ItemEssence phial = (ItemEssence)helditem.getItem();
-    	Aspect aspect = null;
-    	
-    	Aspect[] aspects = phial.getAspects(helditem).getAspects();
-    		
-    	if (aspects.length > 0)
-    		aspect = aspects[0];
-    	
-    	int amount = phial.getAspects(helditem).getAmount(aspect);
-    	
-    	if (helditem != null && jar.amount <= (jar.maxAmount - 8) && (jar.aspect == null || (jar.aspect != null && phial.getAspects(helditem).getAmount(jar.aspect) >= 8)))
-    	{
-    		player.getHeldItem().stackSize--;
-    		jar.addToContainer(aspect, amount);
-      
-    		if (world.isRemote)
-    			world.playSoundAtEntity(player, "liquid.swim", 0.25F, 1.0F);
-    	}
-    	else if (helditem != null && helditem.getItem() instanceof ItemEssence && jar.amount >= 8 && aspect == null)
-    	{
-    		phial.setAspects(helditem, new AspectList().add(aspect, 8));
-    		jar.takeFromContainer(aspect, 8);
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX,
+	        float hitY, float hitZ)
+	{
+	    ItemStack helditem = player.getHeldItem();
+	    TileEntity te = world.getBlockTileEntity(x,  y,  z);
+	    
+	    if (!(helditem.getItem() instanceof IEssentiaContainerItem))
+	    	return false;
 	 
-    		if  (world.isRemote)
-    			world.playSoundAtEntity(player, "liquid.swim", 0.25F, 1.0F);
+	    if (!(te instanceof TileEtherealJar))
+	    	return false;
 	 
-    	}
-    	return true;
-  
-    }
+	    IEssentiaContainerItem container = (IEssentiaContainerItem)helditem.getItem();
+	    
+	    TileEtherealJar jar = (TileEtherealJar)te;
+	 
+	    if (helditem.getItemDamage() == 0)
+	    {
+	    	Aspect aspect = jar.getAspects().getAspects()[0];
+	    	
+	         if (jar.doesContainerContainAmount(aspect, 8)) 
+	         {
+	            if (world.isRemote) 
+	            {
+	               player.swingItem();
+	               return false;
+	            }
+
+	            if (jar.takeFromContainer(aspect, 8))
+	            {
+	               --helditem.stackSize;
+	               ItemStack stack = new ItemStack(ConfigItems.itemEssence, 1, 1);
+	               ((ItemEssence)container).setAspects(stack, (new AspectList()).add(Aspect.TAINT, 8));
+	               if (!player.inventory.addItemStackToInventory(stack)) 
+	               {
+	                  world.spawnEntityInWorld(new EntityItem(world, (double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), stack));
+	               }
+
+	               world.playSoundAtEntity(player, "liquid.swim", 0.25F, 1.0F);
+	               player.inventoryContainer.detectAndSendChanges();
+	               return true;
+	            }
+	         }
+	    }
+	    else
+	    {
+	    	Aspect aspect = container.getAspects(helditem).getAspects()[0];
+	    	
+	         if (jar.getAspects().size() == 0 || jar.doesContainerContainAmount(aspect, 1)) 
+	         {
+	            if (world.isRemote) 
+	            {
+	               player.swingItem();
+	               return false;
+	            }
+
+	            if (jar.addToContainer(aspect, 8) == 0)
+	            {
+	               --helditem.stackSize;
+	               ItemStack stack = new ItemStack(ConfigItems.itemEssence, 1, 0);
+	               ((ItemEssence)helditem.getItem()).setAspects(stack, (new AspectList()).add(Aspect.TAINT, 8));
+	               if (!player.inventory.addItemStackToInventory(stack)) 
+	               {
+	                  world.spawnEntityInWorld(new EntityItem(world, (double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), stack));
+	               }
+
+	               world.playSoundAtEntity(player, "liquid.swim", 0.25F, 1.0F);
+	               player.inventoryContainer.detectAndSendChanges();
+	               return true;
+	            }
+	         }
+	    }
+	    
+	    return false;
+	}
     
     @Override
     public void breakBlock(World world, int x, int y, int z, int arg4, int arg5)
