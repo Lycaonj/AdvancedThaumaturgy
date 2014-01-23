@@ -12,6 +12,7 @@ import thaumcraft.common.tiles.TileJarFillable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -97,6 +98,11 @@ public class Utilities
 	 
 		return focus;
 	  
+	}
+	
+	public static boolean isOp(String name)
+	{
+		return MinecraftServer.getServer().getConfigurationManager().getOps().contains(name);
 	}
 	
 }
