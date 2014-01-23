@@ -347,7 +347,7 @@ public class ItemMercurialWand extends ItemWandCasting
     		else
     		{
     			int currinstability = ReflectionHelper.getPrivateValue(TileInfusionMatrix.class, im, "instability");
-    			player.addChatMessage("Instability: " + currinstability);
+    			player.addChatMessage("[OP Info]: Instability: " + currinstability);
     			return true;
     		}
     	}
