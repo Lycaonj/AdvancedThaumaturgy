@@ -8,6 +8,7 @@ import thaumcraft.api.aspects.IAspectContainer;
 import thaumcraft.api.aspects.IEssentiaTransport;
 import thaumcraft.common.tiles.TileJarFillable;
 import net.ixios.advancedthaumaturgy.AdvThaum;
+import net.ixios.advancedthaumaturgy.misc.Utilities;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
@@ -72,7 +73,7 @@ public class TileEssentiaEngine extends TileEntity implements IPowerEmitter, IPi
 			return;
 		
 		// findEssentia is in common proxy
-		TileJarFillable essentiajar = AdvThaum.proxy.findEssentiaJar(worldObj, aspect, this, 20, 2, 20);
+		TileJarFillable essentiajar = Utilities.findEssentiaJar(worldObj, aspect, this, 20, 2, 20);
 	
 		if (essentiajar != null && essentiajar.amount > 0)
         {

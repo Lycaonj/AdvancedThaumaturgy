@@ -101,7 +101,7 @@ public class ATEventHandler
 		 // is source entity holding a wand?
 		 ItemStack helditem = entity.getHeldItem();
 		
-		if (!(AdvThaum.proxy.getEquippedFocus(helditem) instanceof ItemFocusShock))
+		if (!(Utilities.getEquippedFocus(helditem) instanceof ItemFocusShock))
 			return;
 		 
 		 // does it have Arcing?

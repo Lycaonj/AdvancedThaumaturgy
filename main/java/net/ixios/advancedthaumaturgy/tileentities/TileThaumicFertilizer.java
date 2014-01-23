@@ -11,10 +11,13 @@ import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.aspects.IAspectContainer;
 import thaumcraft.common.config.ConfigBlocks;
 import thaumcraft.common.tiles.TileJarFillable;
+import vazkii.botania.api.ISpecialFlower;
 import net.ixios.advancedthaumaturgy.AdvThaum;
+import net.ixios.advancedthaumaturgy.misc.Utilities;
 import net.ixios.advancedthaumaturgy.misc.Vector3F;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
+import net.minecraft.block.BlockFlower;
 import net.minecraft.block.BlockLilyPad;
 import net.minecraft.block.BlockMushroom;
 import net.minecraft.block.BlockSapling;
@@ -127,11 +130,11 @@ public class TileThaumicFertilizer extends TileEntity implements IAspectContaine
     	
     	if (aspects.getAmount(Aspect.WATER) < 64 && ticktracker % 2 == 0)
     	{
-    		TileJarFillable jar = AdvThaum.proxy.findEssentiaJar(worldObj, Aspect.WATER, this, 16, 2, 16);
+    		TileJarFillable jar = Utilities.findEssentiaJar(worldObj, Aspect.WATER, this, 16, 2, 16);
     		if (jar != null && jar.amount > 0)
 			{
     			jar.takeFromContainer(Aspect.WATER, 1);
-    			AdvThaum.proxy.createParticle(jar, xCoord + 0.5f, yCoord + 1f, zCoord + 0.5f, Aspect.WATER.getColor());
+    			AdvThaum.proxy.createParticle(worldObj, jar.xCoord + 0.5f, jar.yCoord + 1f, jar.zCoord + 0.5f, xCoord + 0.5f, yCoord + 1f, zCoord + 0.5f, Aspect.WATER.getColor());
     			aspects.add(Aspect.WATER, 1);
     			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			}
@@ -139,11 +142,11 @@ public class TileThaumicFertilizer extends TileEntity implements IAspectContaine
     	
     	if (aspects.getAmount(Aspect.PLANT) < 64 && ticktracker % 2 == 0)
     	{
-    		TileJarFillable jar = AdvThaum.proxy.findEssentiaJar(worldObj, Aspect.PLANT, this, 16, 2, 16);
+    		TileJarFillable jar = Utilities.findEssentiaJar(worldObj, Aspect.PLANT, this, 16, 2, 16);
     		if (jar != null && jar.amount > 0)
 			{
     			jar.takeFromContainer(Aspect.PLANT, 1);
-    			AdvThaum.proxy.createParticle(jar, xCoord + 0.5f, yCoord + 1f, zCoord + 0.5f, Aspect.PLANT.getColor());
+    			AdvThaum.proxy.createParticle(worldObj, jar.xCoord + 0.5f, jar.yCoord + 1f, jar.zCoord + 0.5f, xCoord + 0.5f, yCoord + 1f, zCoord + 0.5f, Aspect.PLANT.getColor());
     			aspects.add(Aspect.PLANT, 1);
     			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			}
@@ -217,14 +220,20 @@ public class TileThaumicFertilizer extends TileEntity implements IAspectContaine
         if (block instanceof BlockMushroom)
         {
         	if (worldObj.rand.nextInt(100) < fertilizechance)
-        		spreadMushroomFrom(cx, cy + 1, cz);
+        		spreadSurfaceBlockFrom(cx, cy + 1, cz, 0);
         }
         else if (block instanceof BlockLilyPad && baseid == Block.waterStill.blockID)
         {
         	if (worldObj.rand.nextInt(100) < fertilizechance)
-        		spreadLilypadFrom(cx, cy + 1, cz);
+        		spreadSurfaceBlockFrom(cx, cy + 1, cz, Block.waterStill.blockID);
         }
-       
+        else if (block instanceof BlockFlower && !(block instanceof ISpecialFlower))
+        {
+        	if (worldObj.rand.nextInt(100) < fertilizechance)
+        		spreadSurfaceBlockFrom(cx, cy + 1, cz, 0);
+        }
+    
+        
     	for (cy = yCoord; cy < yCoord + 15; cy++)
         {
     		targetid = worldObj.getBlockId(cx, cy, cz);
@@ -447,27 +456,27 @@ public class TileThaumicFertilizer extends TileEntity implements IAspectContaine
     	}
     }
     
-    private void spreadMushroomFrom(int x, int y, int z)
+    private void spreadSurfaceBlockFrom(int x, int y, int z, int reqblockbase)
     {
     	if (herbapool < costperfertilize)
     		return;
     	
     	Block block = Block.blocksList[worldObj.getBlockId(x,  y,  z)];
-    	if (!(block instanceof BlockMushroom))
+
+    	if (reqblockbase != 0 && worldObj.getBlockId(x,  y - 1, z) != reqblockbase)
     		return;
-    	Block shroom = (BlockMushroom)block;
     	
     	int whichdir = worldObj.rand.nextInt(4);
 
     	Vector3F target = null;
     	
-    	if (worldObj.getBlockId(x - 1, y, z) == shroom.blockID)
+    	if (worldObj.getBlockId(x - 1, y, z) == block.blockID)
     		return;
-    	if (worldObj.getBlockId(x + 1, y, z) == shroom.blockID)
+    	if (worldObj.getBlockId(x + 1, y, z) == block.blockID)
     		return;
-    	if (worldObj.getBlockId(x, y, z - 1) == shroom.blockID)
+    	if (worldObj.getBlockId(x, y, z - 1) == block.blockID)
     		return;
-    	if (worldObj.getBlockId(x, y, z + 1) == shroom.blockID)
+    	if (worldObj.getBlockId(x, y, z + 1) == block.blockID)
     		return;
     	
     	switch (whichdir)
@@ -504,10 +513,10 @@ public class TileThaumicFertilizer extends TileEntity implements IAspectContaine
     	if (target == null)
     		return; // no spot to grow
     	
-    	if (!shroom.canPlaceBlockAt(worldObj,  (int)target.x, (int)target.y, (int)target.z))
+    	if (!block.canPlaceBlockAt(worldObj,  (int)target.x, (int)target.y, (int)target.z))
     		return;
     	
-    	worldObj.setBlock((int)target.x, (int)target.y, (int)target.z, shroom.blockID);
+    	worldObj.setBlock((int)target.x, (int)target.y, (int)target.z, block.blockID);
     	fertilize((int)target.x, (int)target.y, (int)target.z);
     }
     

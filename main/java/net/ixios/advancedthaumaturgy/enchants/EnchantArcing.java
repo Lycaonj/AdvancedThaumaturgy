@@ -1,6 +1,7 @@
 package net.ixios.advancedthaumaturgy.enchants;
 
 import net.ixios.advancedthaumaturgy.AdvThaum;
+import net.ixios.advancedthaumaturgy.misc.Utilities;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.item.ItemBook;
@@ -37,7 +38,7 @@ public class EnchantArcing extends Enchantment
     public boolean canApply(ItemStack stack)
     {
     	// can only apply to books and shock foci
-    	if (AdvThaum.proxy.getEquippedFocus(stack) instanceof ItemFocusShock)
+    	if (Utilities.getEquippedFocus(stack) instanceof ItemFocusShock)
     		return true;
         return (stack.getItem() instanceof ItemBook);
     }

@@ -16,6 +16,7 @@ import thaumcraft.common.tiles.TileJarNode;
 import thaumcraft.common.tiles.TilePedestal;
 import net.ixios.advancedthaumaturgy.AdvThaum;
 import net.ixios.advancedthaumaturgy.fx.FloatyLineFX;
+import net.ixios.advancedthaumaturgy.misc.Utilities;
 import net.ixios.advancedthaumaturgy.misc.Vector3F;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,7 +29,7 @@ public class TileNodeModifier extends TileEntity implements IAspectContainer
 {
 	public class Requirements implements Cloneable
 	{
-		private AspectList m_essentia = null;
+		AspectList m_essentia = null;
 		private AspectList m_essences = null;
 		
 		public Requirements()
@@ -218,7 +219,7 @@ public class TileNodeModifier extends TileEntity implements IAspectContainer
         AddSinister(12),
         AddPure(13);
         
-        private byte id;
+        byte id;
         Operation(int id)
 	    {
 	        this.id = (byte)id;
@@ -424,7 +425,7 @@ public class TileNodeModifier extends TileEntity implements IAspectContainer
 			return;
 		
 		if (essentiajar == null || essentiajar.amount == 0)
-			essentiajar = AdvThaum.proxy.findEssentiaJar(worldObj, aspect, this, 16, 8, 16);
+			essentiajar = Utilities.findEssentiaJar(worldObj, aspect, this, 16, 8, 16);
 		
 		if (essentiajar == null || essentiajar.aspect != aspect)
 		    return;
