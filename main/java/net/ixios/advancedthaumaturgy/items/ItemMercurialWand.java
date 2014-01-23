@@ -62,7 +62,7 @@ public class ItemMercurialWand extends ItemWandCasting
         getRod(new ItemStack(this)).setGlowing(true);
         setUnlocalizedName("at.mercurialwand");
         
-        classictooltip = AdvThaum.config.get("Feature Control", "classic_wand_tooltip", false).getBoolean(false);
+        classictooltip = AdvThaum.config.get("Feature Control", "classic_wand_tooltip", true).getBoolean(true);
 
         
     }
