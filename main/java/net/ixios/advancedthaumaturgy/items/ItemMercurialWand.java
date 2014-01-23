@@ -14,6 +14,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.ixios.advancedthaumaturgy.AdvThaum;
 import net.ixios.advancedthaumaturgy.items.ItemPommel;
 import net.ixios.advancedthaumaturgy.misc.ATResearchItem;
+import net.ixios.advancedthaumaturgy.misc.Utilities;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -344,7 +345,7 @@ public class ItemMercurialWand extends ItemWandCasting
     		{
     			AdvThaum.proxy.tickmanager.beginMonitoring(im);
     		}
-    		else
+    		else if (im.active && Utilities.isOp(player.username))
     		{
     			int currinstability = ReflectionHelper.getPrivateValue(TileInfusionMatrix.class, im, "instability");
     			player.addChatMessage("[OP Info]: Instability: " + currinstability);
