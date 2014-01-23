@@ -6,6 +6,7 @@ import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.blocks.ItemJarFilled;
 import net.ixios.advancedthaumaturgy.AdvThaum;
+import net.ixios.advancedthaumaturgy.blocks.BlockEtherealJar;
 import net.ixios.advancedthaumaturgy.tileentities.TileEtherealJar;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -43,9 +44,9 @@ public class ItemEtherealJar extends ItemJarFilled
     public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, 
             float hitX, float hitY, float hitZ, int metadata)
     {
-        if (!world.setBlock(x, y, z, AdvThaum.EtherealJar.blockID, metadata, 3))
+        if (!world.setBlock(x, y, z, BlockEtherealJar.blockID, metadata, 3))
             return false;
-        if (world.getBlockId(x, y, z) == AdvThaum.EtherealJar.blockID)
+        if (world.getBlockId(x, y, z) == BlockEtherealJar.blockID)
         {
         	TileEntity te = world.getBlockTileEntity(x, y, z);
         	if (te == null)
@@ -57,8 +58,8 @@ public class ItemEtherealJar extends ItemJarFilled
         	
         	ej.setAspects(aspects);
         	
-            Block.blocksList[AdvThaum.EtherealJar.blockID].onBlockPlacedBy(world, x, y, z, player, stack);
-            Block.blocksList[AdvThaum.EtherealJar.blockID].onPostBlockPlaced(world, x, y, z, metadata);
+            Block.blocksList[BlockEtherealJar.blockID].onBlockPlacedBy(world, x, y, z, player, stack);
+            Block.blocksList[BlockEtherealJar.blockID].onPostBlockPlaced(world, x, y, z, metadata);
         }
         return true;
     }

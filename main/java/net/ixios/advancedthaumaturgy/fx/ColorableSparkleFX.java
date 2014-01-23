@@ -29,7 +29,7 @@ public class ColorableSparkleFX extends EntityFX
             float scale, float r, float g, float b, int multiplier)
     {
         super(world, x, y, z, 0.0D, 0.0D, 0.0D);
-        multiplier = 2;
+        this.multiplier = multiplier;
         shrink = true;
         particle = 16;
         tinkle = false;

@@ -173,7 +173,7 @@ public class ItemMercurialWand extends ItemWandCasting
     @Override
     public String getItemDisplayName(ItemStack is)
     {
-        return StatCollector.translateToLocal("item.at.mercurialwand.name");
+        return StatCollector.translateToLocal("item.at.mercurialwand.name") + (getPommelType(is) != ItemPommel.POMMEL_PLAIN ? " [test]" : "");
     }
 
     @Override
@@ -191,8 +191,10 @@ public class ItemMercurialWand extends ItemWandCasting
     @Override
     public int addVis(ItemStack stack, Aspect aspect, int amount, boolean doit)
     {
+    	int amt = amount;
+    	
         if (getPommelType(stack) == ItemPommel.POMMEL_MULTIPLIER)
-        	amount *= 2;
+        	amt *= 2;
         
         if (!aspect.isPrimal() && getPommelType(stack) == ItemPommel.POMMEL_COMPOUND)
         {
@@ -205,8 +207,7 @@ public class ItemMercurialWand extends ItemWandCasting
         	return 0;
         }
         
-        int res = super.addVis(stack, aspect, amount, doit);
-        int amt = ((ItemMercurialWand)stack.getItem()).getVis(stack, aspect);
+        int res = super.addVis(stack, aspect, amt, doit);
         return res;
     }
         
@@ -217,7 +218,8 @@ public class ItemMercurialWand extends ItemWandCasting
     	if (getPommelType(stack) == ItemPommel.POMMEL_DISCOUNT)
     		discount = 0.2f;
     	float cost = 1f - discount;
-    	return (super.getConsumptionModifier(stack, player, aspect) * cost);
+    	float cm = super.getConsumptionModifier(stack, player, aspect);
+    	return (super.getConsumptionModifier(stack, player, aspect) - discount);
     }
     
     @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -233,7 +235,11 @@ public class ItemMercurialWand extends ItemWandCasting
     	
     	discount += (1 - (cap.getBaseCostModifier()));
     	
-    	if (!classictooltip && !shiftdown)
+    	if (classictooltip || shiftdown)
+    	{
+    		super.addInformation(stack, player, list, detailed);
+    	}
+    	else
     	{
 	    	for (Aspect a  : vis.getAspects())
 	    	{
@@ -248,8 +254,6 @@ public class ItemMercurialWand extends ItemWandCasting
 	    	list.add(result.toString());
 	    	list.add("Vis discount: " + (int)(discount * 100) + "% total");
     	}
-    	else
-    		super.addInformation(stack, player, list, detailed);
     	
     	if (getPommelType(stack) != 0)
     		list.add("Pommel: " + ItemPommel.getName(stack));
@@ -265,6 +269,18 @@ public class ItemMercurialWand extends ItemWandCasting
     		return;
     	
     	AspectList aspects = this.getAllVis(stack);
+    	AspectList temp = aspects.copy();
+    	
+    	for (int a = 0; a < temp.getAspects().length; a++)
+    	{
+    		Aspect aspect = temp.getAspects()[a];
+    		if (temp.getAmount(aspect) >= ((getMaxVis(stack) * 0.15f) - 1))
+    			aspects.remove(aspect);
+    	}
+    	
+    	if (aspects.size() == 0)
+    		return;
+    	
     	int which = world.rand.nextInt(aspects.size());
         Aspect aspect = aspects.getAspects()[which];
     	

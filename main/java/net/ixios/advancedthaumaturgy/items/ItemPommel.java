@@ -103,16 +103,12 @@ public class ItemPommel extends Item
 		}
 		
 	}
-	
-	/*abstract void applyEffects();
-	abstract void removeEffects();
-	abstract void onTikUpdate();*/
 
 	public static final int POMMEL_PLAIN = 0;
-	public static final int POMMEL_RECHARGE = 1; // done
-	public static final int POMMEL_COMPOUND = 2;
-	public static final int POMMEL_MULTIPLIER = 3; // implemented
+	public static final int POMMEL_RECHARGE = 1; // tested
+	public static final int POMMEL_COMPOUND = 2; // tested
+	public static final int POMMEL_MULTIPLIER = 3; // tested
 	public static final int POMMEL_STABILIZER = 4;
-	public static final int POMMEL_DISCOUNT = 5; // coded
+	public static final int POMMEL_DISCOUNT = 5;  // tested
     
 }

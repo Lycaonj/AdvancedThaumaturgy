@@ -66,7 +66,7 @@ public class GuiNodeModifier extends GuiContainer
 		
 		nm = (TileNodeModifier)world.getBlockTileEntity(blockX, blockY, blockZ);
 		
-		((BlockNodeModifier)Block.blocksList[BlockNodeModifier.blockID]).refreshAvailableOperations(world, x, y, z);
+		BlockNodeModifier.refreshAvailableOperations(world, x, y, z);
 	}
 
 	@Override
