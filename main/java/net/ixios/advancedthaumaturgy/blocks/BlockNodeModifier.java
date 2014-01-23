@@ -110,7 +110,7 @@ public class BlockNodeModifier extends BlockContainer implements IWandable
 			((TileNodeModifier)world.getBlockTileEntity(x,  y,  z)).cancel();
 	}
 	
-	public int refreshAvailableOperations(World world, int x, int y, int z)
+	public static int refreshAvailableOperations(World world, int x, int y, int z)
 	{
 		TileEntity te = world.getBlockTileEntity(x,  y + 1,  z);
 		if (!(te instanceof TileJarNode))

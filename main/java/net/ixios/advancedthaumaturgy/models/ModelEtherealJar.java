@@ -58,7 +58,7 @@ public class ModelEtherealJar extends ModelBase implements IModelContainer
         GL11.glDepthMask(true);
     }
 
-    private void setRotation(ModelRenderer model, float x, float y, float z)
+    private static void setRotation(ModelRenderer model, float x, float y, float z)
     {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
