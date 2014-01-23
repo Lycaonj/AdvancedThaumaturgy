@@ -6,7 +6,12 @@ import thaumcraft.api.aspects.IAspectContainer;
 import thaumcraft.common.config.ConfigBlocks;
 import net.ixios.advancedthaumaturgy.AdvThaum;
 import net.ixios.advancedthaumaturgy.misc.Vector3F;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.INetworkManager;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.common.ForgeDirection;
 
 public class TileFluxDissipator extends TileEntity implements IAspectContainer
@@ -18,12 +23,6 @@ public class TileFluxDissipator extends TileEntity implements IAspectContainer
 	{
 		
 	}
-	
-	public void setDirection(ForgeDirection d)
-	{
-		//orientation = d;
-	}
-	
 	
 	@Override
 	public boolean canUpdate() 
@@ -73,9 +72,9 @@ public class TileFluxDissipator extends TileEntity implements IAspectContainer
 						
 						worldObj.setBlockToAir(cx,  cy,  cz);
 						
-						worldObj.playSoundEffect(cx, cy, cz, "random.fizz", 1F, 1.0F);
+						worldObj.playSoundEffect(cx, cy, cz, "random.fizz", 0.3F, 1.0F);
 						
-						if (worldObj.rand.nextInt(100) <= 10)
+						if (worldObj.rand.nextInt(100) <= 50)
 						{
 							aspects.add(Aspect.TAINT,  1);
 							worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
@@ -87,10 +86,36 @@ public class TileFluxDissipator extends TileEntity implements IAspectContainer
 		}
 	}
 
+	@Override
+	public void readFromNBT(NBTTagCompound tag)
+	{
+	    super.readFromNBT(tag);
+	    if (aspects != null)
+	    	aspects.readFromNBT(tag);
+	}
 	
+	@Override
+	public void writeToNBT(NBTTagCompound tag)
+	{
+	    super.writeToNBT(tag);
+	    if (aspects != null)
+	    	aspects.writeToNBT(tag);
+	}
 	
+	@Override
+	public Packet getDescriptionPacket()
+	{
+		NBTTagCompound nbt = new NBTTagCompound();
+		writeToNBT(nbt);
+		return new Packet132TileEntityData(xCoord, yCoord, zCoord, 0, nbt);
+	}
 	
-	
+	@Override
+	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt)
+	{
+		readFromNBT(pkt.data);
+	}
+
 	
 	
 	
@@ -140,13 +165,25 @@ public class TileFluxDissipator extends TileEntity implements IAspectContainer
 	@Override
 	public boolean takeFromContainer(AspectList list)
 	{
-		return list.size() == 1 && list.getAmount(Aspect.TAINT) > 0;
+		boolean success = list.size() == 1 && list.getAmount(Aspect.TAINT) > 0;
+		if (success)
+		{
+			aspects.remove(Aspect.TAINT, list.getAmount(Aspect.TAINT));
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		}
+		return success;
 	}
 
 	@Override
 	public boolean takeFromContainer(Aspect aspect, int amount)
 	{
-		return aspect == Aspect.TAINT && aspects.getAmount(aspect) >= amount;
+		boolean success = aspect == Aspect.TAINT && aspects.getAmount(aspect) >= amount;
+		if (success)
+		{
+			aspects.remove(aspect, amount);
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		}
+		return success;
 	}
 	
 }

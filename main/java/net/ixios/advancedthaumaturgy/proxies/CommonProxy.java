@@ -22,6 +22,7 @@ import thaumcraft.common.tiles.TileJarFillable;
 import thaumcraft.common.tiles.TilePedestal;
 import net.ixios.advancedthaumaturgy.AdvThaum;
 import net.ixios.advancedthaumaturgy.blocks.BlockEssentiaEngine;
+import net.ixios.advancedthaumaturgy.blocks.BlockFluxDissipator;
 import net.ixios.advancedthaumaturgy.gui.ContainerNodeModifier;
 import net.ixios.advancedthaumaturgy.gui.GuiNodeModifier;
 import net.ixios.advancedthaumaturgy.misc.TickManager;
@@ -53,6 +54,16 @@ public class CommonProxy implements IGuiHandler, IPacketHandler
 	
 	}
 	
+	public void loadData()
+	{
+		tickmanager.loadData();
+	}
+	
+	public void saveData()
+	{
+		tickmanager.saveData();
+	}
+	
 	public void createParticle(World world, float srcx, float srcy, float srcz, float dstx, float dsty, float dstz, int color) { }
 	
 	public void createParticle(TileEntity src, float dstx, float dsty, float dstz, int color) { }
@@ -82,16 +93,20 @@ public class CommonProxy implements IGuiHandler, IPacketHandler
     public void registerBuildcraftThings()
     {
     	int essentiaengineid = AdvThaum.config.getBlock("BlockIDs", "essentiaengine", 3436).getInt();
-		AdvThaum.EssentiaEngine = new BlockEssentiaEngine(essentiaengineid, Material.rock);
-		
-		AdvThaum.EssentiaEngine.register();
+    	
+    	if (AdvThaum.config.get("Feature Control", "enable_engine", true).getBoolean(true))
+	    {
+    		AdvThaum.EssentiaEngine = new BlockEssentiaEngine(essentiaengineid, Material.rock);
+    		AdvThaum.EssentiaEngine.register();
+	    }
+	   
     }
     
     
     
 
     
-    public boolean AspectListcontains(AspectList list, Aspect aspect)
+    public static boolean AspectListcontains(AspectList list, Aspect aspect)
     {
     	for (Aspect a : list.getAspects())
     	{
@@ -113,54 +128,7 @@ public class CommonProxy implements IGuiHandler, IPacketHandler
      * @param zrange Block range to search on the Z axis
      * @return First jar of essentia it finds that contains at least 1 of aspect specified
      */
-    public TileJarFillable findEssentiaJar(World world, Aspect aspect, int srcx, int srcy, int srcz, int xrange, int yrange, int zrange)
-    {
-    	for (int cx = srcx - (xrange / 2); cx < srcx + (xrange / 2); cx++)
-        {
-            for (int cy = srcy - (yrange / 2); cy < srcy + (yrange / 2); cy++)
-            {
-                for (int cz = srcz - (zrange / 2); cz < srcz + (zrange / 2); cz++)
-                {
-                    TileEntity te = world.getBlockTileEntity(cx,  cy,  cz);
-                    if ((te instanceof TileJarFillable))
-                    {
-                        TileJarFillable jar = (TileJarFillable)te;
-                        
-                        if (jar.amount == 0)
-                            continue;
-                        
-                        if (jar.aspect == null)
-                            continue;
-                         
-                        if (jar.doesContainerContainAmount(aspect, 1))
-                        {
-                            return (TileJarFillable)te;
-                        }
-                    }
-                }
-            }
-        }
-        return null;
-    }
     
-    public TileJarFillable findEssentiaJar(World world, Aspect aspect, TileEntity src, int xrange, int yrange, int zrange)
-    {
-        return findEssentiaJar(world, aspect, src.xCoord, src.yCoord, src.zCoord, xrange, yrange, zrange);
-    }
-   
-
-	public IWandFocus getEquippedFocus(ItemStack stack)
-	{
-		 if ((stack == null) || !(stack.getItem() instanceof ItemWandCasting))
-			 return null;
-	 
-		 ItemWandCasting wand = (ItemWandCasting)stack.getItem();
-	 
-		IWandFocus focus = wand.getFocus(stack);
-	 
-		return focus;
-	  
-	}
 
 
 
