@@ -24,7 +24,7 @@ public class ArcingDamageManager implements ITickHandler
 	}
 
 	@Override
-	public void tickStart(EnumSet<TickType> type, Object... tickData) {}
+	public void tickStart(EnumSet<TickType> type, Object... tickData) { }
 
 	@Override
 	public void tickEnd(EnumSet<TickType> type, Object... tickData) 
@@ -44,7 +44,7 @@ public class ArcingDamageManager implements ITickHandler
 		return "ArcDataManager";
 	}
 	
-	private void update()
+	private static void update()
 	{
 		for(Iterator<ArcData> i = instances.iterator(); i.hasNext();)
 		{
