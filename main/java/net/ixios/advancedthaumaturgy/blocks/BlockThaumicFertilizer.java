@@ -36,6 +36,7 @@ public class BlockThaumicFertilizer extends BlockContainer
         blockID = id;
         this.setCreativeTab(AdvThaum.tabAdvThaum);
         this.setUnlocalizedName("at.fertilizer");
+        this.setHardness(1.0f);
         renderID = RenderingRegistry.getNextAvailableRenderId();
     }
 
@@ -89,7 +90,7 @@ public class BlockThaumicFertilizer extends BlockContainer
 	@Override
 	public void registerIcons(IconRegister ir)
 	{
-		blockIcon = ir.registerIcon("advancedthaumaturgy:thaumic_fertilizer");
+		blockIcon = ir.registerIcon("advthaum:thaumic_fertilizer");
 	}
 
 

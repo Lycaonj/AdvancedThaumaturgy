@@ -9,6 +9,8 @@ import thaumcraft.common.config.ConfigBlocks;
 import thaumcraft.common.config.ConfigResearch;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.ixios.advancedthaumaturgy.AdvThaum;
 import net.ixios.advancedthaumaturgy.items.ItemEngine;
 import net.ixios.advancedthaumaturgy.misc.ATResearchItem;
@@ -16,6 +18,7 @@ import net.ixios.advancedthaumaturgy.tileentities.TileEssentiaEngine;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -110,6 +113,13 @@ public class BlockEssentiaEngine extends Block implements ITileEntityProvider
 	public boolean renderAsNormalBlock() 
 	{
 		return false;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void registerIcons(IconRegister ir)
+	{
+		blockIcon = ir.registerIcon("minecraft:obsidian");
 	}
 	
 	@Override
