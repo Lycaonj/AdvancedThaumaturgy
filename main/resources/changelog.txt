@@ -8,6 +8,8 @@ Fixed fertilizer and flux dissipator to not insta-break and drop no block.
 Fixed bug with flux ventilator where you could not remove vitium with a phial.
 Fixed depth rendering bug with the flux dissipator orb
 Increased the rate at which the flux ventilator converts liquid goo to gas.
+Fixed essentia particle position for the fertilizer.
+Fertilizer now spreads flowers.
 
 Build 16
 Removed red marker particles from the fertilizer.  Oops, debug code!
