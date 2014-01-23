@@ -73,7 +73,7 @@ public class ClientProxy extends CommonProxy
         MinecraftForgeClient.registerItemRenderer(BlockThaumicFertilizer.blockID, renderer);
         ClientRegistry.bindTileEntitySpecialRenderer(TileThaumicFertilizer.class, renderer);
 
-        renderer = new GenericRenderer(new ModelNodeModifier(), 1F, -0.2F, 1.1F, .5F);
+        renderer = new GenericRenderer(new ModelNodeModifier(), 1F, -0.2F, 1.1F, .4F);
         renderer.setScale(0.3F);
 		MinecraftForgeClient.registerItemRenderer(BlockNodeModifier.blockID, renderer);
         ClientRegistry.bindTileEntitySpecialRenderer(TileNodeModifier.class, renderer);
@@ -92,8 +92,11 @@ public class ClientProxy extends CommonProxy
         
         TileEntitySpecialRenderer special = new BlockEtherealJarRenderer();
 
-        MinecraftForgeClient.registerItemRenderer(AdvThaum.itemEtherealJar.itemID, new ItemEtherealJarRenderer((BlockEtherealJarRenderer)special));
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEtherealJar.class, special);
+        if (AdvThaum.itemEtherealJar != null)
+        {
+        	MinecraftForgeClient.registerItemRenderer(AdvThaum.itemEtherealJar.itemID, new ItemEtherealJarRenderer((BlockEtherealJarRenderer)special));
+        	ClientRegistry.bindTileEntitySpecialRenderer(TileEtherealJar.class, special);
+        }
         
         MinecraftForgeClient.registerItemRenderer(BlockCreativeNode.blockID, new ItemNodeRenderer());
         
@@ -249,5 +252,10 @@ public class ClientProxy extends CommonProxy
     	}
     	catch (IOException io) { }
     }
+
+    @Override
+    public void loadData() { }
     
+    @Override
+    public void saveData() { }
 }
