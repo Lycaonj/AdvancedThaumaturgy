@@ -44,7 +44,7 @@ import net.minecraftforge.common.MinecraftForge;
 public class CommonProxy implements IGuiHandler, IPacketHandler
 {
 
-	public TickManager tickmanager = null;
+	private TickManager tickmanager = null;
 	
 	public void registerAllTheThings() 
 	{ 
