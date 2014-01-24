@@ -21,6 +21,7 @@ import thaumcraft.common.items.ItemEssence;
 import thaumcraft.common.tiles.TileJarFillable;
 import net.ixios.advancedthaumaturgy.AdvThaum;
 import net.ixios.advancedthaumaturgy.items.ItemEtherealJar;
+import net.ixios.advancedthaumaturgy.items.TCItems;
 import net.ixios.advancedthaumaturgy.misc.ATResearchItem;
 import net.ixios.advancedthaumaturgy.tileentities.TileEtherealJar;
 import net.ixios.advancedthaumaturgy.tileentities.TileFluxDissipator;
@@ -66,13 +67,15 @@ public class BlockEtherealJar extends BlockJar
     	
     	// do research
     	ItemStack crystal = new ItemStack(ConfigBlocks.blockCrystal, 1, 32767);
-    	ItemStack silverwoodplank = new ItemStack(ConfigBlocks.blockWoodenDevice, 1 , 7);
+    	ItemStack silverwood = new ItemStack(ConfigBlocks.blockMagicalLog, 1 , 1);
+    	ItemStack quicksilver = TCItems.quicksilver;
     	
    	 	ShapedArcaneRecipe recipe = ThaumcraftApi.addArcaneCraftingRecipe("ETHEREALJAR", new ItemStack(AdvThaum.itemEtherealJar, 1, 0),
              (new AspectList()).add(Aspect.AIR, 25).add(Aspect.ENTROPY, 25),
-             new Object[] { "JCJ",
-   	 		  	            "CPC",
-   	 			 		    "JCJ", 'C', crystal, 'J', new ItemStack(ConfigBlocks.blockJar, 1, 0), 'P', silverwoodplank });
+             new Object[] { "SSS",
+   	 		  	            "JQJ",
+   	 			 		    "JCJ", 'C', crystal, 'J', new ItemStack(ConfigBlocks.blockJar, 1, 0), 'S', silverwood,
+   	 			 		    		'Q', quicksilver });
      
      ConfigResearch.recipes.put("EtherealJar", recipe);
  
@@ -179,16 +182,14 @@ public class BlockEtherealJar extends BlockJar
         TileEtherealJar ej = (TileEtherealJar)te;
          
         ItemStack drop = new ItemStack(AdvThaum.itemEtherealJar);
-        NBTTagCompound tag = new NBTTagCompound();
-        
+       
         if (ej.amount > 0)
-        {
             ((ItemJarFilled)drop.getItem()).setAspects(drop, (new AspectList()).add(ej.aspect, ej.amount));
-            if (!drop.hasTagCompound())
-                drop.setTagCompound(new NBTTagCompound("tag"));
-            if (ej.aspectFilter != null)
-                drop.stackTagCompound.setString("filter", ej.aspectFilter.getTag());
-        }
+        if (!drop.hasTagCompound())
+            drop.setTagCompound(new NBTTagCompound("tag"));
+        if (ej.aspectFilter != null)
+            drop.stackTagCompound.setString("filter", ej.aspectFilter.getTag());
+        
 
         dropBlockAsItem_do(world, x, y, z, drop);
 
