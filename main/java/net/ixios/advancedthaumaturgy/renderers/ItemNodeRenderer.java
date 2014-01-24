@@ -42,16 +42,16 @@ public class ItemNodeRenderer implements IItemRenderer
 
     public boolean shouldUseRenderHelper(net.minecraftforge.client.IItemRenderer.ItemRenderType type, ItemStack item, net.minecraftforge.client.IItemRenderer.ItemRendererHelper helper)
     {
-        return helper != net.minecraftforge.client.IItemRenderer.ItemRendererHelper.EQUIPPED_BLOCK;
+        return helper != IItemRenderer.ItemRendererHelper.EQUIPPED_BLOCK;
     }
 
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data)
     {
-        if(type == ItemRenderType.ENTITY)
+        if (type == ItemRenderType.ENTITY)
             GL11.glTranslatef(-0.5F, -0.25F, -0.5F);
         else
-        if(type == net.minecraftforge.client.IItemRenderer.ItemRenderType.EQUIPPED && (data[1] instanceof EntityPlayer))
+        if (type == net.minecraftforge.client.IItemRenderer.ItemRenderType.EQUIPPED && (data[1] instanceof EntityPlayer))
             GL11.glTranslatef(0.0F, 0.0F, -0.5F);
         TileNode tjf = new TileNode();
         tjf.setAspects(aspects);

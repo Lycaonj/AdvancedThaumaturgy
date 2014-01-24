@@ -33,7 +33,7 @@ public class ItemEtherealJarRenderer implements IItemRenderer
 	@Override
     public boolean handleRenderType(ItemStack item, ItemRenderType type)
     {
- 	    return true;
+ 	    return true;//(type == ItemRenderType.EQUIPPED) || (type == ItemRenderType.INVENTORY) || (type == ItemRenderType.ENTITY);
     }
 
 	@Override
@@ -49,7 +49,7 @@ public class ItemEtherealJarRenderer implements IItemRenderer
 		{
         	case ENTITY:
         	{
-        		//BlockEtherealJarRenderer.renderHWB(item, -0.5F, 0.0F, 0.5F, 0.5F);
+        		renderInventoryItem(item, -0.5F, 0.0F, 0.5F, 0.5F);
                 return;
         	}
           
@@ -63,7 +63,14 @@ public class ItemEtherealJarRenderer implements IItemRenderer
         	{
         		renderInventoryItem(item, 1.0F, 0.8F, 1.0F, 0.5F);
                 return;
-          }
+        	}
+        
+        	case EQUIPPED_FIRST_PERSON:
+        	{
+        		renderInventoryItem(item, 0.0F, 0.0F, 0.0F, 0.5F);
+        		return;
+        	}
+        	
           default:
                   return;
 		}
@@ -88,10 +95,10 @@ public class ItemEtherealJarRenderer implements IItemRenderer
 	        GL11.glDisable(2884);
 	        GL11.glTranslatef((float)x + 0.5F, (float)y + 0.01F, (float)z + 0.5F);
 	        GL11.glRotatef(180F, 1.0F, 0.0F, 0.0F);
-	        GL11.glRotatef( 0.0F, 0.0F, 0.0F, 1.0F);
+	        GL11.glRotatef(0.0F, 0.0F, 0.0F, 1.0F);
 	        GL11.glRotatef(0.0F, 1.0F, 0.0F, 0.0F);
 	        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-
+	        
 	        if (amount > 0)
 	            renderInventoryLiquid(stack, x, y, z, f);
 	            
