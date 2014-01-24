@@ -336,7 +336,7 @@ public class ItemMercurialWand extends ItemWandCasting
     	
     	TileEntity te = world.getBlockTileEntity(x, y, z);
 		if (!(te instanceof TileInfusionMatrix))
-			return false;
+			return super.onItemUseFirst(stack, player, world, x, y, z, side, hitX, hitY, hitZ);;
 		TileInfusionMatrix im = (TileInfusionMatrix)te;
 		
     	if (getPommelType(stack) == ItemPommel.POMMEL_STABILIZER)
