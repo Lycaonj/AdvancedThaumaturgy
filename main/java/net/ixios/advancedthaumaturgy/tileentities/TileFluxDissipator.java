@@ -74,7 +74,7 @@ public class TileFluxDissipator extends TileEntity implements IAspectContainer
 						
 						worldObj.playSoundEffect(cx, cy, cz, "random.fizz", 0.3F, 1.0F);
 						
-						if (worldObj.rand.nextInt(100) <= 50)
+						if (worldObj.rand.nextInt(100) <= 15)
 						{
 							aspects.add(Aspect.TAINT,  1);
 							worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
