@@ -109,13 +109,18 @@ public class BlockEtherealJar extends BlockJar
     	TileEntity te = world.getBlockTileEntity(x, y, z);
         ItemStack helditem = player.getHeldItem();
         
+        if (!(te instanceof TileEtherealJar))
+    		return true;
+          
     	// world.playSound((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), "thaumcraft:jar", 0.2F, 1.0F, false);
-    	TileEtherealJar jar = null;
+    	TileEtherealJar jar = (TileEtherealJar)te;;
+    	ItemEssence phial = null;
+    	boolean noitem = (helditem == null);
     	
-    	if (te instanceof TileEtherealJar)
-    		jar = (TileEtherealJar)te;
+    	if (!noitem && helditem.getItem() instanceof ItemEssence)
+    		phial = (ItemEssence)helditem.getItem();
     	
-        if (jar != null && player.isSneaking() && jar.aspectFilter != null && side == jar.facing)
+        if (noitem && player.isSneaking() && jar.aspectFilter != null && side == jar.facing)
         {
         	jar.aspectFilter = null;
         	if (world.isRemote) 
@@ -128,7 +133,7 @@ public class BlockEtherealJar extends BlockJar
         		world.spawnEntityInWorld(new EntityItem(world, x + 0.5F + fd.offsetX / 3.0F, y + 0.5F, z + 0.5F + fd.offsetZ / 3.0F, new ItemStack(ConfigItems.itemResource, 1, 13)));
         	}
         }
-        else if (jar != null && player.isSneaking() && helditem == null)
+        else if (player.isSneaking() && noitem)
         {
         	jar.amount = 0;
         	if (world.isRemote) 
@@ -137,28 +142,59 @@ public class BlockEtherealJar extends BlockJar
         		world.playSound(x + 0.5F, y + 0.5F, z + 0.5F, "liquid.swim", 0.5F, 1.0F + world.rand.nextFloat() - world.rand.nextFloat() * 0.3F, false);
         	}
         }
-        else if (jar != null && player.getHeldItem() != null && jar.aspectFilter == null && 
-        	helditem.itemID == ConfigItems.itemResource.itemID && helditem.getItemDamage() == 13) 
+        else if (!noitem && jar.aspectFilter == null && helditem.itemID == ConfigItems.itemResource.itemID && helditem.getItemDamage() == 13) 
         {
-        	if (jar.amount == 0 && ((IEssentiaContainerItem)helditem.getItem()).getAspects(helditem) == null) 
-        	{
+        	if (jar.amount == 0 || jar.aspect == null) 
         		return true;
-        	}
 
-           if (jar.amount == 0 && ((IEssentiaContainerItem)helditem.getItem()).getAspects(helditem) != null)
-           {
-              jar.aspect = ((IEssentiaContainerItem)helditem.getItem()).getAspects(helditem).getAspects()[0];
-           }
-
-           --helditem.stackSize;
-           this.onBlockPlacedBy(world, x, y, z, player, (ItemStack)null);
            jar.aspectFilter = jar.aspect;
            
-           if (world.isRemote) {
-              world.playSound(x + 0.5F, y + 0.5F, z + 0.5F, "thaumcraft:jar", 0.4F, 1.0F, false);
-           }
+           --helditem.stackSize;
+           this.onBlockPlacedBy(world, x, y, z, player, (ItemStack)null);
+           
+           if (world.isRemote)
+        	   world.playSound(x + 0.5F, y + 0.5F, z + 0.5F, "thaumcraft:jar", 0.4F, 1.0F, false);
+           
         }
-
+        else if (helditem != null && (helditem.getItem() instanceof ItemEssence))
+    	{
+        	AspectList aspects = phial.getAspects(helditem);
+        	if (jar.amount >= 8 && jar.aspect != null && aspects == null)
+        	{ // empty phial, full jar
+        		helditem.stackSize--;
+        		ItemStack phialstack = new ItemStack(ConfigItems.itemEssence, 1, 1);
+        		((ItemEssence)phialstack.getItem()).setAspects(phialstack, new AspectList().add(jar.aspect, 8));
+        		
+        		jar.takeFromContainer(jar.aspect, 8);
+        		world.markBlockForUpdate(jar.xCoord, jar.yCoord, jar.zCoord);
+        		
+        		if (!player.inventory.addItemStackToInventory(phialstack))
+        			world.spawnEntityInWorld(new EntityItem(world,x + 0.5f, y + 0.5f, z + 0.5f, phialstack));
+        		
+        		if (world.isRemote)
+        			world.playSound(x + 0.5F, y + 0.5F, z + 0.5F, "liquid.swim", 0.5F, 1.0F + world.rand.nextFloat() - world.rand.nextFloat() * 0.3F, false);
+        	}
+        	else if (phial.getAspects(helditem) != null && jar.amount <= jar.maxAmount - 8)
+        	{ // empty jar, full phial
+        		if (jar.aspect != null && phial.getAspects(helditem).getAspects()[0] != jar.aspect)
+        			return true;
+        		
+        		helditem.stackSize--;
+        		ItemStack emptyphial = new ItemStack(ConfigItems.itemEssence, 1, 0);
+        		
+        		Aspect aspect = phial.getAspects(helditem).getAspects()[0];
+        		jar.addToContainer(aspect, 8);
+        		jar.aspect = aspect;
+        		
+        		world.markBlockForUpdate(jar.xCoord, jar.yCoord, jar.zCoord);
+        		
+        		if (!player.inventory.addItemStackToInventory(emptyphial))
+        			world.spawnEntityInWorld(new EntityItem(world,x + 0.5f, y + 0.5f, z + 0.5f, emptyphial));
+        		
+        		if (world.isRemote)
+        			world.playSound(x + 0.5F, y + 0.5F, z + 0.5F, "liquid.swim", 0.5F, 1.0F + world.rand.nextFloat() - world.rand.nextFloat() * 0.3F, false);
+        	}
+		}
         return true;
 	}
     
