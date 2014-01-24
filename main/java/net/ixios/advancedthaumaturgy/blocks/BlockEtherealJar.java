@@ -18,6 +18,8 @@ import thaumcraft.common.config.ConfigBlocks;
 import thaumcraft.common.config.ConfigItems;
 import thaumcraft.common.config.ConfigResearch;
 import thaumcraft.common.items.ItemEssence;
+import thaumcraft.common.items.ItemResearchNotes;
+import thaumcraft.common.items.ItemResource;
 import thaumcraft.common.tiles.TileJarFillable;
 import net.ixios.advancedthaumaturgy.AdvThaum;
 import net.ixios.advancedthaumaturgy.items.ItemEtherealJar;
@@ -29,10 +31,12 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 
 public class BlockEtherealJar extends BlockJar
 {
@@ -87,7 +91,7 @@ public class BlockEtherealJar extends BlockJar
      ri.setTitle("at.research.etherealjar.title");
      ri.setInfo("at.research.etherealjar.desc");
      ri.setParents("JARVOID");
-     ri.setPages(new ResearchPage("at.research.etherealjar.pg1"),
+     ri.setPages(new ResearchPage("at.research.etherealjar.pg1"), new ResearchPage("at.research.etherealjar.pg2"),
              new ResearchPage(recipe));
      
      ri.setConcealed();
@@ -102,77 +106,60 @@ public class BlockEtherealJar extends BlockJar
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX,
 	        float hitY, float hitZ)
 	{
-	    ItemStack helditem = player.getHeldItem();
-	    TileEntity te = world.getBlockTileEntity(x,  y,  z);
-	    
-	    if (!(helditem.getItem() instanceof IEssentiaContainerItem))
-	    	return false;
-	 
-	    if (!(te instanceof TileEtherealJar))
-	    	return false;
-	 
-	    IEssentiaContainerItem container = (IEssentiaContainerItem)helditem.getItem();
-	    
-	    TileEtherealJar jar = (TileEtherealJar)te;
-	 
-	    if (helditem.getItemDamage() == 0)
-	    {
-	    	Aspect aspect = jar.getAspects().getAspects()[0];
-	    	
-	         if (jar.doesContainerContainAmount(aspect, 8)) 
-	         {
-	            if (world.isRemote) 
-	            {
-	               player.swingItem();
-	               return false;
-	            }
+    	TileEntity te = world.getBlockTileEntity(x, y, z);
+        ItemStack helditem = player.getHeldItem();
+        
+    	// world.playSound((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), "thaumcraft:jar", 0.2F, 1.0F, false);
+    	TileEtherealJar jar = null;
+    	
+    	if (te instanceof TileEtherealJar)
+    		jar = (TileEtherealJar)te;
+    	
+        if (jar != null && player.isSneaking() && jar.aspectFilter != null && side == jar.facing)
+        {
+        	jar.aspectFilter = null;
+        	if (world.isRemote) 
+        	{
+        		world.playSound(x + 0.5F, y + 0.5F, z + 0.5F, "thaumcraft:page", 1.0F, 1.0F, false);
+        	}
+        	else
+        	{
+        		ForgeDirection fd = ForgeDirection.getOrientation(side);
+        		world.spawnEntityInWorld(new EntityItem(world, x + 0.5F + fd.offsetX / 3.0F, y + 0.5F, z + 0.5F + fd.offsetZ / 3.0F, new ItemStack(ConfigItems.itemResource, 1, 13)));
+        	}
+        }
+        else if (jar != null && player.isSneaking() && helditem == null)
+        {
+        	jar.amount = 0;
+        	if (world.isRemote) 
+        	{
+        		world.playSound(x + 0.5F, y + 0.5F, z + 0.5F, "thaumcraft:jar", 0.4F, 1.0F, false);
+        		world.playSound(x + 0.5F, y + 0.5F, z + 0.5F, "liquid.swim", 0.5F, 1.0F + world.rand.nextFloat() - world.rand.nextFloat() * 0.3F, false);
+        	}
+        }
+        else if (jar != null && player.getHeldItem() != null && jar.aspectFilter == null && 
+        	helditem.itemID == ConfigItems.itemResource.itemID && helditem.getItemDamage() == 13) 
+        {
+        	if (jar.amount == 0 && ((IEssentiaContainerItem)helditem.getItem()).getAspects(helditem) == null) 
+        	{
+        		return true;
+        	}
 
-	            if (jar.takeFromContainer(aspect, 8))
-	            {
-	               --helditem.stackSize;
-	               ItemStack stack = new ItemStack(ConfigItems.itemEssence, 1, 1);
-	               ((ItemEssence)container).setAspects(stack, (new AspectList()).add(Aspect.TAINT, 8));
-	               if (!player.inventory.addItemStackToInventory(stack)) 
-	               {
-	                  world.spawnEntityInWorld(new EntityItem(world, (double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), stack));
-	               }
+           if (jar.amount == 0 && ((IEssentiaContainerItem)helditem.getItem()).getAspects(helditem) != null)
+           {
+              jar.aspect = ((IEssentiaContainerItem)helditem.getItem()).getAspects(helditem).getAspects()[0];
+           }
 
-	               world.playSoundAtEntity(player, "liquid.swim", 0.25F, 1.0F);
-	               player.inventoryContainer.detectAndSendChanges();
-	               return true;
-	            }
-	         }
-	    }
-	    else
-	    {
-	    	Aspect aspect = container.getAspects(helditem).getAspects()[0];
-	    	
-	         if (jar.getAspects().size() == 0 || jar.doesContainerContainAmount(aspect, 1)) 
-	         {
-	            if (world.isRemote) 
-	            {
-	               player.swingItem();
-	               return false;
-	            }
+           --helditem.stackSize;
+           this.onBlockPlacedBy(world, x, y, z, player, (ItemStack)null);
+           jar.aspectFilter = jar.aspect;
+           
+           if (world.isRemote) {
+              world.playSound(x + 0.5F, y + 0.5F, z + 0.5F, "thaumcraft:jar", 0.4F, 1.0F, false);
+           }
+        }
 
-	            if (jar.addToContainer(aspect, 8) == 0)
-	            {
-	               --helditem.stackSize;
-	               ItemStack stack = new ItemStack(ConfigItems.itemEssence, 1, 0);
-	               ((ItemEssence)helditem.getItem()).setAspects(stack, (new AspectList()).add(Aspect.TAINT, 8));
-	               if (!player.inventory.addItemStackToInventory(stack)) 
-	               {
-	                  world.spawnEntityInWorld(new EntityItem(world, (double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), stack));
-	               }
-
-	               world.playSoundAtEntity(player, "liquid.swim", 0.25F, 1.0F);
-	               player.inventoryContainer.detectAndSendChanges();
-	               return true;
-	            }
-	         }
-	    }
-	    
-	    return false;
+        return true;
 	}
     
     @Override
@@ -200,7 +187,7 @@ public class BlockEtherealJar extends BlockJar
     @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack stack)
     {
-    	if (!stack.hasTagCompound())
+    	if (stack == null || !stack.hasTagCompound())
     		return;
     	
     	NBTTagCompound nbt = stack.getTagCompound();
