@@ -88,7 +88,7 @@ public class BlockNodeModifier extends BlockContainer implements IWandable
 					new ItemStack(this));
 			ri.setTitle("at.research.nodemodifier.title");
 			ri.setInfo("at.research.nodemodifier.desc");
-			ri.setParents("NODEJAR");
+			ri.setParents("NODEJAR", "INFUSION");
 			ri.setPages(new ResearchPage("at.research.nodemodifier.pg1"),
 					new ResearchPage("at.research.nodemodifier.pg2"), new ResearchPage(recipe), new ResearchPage(list));
 			ri.setConcealed();

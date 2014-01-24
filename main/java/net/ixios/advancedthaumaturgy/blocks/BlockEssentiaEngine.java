@@ -69,7 +69,7 @@ public class BlockEssentiaEngine extends Block implements ITileEntityProvider
 	                new ItemStack(this));
 	        ri.setTitle("at.research.essentiaengine.title");
 	        ri.setInfo("at.research.essentiaengine.desc");
-	        ri.setParents("INFERNALFURNACE");
+	        ri.setParents("INFERNALFURNACE", "INFUSION");
 	        ri.setPages(new ResearchPage("at.research.essentiaengine.pg1"),
 	                new ResearchPage(recipe));
 	        
