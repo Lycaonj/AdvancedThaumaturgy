@@ -13,6 +13,7 @@ import thaumcraft.client.fx.FXEssentiaTrail;
 import thaumcraft.client.fx.FXSparkle;
 import thaumcraft.client.renderers.item.ItemWandRenderer;
 import thaumcraft.common.Thaumcraft;
+import thaumcraft.common.tiles.TileInfusionMatrix;
 import net.ixios.advancedthaumaturgy.AdvThaum;
 import net.ixios.advancedthaumaturgy.blocks.BlockCreativeNode;
 import net.ixios.advancedthaumaturgy.blocks.BlockEssentiaEngine;
@@ -258,4 +259,8 @@ public class ClientProxy extends CommonProxy
     
     @Override
     public void saveData() { }
+    
+    @Override
+    public void beginMonitoring(TileInfusionMatrix im) { }
+    
 }

@@ -343,7 +343,7 @@ public class ItemMercurialWand extends ItemWandCasting
     	{
     		if (!im.active)
     		{
-    			AdvThaum.proxy.tickmanager.beginMonitoring(im);
+    			AdvThaum.proxy.beginMonitoring(im);
     		}
     		else if (im.active && Utilities.isOp(player.username))
     		{

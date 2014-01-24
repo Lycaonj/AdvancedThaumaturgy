@@ -64,6 +64,11 @@ public class CommonProxy implements IGuiHandler, IPacketHandler
 		tickmanager.saveData();
 	}
 	
+	public void beginMonitoring(TileInfusionMatrix im)
+	{
+		tickmanager.beginMonitoring(im);
+	}
+	
 	public void createParticle(World world, float srcx, float srcy, float srcz, float dstx, float dsty, float dstz, int color) { }
 	
 	public void createParticle(TileEntity src, float dstx, float dsty, float dstz, int color) { }
