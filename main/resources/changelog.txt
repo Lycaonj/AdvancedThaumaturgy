@@ -1,3 +1,8 @@
+Build 18
+Fixed TickManager crash on servers.
+Fixed labels causing crash when affixing to ethereal jars.
+Fixed thaumonomicon pages for ethereal jar.
+
 Build 17
 Fixed wand tooltip to correctly show vis discount from armor, and not the current Ignis modifier
 Added Herba as a requirement for the actual fertilization component of the fertilizer.  Watering still requires Aqua, of course
