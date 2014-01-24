@@ -25,6 +25,7 @@ public class ItemEtherealJar extends ItemJarFilled
 	{
 		super(id);
 		this.setCreativeTab(AdvThaum.tabAdvThaum);
+		this.setMaxStackSize(4);
 		this.setUnlocalizedName("at.etherealjar");
 	}
 
