@@ -80,13 +80,13 @@ public class BlockEtherealJar extends BlockJar
      ConfigResearch.recipes.put("EtherealJar", recipe);
  
      // add research
-      ATResearchItem ri = new ATResearchItem("ETHEREALJAR", "BASICS",
+      ATResearchItem ri = new ATResearchItem("ETHEREALJAR", "ALCHEMY",
     		  (new AspectList()).add(Aspect.AIR, 50).add(Aspect.ENTROPY, 50),
-             -10, 2, 3,
+             7, -7, 3,
              new ItemStack(AdvThaum.itemEtherealJar, 1, 0));
      ri.setTitle("at.research.etherealjar.title");
      ri.setInfo("at.research.etherealjar.desc");
-     ri.setParents("NODEJAR");
+     ri.setParents("JARVOID");
      ri.setPages(new ResearchPage("at.research.etherealjar.pg1"),
              new ResearchPage(recipe));
      
