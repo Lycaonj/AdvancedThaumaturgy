@@ -68,7 +68,7 @@ import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry.EntityRegistration;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid="AdvancedThaumaturgy", version="0.0.18", name="Advanced Thaumaturgy", 
+@Mod(modid="AdvancedThaumaturgy", version="0.0.19", name="Advanced Thaumaturgy", 
 	dependencies="required-after:Thaumcraft", acceptedMinecraftVersions="1.6.4")
 @NetworkMod(clientSideRequired=true, channels={"AdvThaum"}, packetHandler = CommonProxy.class)
 

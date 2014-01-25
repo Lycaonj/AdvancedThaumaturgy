@@ -1,3 +1,7 @@
+Build 19
+Quick fix to a bug that was causing random items to disappear from creative tabs.
+Fixed bug where labels always apply to the same direction on ethereal jars.
+
 Build 18
 Fixed TickManager crash on servers.
 Fixed labels causing crash when affixing to ethereal jars.
