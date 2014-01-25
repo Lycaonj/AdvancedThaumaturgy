@@ -23,17 +23,10 @@ import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.SideOnly;
 import cpw.mods.fml.relauncher.Side;
 
-@SideOnly(Side.CLIENT)
 public class TickManager implements ITickHandler
 {
 	public ArrayList<TileInfusionMatrix> waiting = new ArrayList<TileInfusionMatrix>(); 
 	public HashMap<TileInfusionMatrix, Integer> monitoring = new HashMap<TileInfusionMatrix, Integer>();
-	
-	@ForgeSubscribe
-	public void onRenderWorld(RenderWorldLastEvent event)
-	{
-		
-	}
 		
 	public void loadData()
 	{
