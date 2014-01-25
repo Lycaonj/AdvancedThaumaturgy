@@ -55,7 +55,7 @@ public class BlockEtherealJar extends BlockJar
     public void getSubBlocks(int blockid, CreativeTabs tab, List list) 
     {
     	// don't show in creative menu
-    	list.clear(); //add(new ItemStack(blockid, 1, 0));
+    	//list.clear(); //add(new ItemStack(blockid, 1, 0));
     }
     
     @Override
