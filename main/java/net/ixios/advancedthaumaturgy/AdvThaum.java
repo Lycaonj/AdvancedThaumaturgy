@@ -251,10 +251,7 @@ public class AdvThaum
 			 CreativeNode.register();
 		 
 		 if (EtherealJar != null && itemEtherealJar != null)
-		 {
 			 EtherealJar.register();
-			 //itemEtherealJar.register();
-		 }
 		 
 		 if (FluxDissipator != null)
 			 FluxDissipator.register();
