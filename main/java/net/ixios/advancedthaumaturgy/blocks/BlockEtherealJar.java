@@ -35,6 +35,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 
@@ -223,19 +224,36 @@ public class BlockEtherealJar extends BlockJar
     @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack stack)
     {
-    	if (stack == null || !stack.hasTagCompound())
+    	TileEntity te = world.getBlockTileEntity(x, y, z);
+    	
+    	if (!(te instanceof TileEtherealJar))
     		return;
     	
-    	NBTTagCompound nbt = stack.getTagCompound();
-    	TileEtherealJar ej = new TileEtherealJar();
+    	TileEtherealJar ej = (TileEtherealJar)te; 
     	
-    	if (nbt.hasKey("aspect") && nbt.hasKey("amount"))
+    	if (ej == null)
+    		ej = new TileEtherealJar();
+    	
+    	int facing = MathHelper.floor_double((double)(player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+		
+		if (facing == 0)
+			ej.facing = 2;
+		else if (facing == 1)
+            ej.facing = 5;
+		else if (facing == 2)
+            ej.facing = 3;
+		else if (facing == 3)
+            ej.facing = 4;
+		
+		NBTTagCompound nbt = (stack == null) ? null : stack.getTagCompound();
+		
+    	if (nbt != null && nbt.hasKey("aspect") && nbt.hasKey("amount"))
     	{
     		ej.amount = nbt.getInteger("amount");
     		ej.aspect = Aspect.getAspect(nbt.getString("aspect"));
     	}
     	
-    	if (nbt.hasKey("filter"))
+    	if (nbt != null && nbt.hasKey("filter"))
     		ej.aspectFilter = Aspect.getAspect(nbt.getString("filter"));
     		
     	world.setBlockTileEntity(x,  y,  z, ej);
