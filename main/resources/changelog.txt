@@ -1,3 +1,15 @@
+Build 21
+Removed mercurial wand infusion recipe, you can now properly use any cap you like on the core.
+
+Build 20
+Fixed several issues with the ethereal jar which was causing desync issues between client and server
+Fixed issue with mcmod.info file.
+Changed how the fertilizer works.  It now uses herba to fertilize (ala the lamp of growth) which will cause normal plant
+growth and can spread certain plants like mushrooms, lilypads and flowers.  Hydrating soil is now a free function
+so you no longer need to worry about accidentally running out of aqua and having your farmland dry up.
+Fixed NPE crash when right clicking a flux dissipator with an empty hand.
+Ethereal jars now retain their labels when broken and placed.
+
 Build 19
 Quick fix to a bug that was causing random items to disappear from creative tabs.
 Fixed bug where labels always apply to the same direction on ethereal jars.

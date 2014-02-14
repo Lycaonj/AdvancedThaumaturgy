@@ -109,7 +109,7 @@ public class BlockThaumicVulcanizer extends BlockContainer
     			if (!(xc == x && zc == z))
     			{
     				world.setBlock(xc, y, zc, BlockPlaceholder.blockID);
-    				TilePlaceholder te = new TilePlaceholder(x, y, z);
+    				TilePlaceholder te = new TilePlaceholder();
     				world.setBlockTileEntity(xc, y, zc, te);
     			}
     		}
@@ -127,7 +127,6 @@ public class BlockThaumicVulcanizer extends BlockContainer
     			if (!(xc == x && zc == z))
     			{
     				TilePlaceholder te = (TilePlaceholder)world.getBlockTileEntity(xc, y, zc);
-	    			te.disableBroadcast();
     			}
     		}
     	}

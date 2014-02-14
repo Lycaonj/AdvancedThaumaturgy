@@ -1,11 +1,10 @@
 package net.ixios.advancedthaumaturgy.misc;
 
-public class Vector3F
+public class Vector3
 {
-
-	public float x, y, z;
+	public int x, y, z;
 	
-	public Vector3F(float x, float y, float z)
+	public Vector3(int x, int y, int z)
 	{
 		this.x = x; this.y = y; this.z = z;
 	}
@@ -17,13 +16,11 @@ public class Vector3F
 		float dz = (float)Math.pow(target.z - z, 2);
 		return (float)Math.sqrt(dx + dy + dz);
 	}
-	
-	public float distanceTo(Vector3 target)
+
+	@Override
+	public String toString()
 	{
-		float dx = (float)Math.pow(target.x - x, 2);
-		float dy = (float)Math.pow(target.y - y, 2);
-		float dz = (float)Math.pow(target.z - z, 2);
-		return (float)Math.sqrt(dx + dy + dz);
+	    return x + ";" + y + ";" + z;
 	}
 	
 }

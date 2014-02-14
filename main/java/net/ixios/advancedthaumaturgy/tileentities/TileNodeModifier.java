@@ -303,7 +303,7 @@ public class TileNodeModifier extends TileEntity implements IAspectContainer
 		reqs = new Requirements(new AspectList().add(Aspect.ORDER, 64), new AspectList().add(null, 4));
 		requirementlist.put(Operation.RemoveTainted, reqs);
 		
-		reqs = new Requirements(new AspectList().add(Aspect.AURA, 64), new AspectList().add(Aspect.AURA, 4));
+		reqs = new Requirements(new AspectList().add(Aspect.AURA, 64), new AspectList().add(Aspect.AURA, 1));
 		requirementlist.put(Operation.AddBright, reqs);
 		
 		reqs = new Requirements(new AspectList().add(Aspect.CROP, 32), new AspectList().add(Aspect.CROP, 1));
@@ -318,7 +318,7 @@ public class TileNodeModifier extends TileEntity implements IAspectContainer
 		reqs = new Requirements(new AspectList().add(Aspect.AURA, 32), new AspectList().add(null, 4));
 		requirementlist.put(Operation.AddAspect, reqs);
 		
-		reqs = new Requirements(new AspectList().add(Aspect.AURA, 64), new AspectList().add(Aspect.AURA, 2));
+		reqs = new Requirements(new AspectList().add(Aspect.AURA, 64), new AspectList().add(Aspect.AURA, 4));
 		requirementlist.put(Operation.IncreaseAspect, reqs);
 		
 		reqs = new Requirements(new AspectList().add(Aspect.HUNGER, 64), new AspectList().add(Aspect.HUNGER, 2));

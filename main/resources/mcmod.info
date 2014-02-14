@@ -11,6 +11,6 @@
   "credits": "Azanor, for Thaumcrft. Vazkii for inspiration. XanderGryphon, LordIllyohs for support. Le_Alchemist for proving that living beings can indeed be dumber than a rock.",
   "logoFile": "",
   "screenshots": [],
-  "dependencies": [thaumcraft]
+  "dependencies": ["thaumcraft"]
 }
 ]

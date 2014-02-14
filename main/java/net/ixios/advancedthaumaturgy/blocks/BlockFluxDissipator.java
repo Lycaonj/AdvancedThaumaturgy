@@ -111,7 +111,7 @@ public class BlockFluxDissipator extends BlockContainer
 	    ItemStack helditem = player.getHeldItem();
 	    TileEntity te = world.getBlockTileEntity(x,  y,  z);
 	    
-	    if (!(helditem.getItem() instanceof IEssentiaContainerItem))
+	    if (helditem == null || !(helditem.getItem() instanceof IEssentiaContainerItem))
 	    	return false;
 	 
 	    if (!(te instanceof TileFluxDissipator))

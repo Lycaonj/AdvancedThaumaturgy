@@ -10,6 +10,7 @@ import thaumcraft.api.research.ResearchCategoryList;
 import thaumcraft.api.research.ResearchItem;
 import thaumcraft.common.Thaumcraft;
 import thaumcraft.common.lib.research.ResearchManager;
+import net.ixios.advancedthaumaturgy.AdvThaum;
 import net.ixios.advancedthaumaturgy.tileentities.TileNodeModifier.Operation;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
@@ -76,15 +77,14 @@ public class ATServerCommand implements ICommand
 		
 		EntityPlayer player = (EntityPlayer)sender;
 		
-		if (params.length == 0)
-		{
-			showHelp(player);
-			return;
-		}
-		
 		String cmd = params[0].toLowerCase();
 		
-		if (cmd == "research")
+		if (cmd.equals("debug"))
+		{
+			AdvThaum.debug = !AdvThaum.debug;
+			player.addChatMessage("Debug mode is now: " + AdvThaum.debug);
+		}
+		else if (cmd.equals("research"))
 		{
 			if (params.length < 2)
 			{
@@ -95,7 +95,7 @@ public class ATServerCommand implements ICommand
 			String option = params[1].toLowerCase();
 			String which = params[2].toLowerCase();
 			
-			if (option == "add")
+			if (option.equals("add"))
 			{
 				Collection rc = ResearchCategories.researchCategories.values();
                 
@@ -116,7 +116,7 @@ public class ATServerCommand implements ICommand
                 }
 	                
 			}
-			else if (option == "remove")
+			else if (option.equals("remove"))
 			{
 				ArrayList<String> list = (ArrayList<String>) ResearchManager.getResearchForPlayer(player.username);
 				for (Iterator<String>it = list.iterator(); it.hasNext();)

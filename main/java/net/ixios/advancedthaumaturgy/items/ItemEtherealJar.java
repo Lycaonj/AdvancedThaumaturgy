@@ -4,6 +4,7 @@ import java.util.List;
 
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
+import thaumcraft.api.aspects.IEssentiaContainerItem;
 import thaumcraft.common.blocks.ItemJarFilled;
 import net.ixios.advancedthaumaturgy.AdvThaum;
 import net.ixios.advancedthaumaturgy.blocks.BlockEtherealJar;
@@ -57,10 +58,20 @@ public class ItemEtherealJar extends ItemJarFilled
         	
         	AspectList aspects = ((ItemJarFilled)stack.getItem()).getAspects(stack); 
         	
-        	ej.setAspects(aspects);
+        	if (aspects != null && aspects.getAspects() != null)
+        	{
+        		ej.aspect = aspects.getAspects()[0];
+        	   	ej.amount = aspects.getAmount(ej.aspect);
+        	}
+        	
+        	NBTTagCompound tag = stack.stackTagCompound;
+        	
+        	if (tag != null && tag.hasKey("AspectFilter"))
+        		ej.aspectFilter = Aspect.getAspect(tag.getString("AspectFilter"));
         	
             Block.blocksList[BlockEtherealJar.blockID].onBlockPlacedBy(world, x, y, z, player, stack);
             Block.blocksList[BlockEtherealJar.blockID].onPostBlockPlaced(world, x, y, z, metadata);
+        	
         }
         return true;
     }

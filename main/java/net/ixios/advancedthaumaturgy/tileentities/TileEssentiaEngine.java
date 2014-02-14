@@ -6,9 +6,12 @@ import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.aspects.IAspectContainer;
 import thaumcraft.api.aspects.IEssentiaTransport;
+import thaumcraft.client.fx.FXLightningBolt;
 import thaumcraft.common.tiles.TileJarFillable;
 import net.ixios.advancedthaumaturgy.AdvThaum;
 import net.ixios.advancedthaumaturgy.misc.Utilities;
+import net.ixios.advancedthaumaturgy.misc.Vector3F;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
@@ -21,17 +24,20 @@ import buildcraft.api.power.PowerHandler;
 import buildcraft.api.power.PowerHandler.PowerReceiver;
 import buildcraft.api.transport.IPipeConnection;
 import buildcraft.api.transport.IPipeTile.PipeType;
-//import cpw.mods.fml.common.Optional;
+import cpw.mods.fml.common.Optional;
 //import cpw.mods.fml.common.Optional.Method;
+import cpw.mods.fml.common.Optional.Method;
 
-//@Optional.InterfaceList({@Optional.Interface(modid = "BuildCraft|Energy", iface = "IPipeConnection"), @Optional.Interface(modid = "BuildCraft|Energy", iface = "IPowerEmitter")})
-public class TileEssentiaEngine extends TileEntity implements IPowerEmitter, IPipeConnection, IAspectContainer, IEssentiaTransport
+@Optional.InterfaceList({
+	@Optional.Interface(modid = "BuildCraft|Energy", iface = "IPipeConnection"), 
+	@Optional.Interface(modid = "BuildCraft|Energy", iface = "IPowerEmitter")})
+public class TileEssentiaEngine extends TileEntity implements IPowerEmitter, IPipeConnection, IEssentiaTransport
 {
 	//private final double costperRF = 1D / x;
 	//private final double costperEU = 1D / 4000D;
 	private final double costperMJ = 1D / 1800D;
 
-	private Aspect aspect = Aspect.FIRE;
+	private Aspect curraspect = null;
 	private float energy = 0.0F;
 	private final float maxEnergy = 100F;
 
@@ -43,9 +49,17 @@ public class TileEssentiaEngine extends TileEntity implements IPowerEmitter, IPi
 	{
 		aspectvalues = new HashMap<Aspect, Float>();
 		aspectvalues.put(Aspect.FIRE, 1.0F);
-		aspectvalues.put(Aspect.TREE, 0.5F);
+		aspectvalues.put(Aspect.EARTH, 0.5F);
+		aspectvalues.put(Aspect.AIR, 0.5F);
+		aspectvalues.put(Aspect.WATER, 0.5F);
+		aspectvalues.put(Aspect.ORDER, 1.0F);
+		aspectvalues.put(Aspect.ENTROPY, 0.5F);
+		
+		aspectvalues.put(Aspect.TREE, 0.25F);
 		aspectvalues.put(Aspect.PLANT, 0.25F);
-		aspectvalues.put(Aspect.EARTH, 0.1F);
+		aspectvalues.put(Aspect.STONE, 0.25F);
+		aspectvalues.put(Aspect.ENERGY, 2.0F);
+		
 	}
 
 	public void setActive(boolean value)
@@ -63,25 +77,40 @@ public class TileEssentiaEngine extends TileEntity implements IPowerEmitter, IPi
 	
 	private void restockEnergy()
 	{
-		if (hasEssentiaTubeConnection())
-		{
-			fillFromPipe();
-			return;
-		}
-	
+
 		if ((int)energy >= maxEnergy)
 			return;
+	
+		if (hasEssentiaTubeConnection())
+		{
+			if (fillFromPipe() == 0)
+				return;
+			energy += aspectvalues.get(curraspect);
+            if (!worldObj.isRemote)
+            	worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+			return;
+		}
 		
 		// findEssentia is in common proxy
-		TileJarFillable essentiajar = Utilities.findEssentiaJar(worldObj, aspect, this, 20, 2, 20);
-	
+		TileJarFillable essentiajar = null;
+		
+		for (Aspect aspect : aspectvalues.keySet())
+		{
+			essentiajar = Utilities.findEssentiaJar(worldObj, aspect, this, 20, 2, 20);
+			if (essentiajar != null)
+			{
+				curraspect = essentiajar.aspect;
+				break;
+			}
+		}
+		
 		if (essentiajar != null && essentiajar.amount > 0)
         {
 			// createParticls is a blank method in common proxy, and has actual code in client proxy
             AdvThaum.proxy.createParticle(worldObj, (float)essentiajar.xCoord + 0.5F, essentiajar.yCoord + 1, (float)essentiajar.zCoord + 0.5F, 
-            		(float)xCoord + 0.5F, (float)yCoord + 0.8F, (float)zCoord + 0.5F, aspect.getColor());
-            essentiajar.takeFromContainer(aspect, 1);
-            energy += aspectvalues.get(aspect);
+            		(float)xCoord + 0.5F, (float)yCoord + 0.8F, (float)zCoord + 0.5F, essentiajar.aspect.getColor());
+            essentiajar.takeFromContainer(curraspect, 1);
+            energy += aspectvalues.get(curraspect);
             if (!worldObj.isRemote)
             {
             	worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
@@ -97,15 +126,34 @@ public class TileEssentiaEngine extends TileEntity implements IPowerEmitter, IPi
 	{
 		super.updateEntity();
 		
-		if ((worldObj.isRemote) && (aspect != null))
+		if ((worldObj.isRemote) && (curraspect != null))
 		{
-			//if (worldObj.rand.nextBoolean())
-				//worldObj.spawnParticle("flame", xCoord + 0.5F, yCoord + 1.5F, zCoord + 0.5F, 0.0F, worldObj.rand.nextFloat() / 50F, 0.0F);
-			//	if (worldObj.getWorldTime() % 20 == 0)
-				AdvThaum.proxy.createOrbitingParticle(worldObj, this, 20, 0.2F, aspect.getColor());
-				AdvThaum.proxy.createOrbitingParticle(worldObj, this, 20, 0.2F, aspect.getColor());
-				AdvThaum.proxy.createOrbitingParticle(worldObj, this, 20, 0.2F, aspect.getColor());
-				AdvThaum.proxy.createOrbitingParticle(worldObj, this, 20, 0.2F, aspect.getColor());
+			Vector3F src = new Vector3F(xCoord + 0.5F, yCoord + 1.0F, zCoord + 0.5F);
+			Vector3F dst = new Vector3F(src.x, yCoord, src.z);
+			
+			/*src.x += (worldObj.rand.nextFloat() - 0.5F);
+			src.y += (worldObj.rand.nextFloat() - 0.5F);
+			src.z += (worldObj.rand.nextFloat() - 0.5F);*/
+			
+			dst.x += (worldObj.rand.nextFloat() - 0.5F);
+			dst.y += (worldObj.rand.nextFloat() - 0.5F);
+			dst.z += (worldObj.rand.nextFloat() - 0.5F);
+			
+			if (Minecraft.getMinecraft().renderViewEntity.ticksExisted % 60 == 0)
+			{
+				FXLightningBolt bolt = new FXLightningBolt(worldObj, src.x, src.y, src.z, dst.x, dst.y, dst.z, worldObj.rand.nextLong(), 5, 1);
+				bolt.defaultFractal();
+				bolt.setType(0);
+				bolt.finalizeBolt();
+			}
+			
+			if (curraspect != null)
+			{
+				AdvThaum.proxy.createOrbitingParticle(worldObj, this, 20, 0.2F, curraspect.getColor());
+				AdvThaum.proxy.createOrbitingParticle(worldObj, this, 20, 0.2F, curraspect.getColor());
+				AdvThaum.proxy.createOrbitingParticle(worldObj, this, 20, 0.2F, curraspect.getColor());
+				AdvThaum.proxy.createOrbitingParticle(worldObj, this, 20, 0.2F, curraspect.getColor());
+			}
 		}
 		
 		restockEnergy();
@@ -153,8 +201,7 @@ public class TileEssentiaEngine extends TileEntity implements IPowerEmitter, IPi
 	
 	
 	
-	
-	//@Method(modid = "BuildCraft|Energy")
+	@Method(modid = "BuildCraft|Energy")
 	@Override
 	public ConnectOverride overridePipeConnection(PipeType type, ForgeDirection with)
 	{
@@ -164,71 +211,21 @@ public class TileEssentiaEngine extends TileEntity implements IPowerEmitter, IPi
 			return ConnectOverride.CONNECT;
 	}
 
-	//@Method(modid = "BuildCraft|Energy")
+	@Method(modid = "BuildCraft|Energy")
 	@Override
 	public boolean canEmitPowerFrom(ForgeDirection side) 
 	{
 		return (side != ForgeDirection.DOWN);
 	}
 
-	
-	
-	
 
-	@Override
-	public int addToContainer(Aspect arg0, int arg1)
-	{ 
-		return 0; 
-	}
-
-	@Override
-	public int containerContains(Aspect arg0) 
-	{
-		return (aspect == arg0) ? 1 : 0; 
-	}
-	
-	@Override
-	public boolean doesContainerContain(AspectList arg0)
-	{
-		return ((arg0.size() == 1) && (arg0.aspects.containsKey(arg0)));
-	}
-
-	@Override
-	public boolean doesContainerContainAmount(Aspect arg0, int arg1)
-	{
-		return ((aspect == arg0) && ((int)energy >= arg1));
-	}
-
-	@Override
-	public AspectList getAspects()
-	{
-		if (aspect == null)
-			return null;
-		else
-			return new AspectList().add(aspect, (int)energy);
-	}
-
-	@Override
-	public void setAspects(AspectList arg0) { return; }
-
-	@Override
-	public boolean takeFromContainer(AspectList arg0) { return false; }
-
-	@Override
-	public boolean takeFromContainer(Aspect arg0, int arg1) { return false; }
-
-	@Override
-	public boolean doesContainerAccept(Aspect arg0)
-	{
-		return (aspect == arg0);
-	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt)
 	{
 		super.readFromNBT(nbt);
 		if (nbt.hasKey("aspect"))
-			aspect = Aspect.getAspect(nbt.getString("aspect").toLowerCase());
+			curraspect = Aspect.getAspect(nbt.getString("aspect").toLowerCase());
 		energy = nbt.getFloat("energy");
 		currentlyactive = nbt.getBoolean("active");
 	}
@@ -237,8 +234,8 @@ public class TileEssentiaEngine extends TileEntity implements IPowerEmitter, IPi
 	public void writeToNBT(NBTTagCompound nbt)
 	{
 		super.writeToNBT(nbt);
-		if (aspect != null)
-			nbt.setString("aspect", aspect.getName().toLowerCase());
+		if (curraspect != null)
+			nbt.setString("aspect", curraspect.getName().toLowerCase());
 		nbt.setFloat("energy", energy);
 		nbt.setBoolean("active", currentlyactive);
 	}
@@ -285,7 +282,7 @@ public class TileEssentiaEngine extends TileEntity implements IPowerEmitter, IPi
 	@Override
 	public AspectList getSuction(ForgeDirection arg0)
 	{
-		return new AspectList().add(aspect, 256);
+		return new AspectList().add(curraspect, 256);
 	}
 
 	@Override
@@ -337,14 +334,11 @@ public class TileEssentiaEngine extends TileEntity implements IPowerEmitter, IPi
 	                
 	         for (Aspect a : available.getAspects())       
 	         {
-	        	 if (a != aspect)
+	        	 if (a != curraspect)
 	        		 continue;
 	        	 
 	        	 if ((int)energy < maxEnergy && ic.getSuction(ForgeDirection.DOWN).getAmount(a) < getSuction(ForgeDirection.UP).getAmount(a) && getSuction(ForgeDirection.UP).getAmount(a) >= ic.getMinimumSuction())
-	             {
-	        		 addToContainer(a, ic.takeVis(a, 1));
-	                 return 1;
-	             }	                
+	        		 return 1;               
 	         }
 		 }
 		 return 0;

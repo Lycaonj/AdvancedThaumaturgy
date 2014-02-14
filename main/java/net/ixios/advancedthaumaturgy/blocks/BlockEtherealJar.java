@@ -116,10 +116,14 @@ public class BlockEtherealJar extends BlockJar
     	// world.playSound((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), "thaumcraft:jar", 0.2F, 1.0F, false);
     	TileEtherealJar jar = (TileEtherealJar)te;;
     	ItemEssence phial = null;
+    	IEssentiaContainerItem container = null;
+    		
     	boolean noitem = (helditem == null);
     	
     	if (!noitem && helditem.getItem() instanceof ItemEssence)
     		phial = (ItemEssence)helditem.getItem();
+    	if (!noitem && helditem.getItem() instanceof IEssentiaContainerItem)
+    		container = (IEssentiaContainerItem)helditem.getItem();
     	
         if (noitem && player.isSneaking() && jar.aspectFilter != null && side == jar.facing)
         {
@@ -133,6 +137,7 @@ public class BlockEtherealJar extends BlockJar
         		ForgeDirection fd = ForgeDirection.getOrientation(side);
         		world.spawnEntityInWorld(new EntityItem(world, x + 0.5F + fd.offsetX / 3.0F, y + 0.5F, z + 0.5F + fd.offsetZ / 3.0F, new ItemStack(ConfigItems.itemResource, 1, 13)));
         	}
+        	world.markBlockForUpdate(x,  y,  z);
         }
         else if (player.isSneaking() && noitem)
         {
@@ -142,9 +147,21 @@ public class BlockEtherealJar extends BlockJar
         		world.playSound(x + 0.5F, y + 0.5F, z + 0.5F, "thaumcraft:jar", 0.4F, 1.0F, false);
         		world.playSound(x + 0.5F, y + 0.5F, z + 0.5F, "liquid.swim", 0.5F, 1.0F + world.rand.nextFloat() - world.rand.nextFloat() * 0.3F, false);
         	}
+        	world.markBlockForUpdate(x,  y,  z);
+        }
+        else if (!noitem && jar.amount == 0 && container.getAspects(helditem) != null)
+        {
+        	jar.aspectFilter = container.getAspects(helditem).getAspects()[0];
+            
+            --helditem.stackSize;
+            this.onBlockPlacedBy(world, x, y, z, player, (ItemStack)null);
+            
+            if (world.isRemote)
+         	   world.playSound(x + 0.5F, y + 0.5F, z + 0.5F, "thaumcraft:page", 0.4F, 1.0F, false);
+            world.markBlockForUpdate(x,  y,  z);
         }
         else if (!noitem && jar.aspectFilter == null && helditem.itemID == ConfigItems.itemResource.itemID && helditem.getItemDamage() == 13) 
-        {
+        {  // applying a blank label
         	if (jar.amount == 0 || jar.aspect == null) 
         		return true;
 
@@ -155,7 +172,7 @@ public class BlockEtherealJar extends BlockJar
            
            if (world.isRemote)
         	   world.playSound(x + 0.5F, y + 0.5F, z + 0.5F, "thaumcraft:jar", 0.4F, 1.0F, false);
-           
+           world.markBlockForUpdate(x,  y,  z);
         }
         else if (helditem != null && (helditem.getItem() instanceof ItemEssence))
     	{
@@ -174,6 +191,7 @@ public class BlockEtherealJar extends BlockJar
         		
         		if (world.isRemote)
         			world.playSound(x + 0.5F, y + 0.5F, z + 0.5F, "liquid.swim", 0.5F, 1.0F + world.rand.nextFloat() - world.rand.nextFloat() * 0.3F, false);
+        		world.markBlockForUpdate(x,  y,  z);
         	}
         	else if (phial.getAspects(helditem) != null && jar.amount <= jar.maxAmount - 8)
         	{ // empty jar, full phial
@@ -187,13 +205,13 @@ public class BlockEtherealJar extends BlockJar
         		jar.addToContainer(aspect, 8);
         		jar.aspect = aspect;
         		
-        		world.markBlockForUpdate(jar.xCoord, jar.yCoord, jar.zCoord);
-        		
         		if (!player.inventory.addItemStackToInventory(emptyphial))
         			world.spawnEntityInWorld(new EntityItem(world,x + 0.5f, y + 0.5f, z + 0.5f, emptyphial));
         		
         		if (world.isRemote)
         			world.playSound(x + 0.5F, y + 0.5F, z + 0.5F, "liquid.swim", 0.5F, 1.0F + world.rand.nextFloat() - world.rand.nextFloat() * 0.3F, false);
+        		
+        		world.markBlockForUpdate(x,  y,  z);
         	}
 		}
         return true;
@@ -212,9 +230,8 @@ public class BlockEtherealJar extends BlockJar
         if (!drop.hasTagCompound())
             drop.setTagCompound(new NBTTagCompound("tag"));
         if (ej.aspectFilter != null)
-            drop.stackTagCompound.setString("filter", ej.aspectFilter.getTag());
+        	drop.stackTagCompound.setString("AspectFilter", ej.aspectFilter.getTag());
         
-
         dropBlockAsItem_do(world, x, y, z, drop);
 
         world.removeBlockTileEntity(x, y, z);
@@ -226,13 +243,7 @@ public class BlockEtherealJar extends BlockJar
     {
     	TileEntity te = world.getBlockTileEntity(x, y, z);
     	
-    	if (!(te instanceof TileEtherealJar))
-    		return;
-    	
     	TileEtherealJar ej = (TileEtherealJar)te; 
-    	
-    	if (ej == null)
-    		ej = new TileEtherealJar();
     	
     	int facing = MathHelper.floor_double((double)(player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 		
@@ -244,19 +255,7 @@ public class BlockEtherealJar extends BlockJar
             ej.facing = 3;
 		else if (facing == 3)
             ej.facing = 4;
-		
-		NBTTagCompound nbt = (stack == null) ? null : stack.getTagCompound();
-		
-    	if (nbt != null && nbt.hasKey("aspect") && nbt.hasKey("amount"))
-    	{
-    		ej.amount = nbt.getInteger("amount");
-    		ej.aspect = Aspect.getAspect(nbt.getString("aspect"));
-    	}
-    	
-    	if (nbt != null && nbt.hasKey("filter"))
-    		ej.aspectFilter = Aspect.getAspect(nbt.getString("filter"));
-    		
-    	world.setBlockTileEntity(x,  y,  z, ej);
+		    	
     }
     
 }

@@ -120,6 +120,8 @@ public class BlockNodeModifier extends BlockContainer implements IWandable
 		
 		nm.availableOperations.clear();
 		
+		int aspectcount = jar.getAspects().size();
+		
 		if (jar.getNodeModifier() != null)
 		{
 			switch (jar.getNodeModifier())
@@ -186,7 +188,8 @@ public class BlockNodeModifier extends BlockContainer implements IWandable
 			}
 		}
 		
-		nm.availableOperations.add(Operation.AddAspect);
+		if (aspectcount < 6)
+			nm.availableOperations.add(Operation.AddAspect);
 		nm.availableOperations.add(Operation.IncreaseAspect);
 		
 		return nm.availableOperations.size();

@@ -29,6 +29,7 @@ import net.ixios.advancedthaumaturgy.fx.EntityOrbiterFX;
 import net.ixios.advancedthaumaturgy.fx.FloatyLineFX;
 import net.ixios.advancedthaumaturgy.gui.GuiNodeModifier;
 import net.ixios.advancedthaumaturgy.items.ItemEtherealJar;
+import net.ixios.advancedthaumaturgy.misc.Vector3;
 import net.ixios.advancedthaumaturgy.misc.Vector3F;
 import net.ixios.advancedthaumaturgy.models.ModelEngine;
 import net.ixios.advancedthaumaturgy.models.ModelEtherealJar;
@@ -44,9 +45,9 @@ import net.ixios.advancedthaumaturgy.tileentities.TileEtherealJar;
 import net.ixios.advancedthaumaturgy.tileentities.TileFluxDissipator;
 import net.ixios.advancedthaumaturgy.tileentities.TileNodeModifier;
 import net.ixios.advancedthaumaturgy.tileentities.TileNodeModifier.Operation;
+import net.ixios.advancedthaumaturgy.tileentities.TilePlaceholder;
 import net.ixios.advancedthaumaturgy.tileentities.TileThaumicFertilizer;
 import net.ixios.advancedthaumaturgy.tileentities.TileEssentiaEngine;
-import net.ixios.advancedthaumaturgy.tileentities.TilePlaceholder;
 import net.ixios.advancedthaumaturgy.tileentities.TileVulcanizer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityAuraFX;
@@ -67,6 +68,8 @@ public class ClientProxy extends CommonProxy
 	public void registerAllTheThings()
 	{
 		
+		super.registerAllTheThings();
+		
 		if (AdvThaum.MercurialWand != null)
 			MinecraftForgeClient.registerItemRenderer(AdvThaum.MercurialWand.itemID, new ItemWandRenderer());
     	
@@ -85,7 +88,7 @@ public class ClientProxy extends CommonProxy
 
     	renderer = new GenericRenderer(null);
 		MinecraftForgeClient.registerItemRenderer(BlockPlaceholder.blockID, renderer);
-        ClientRegistry.bindTileEntitySpecialRenderer(TilePlaceholder.class, renderer);
+		ClientRegistry.bindTileEntitySpecialRenderer(TilePlaceholder.class, renderer);
         
         renderer = new GenericRenderer(new ModelMinilith(Color.MAGENTA));
         MinecraftForgeClient.registerItemRenderer(BlockFluxDissipator.blockID, renderer);
@@ -254,13 +257,4 @@ public class ClientProxy extends CommonProxy
     	catch (IOException io) { }
     }
 
-    @Override
-    public void loadData() { }
-    
-    @Override
-    public void saveData() { }
-    
-    @Override
-    public void beginMonitoring(TileInfusionMatrix im) { }
-    
 }

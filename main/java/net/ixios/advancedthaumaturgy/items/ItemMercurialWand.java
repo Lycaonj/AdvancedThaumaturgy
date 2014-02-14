@@ -76,14 +76,15 @@ public class ItemMercurialWand extends ItemWandCasting
 		 
 		 ItemStack cap = ConfigItems.WAND_CAP_THAUMIUM.getItem();
 		 
-		/// add recipe
+		/*/// add recipe
+		 Shaped
         InfusionRecipe recipe = ThaumcraftApi.addInfusionCraftingRecipe("MERCURIALWAND", new ItemStack(this), 6,
                 (new AspectList()).add(Aspect.METAL, 256).add(Aspect.FIRE, 256).add(Aspect.MAGIC, 256).add(Aspect.TREE, 256).add(Aspect.CRYSTAL, 256),
                 new ItemStack(AdvThaum.MercurialCore),
                 new ItemStack[] { cap, cap });
         
         
-        ConfigResearch.recipes.put("MercurialWand", recipe);
+        ConfigResearch.recipes.put("MercurialWand", recipe);*/
     
         // add research
          ATResearchItem ri = new ATResearchItem("MERCURIALWAND", "THAUMATURGY",
@@ -94,8 +95,8 @@ public class ItemMercurialWand extends ItemWandCasting
         ri.setInfo("at.research.mercurialwand.desc");
         ri.setParents("MERCURIALCORE");
         ri.setPages(new ResearchPage("at.research.mercurialwand.pg1"),
-        		new ResearchPage("at.research.mercurialwand.pg2"),
-                new ResearchPage(recipe));
+        		new ResearchPage("at.research.mercurialwand.pg2")/*,
+                new ResearchPage(recipe)*/);
         
         ri.setSpecial();
         ri.setConcealed();

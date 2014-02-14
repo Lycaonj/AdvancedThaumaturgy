@@ -93,7 +93,7 @@ public class ItemEtherealJarRenderer implements IItemRenderer
 	    	
 	        GL11.glPushMatrix();
 	        GL11.glDisable(2884);
-	        GL11.glTranslatef((float)x + 0.5F, (float)y + 0.01F, (float)z + 0.5F);
+	        //GL11.glTranslatef((float)x + 0.5F, (float)y + 0.01F, (float)z + 0.5F);
 	        GL11.glRotatef(180F, 1.0F, 0.0F, 0.0F);
 	        GL11.glRotatef(0.0F, 0.0F, 0.0F, 1.0F);
 	        GL11.glRotatef(0.0F, 1.0F, 0.0F, 0.0F);

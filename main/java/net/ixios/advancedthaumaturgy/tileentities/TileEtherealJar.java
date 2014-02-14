@@ -17,9 +17,9 @@ public class TileEtherealJar extends TileJarFillable
 	@Override
 	public AspectList getSuction(ForgeDirection loc)
 	{
-		AspectList aspects = super.getSuction(loc);
-		for (Aspect a : aspects.getAspects());
-			aspects.add(aspect, 5);
-		return aspects;
+		AspectList list = super.getSuction(loc);
+		for (Aspect a : list.getAspects())
+			list.merge(a, 5);
+	      return list;
 	}
 }

@@ -26,6 +26,7 @@ import net.ixios.advancedthaumaturgy.blocks.BlockFluxDissipator;
 import net.ixios.advancedthaumaturgy.gui.ContainerNodeModifier;
 import net.ixios.advancedthaumaturgy.gui.GuiNodeModifier;
 import net.ixios.advancedthaumaturgy.misc.TickManager;
+import net.ixios.advancedthaumaturgy.misc.Vector3;
 import net.ixios.advancedthaumaturgy.misc.Vector3F;
 import net.ixios.advancedthaumaturgy.tileentities.TileNodeModifier;
 import net.ixios.advancedthaumaturgy.tileentities.TileNodeModifier.Operation;
@@ -67,6 +68,11 @@ public class CommonProxy implements IGuiHandler, IPacketHandler
 	public void beginMonitoring(TileInfusionMatrix im)
 	{
 		tickmanager.beginMonitoring(im);
+	}
+	
+	public void beginMonitoring(EntityPlayer plr, Vector3 vec, Block block)
+	{
+		tickmanager.beginMonitoring(plr, vec, block);
 	}
 	
 	public void createParticle(World world, float srcx, float srcy, float srcz, float dstx, float dsty, float dstz, int color) { }

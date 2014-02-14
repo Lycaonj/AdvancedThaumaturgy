@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.print.attribute.standard.MediaSize.Engineering;
+
 import net.ixios.advancedthaumaturgy.blocks.BlockCreativeNode;
 import net.ixios.advancedthaumaturgy.blocks.BlockEssentiaEngine;
 import net.ixios.advancedthaumaturgy.blocks.BlockEtherealJar;
@@ -14,7 +16,10 @@ import net.ixios.advancedthaumaturgy.blocks.BlockNodeModifier;
 import net.ixios.advancedthaumaturgy.blocks.BlockPlaceholder;
 import net.ixios.advancedthaumaturgy.blocks.BlockThaumicFertilizer;
 import net.ixios.advancedthaumaturgy.blocks.BlockThaumicVulcanizer;
-import net.ixios.advancedthaumaturgy.compat.buildcraft.BCCompatRegistrar;
+import net.ixios.advancedthaumaturgy.compat.energy.EnergyCompatBase;
+//import net.ixios.advancedthaumaturgy.compat.energy.TECompatChecker;
+import net.ixios.advancedthaumaturgy.compat.energy.BCCompatChecker;
+import net.ixios.advancedthaumaturgy.items.ItemAeroSphere;
 import net.ixios.advancedthaumaturgy.items.ItemEtherealJar;
 import net.ixios.advancedthaumaturgy.items.ItemFocusVoidCage;
 import net.ixios.advancedthaumaturgy.items.ItemInfusedThaumium;
@@ -37,6 +42,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.tileentity.TileEntityCommandBlock;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
@@ -68,7 +74,7 @@ import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry.EntityRegistration;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid="AdvancedThaumaturgy", version="0.0.19", name="Advanced Thaumaturgy", 
+@Mod(modid="AdvancedThaumaturgy", version="0.0.20", name="Advanced Thaumaturgy", 
 	dependencies="required-after:Thaumcraft", acceptedMinecraftVersions="1.6.4")
 @NetworkMod(clientSideRequired=true, channels={"AdvThaum"}, packetHandler = CommonProxy.class)
 
@@ -94,6 +100,7 @@ public class AdvThaum
 	public static ItemPommel PommelBase;
 	public static ItemFocusVoidCage FocusVoidCage;
 	public static ItemEtherealJar itemEtherealJar;
+	public static ItemAeroSphere AeroSphere;
 	
 	// blocks
 	public static BlockNodeModifier NodeModifier;
@@ -122,10 +129,7 @@ public class AdvThaum
 	     config = new Configuration(event.getSuggestedConfigurationFile());
 	     
 	     config.load();
-	     
-	     config.addCustomCategoryComment("ItemIDs", "Set any ID to -1 to disable it in the mod.");
-	     config.addCustomCategoryComment("BlockIDs", "Set any ID to -1 to disable it in the mod.");
-	     
+	      
 	     int mercurialcoreid = config.getItem("ItemIDs", "mercurialcore", 13333).getInt();
 	     int mercurialwandid = config.getItem("ItemIDs", "mercurialwand", 13334).getInt();
 	     int infusedthaumiumid = config.getItem("ItemIDs", "infusedthaumium", 13335).getInt();
@@ -133,6 +137,7 @@ public class AdvThaum
 	     int pommelid = config.getItem("ItemIDs", "pommel", 13337).getInt();
 	     int focusvoidcageid = config.getItem("ItemIDs", "focusvoidcage", 13338).getInt();
 	     int itemetherealjar = config.getItem("ItemIDs", "ethereal_jar", 13339).getInt();
+	     int aerosphereid = config.getItem("ItemIDs", "aerosphere", 13340).getInt();
 	     
 	     int nodemodifierid = config.getBlock("BlockIDs", "nodemodifier", 3433).getInt();
 	     int thaumicfertilizerid = config.getBlock("BlockIDs", "thaumicfertilizer", 3434).getInt();
@@ -185,6 +190,9 @@ public class AdvThaum
 	     if (config.get("Feature Control", "enable_focus_void_cage", true).getBoolean(true))
 	    	 FocusVoidCage = new ItemFocusVoidCage(focusvoidcageid);
 	     
+	     if (config.get("Feature Control", "enable_aerosphere", true).getBoolean(true))
+	    	 AeroSphere = new ItemAeroSphere(aerosphereid);
+	     
 	     Placeholder = new BlockPlaceholder(placeholderid, Material.air);
 	     
 	     //ThaumicInkwell = new ItemThaumInkwell(thaumicwellid);
@@ -196,9 +204,7 @@ public class AdvThaum
 	     MinecraftForge.EVENT_BUS.register(new ATEventHandler());
 	     
 	     TickRegistry.registerTickHandler(new ArcingDamageManager(), Side.SERVER);
-	     
-	     proxy.registerAllTheThings();
-	 	
+	    
      }
 	
 	 public static void log(String text)
@@ -232,6 +238,8 @@ public class AdvThaum
 	 @EventHandler  
      public void postInit(FMLPostInitializationEvent event) 
      {
+		 proxy.registerAllTheThings();
+		 
 		 if (MercurialCore != null)
 			 MercurialCore.register();
 		 
@@ -261,13 +269,19 @@ public class AdvThaum
 		 
 		 if (FocusVoidCage != null)
 			 FocusVoidCage.register();
-			 
-		 //ThaumicInkwell.register();
 		 
+		 if (AeroSphere != null)
+			 AeroSphere.register();
+		 
+		 //ThaumicInkwell.register();
 		 //ThaumicVulcanizer.register();
 		 
 		 // implement bc related blocks if the api is detected
-		 new BCCompatRegistrar().register();
+		 new BCCompatChecker().register();
+		 //new TECompatChecker().register();
+		 
+		 if (config.get("Feature Control", "force_enable_essentia_engine", false).getBoolean(false))
+			 new EnergyCompatBase().forceRegister("Force registration");
 		 
 		 // enable activating node in a jar by wanding the top wood slabs
 		 WandTriggerRegistry.registerWandBlockTrigger(Thaumcraft.proxy.wandManager, 4, Block.woodSingleSlab.blockID, -1);

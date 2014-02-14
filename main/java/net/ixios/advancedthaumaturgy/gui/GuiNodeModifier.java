@@ -124,7 +124,7 @@ public class GuiNodeModifier extends GuiContainer
 		}
 		else if (!(te instanceof TileJarNode))
 		{
-			fontRenderer.drawSplitString("Invalid modification target.  Begin modification by placing a jarred node on the Node Modifier.", 5, 5, 150, Color.WHITE.getRGB());
+			fontRenderer.drawSplitString("Invalid modification target.  Begin modification by placing a jarred node on the Node Modifier.", 20, ySize - 45, xSize - 30, Color.WHITE.getRGB());
 			return;
 		}
 		

@@ -18,11 +18,14 @@ import net.ixios.advancedthaumaturgy.misc.Vector3F;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.BlockFlower;
+import net.minecraft.block.BlockGrass;
 import net.minecraft.block.BlockLilyPad;
 import net.minecraft.block.BlockMushroom;
 import net.minecraft.block.BlockSapling;
 import net.minecraft.block.BlockStem;
 import net.minecraft.block.BlockVine;
+import net.minecraft.block.BlockWood;
+import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
@@ -33,8 +36,11 @@ import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.WorldInfo;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.FakePlayer;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.ForgeDummyContainer;
 
 public class TileThaumicFertilizer extends TileEntity implements IAspectContainer
 {
@@ -44,13 +50,11 @@ public class TileThaumicFertilizer extends TileEntity implements IAspectContaine
 	
 	private int fertilizechance = 20;
 	
-    private final float costperhydration = 0.05F;
     private final float costperfertilize = 0.5f;
     
     private ArrayList<Vector3F> blockstomonitor = null;
     private int arrayposition = 0;
     
-    private float aquapool = 0.0f;
     private float herbapool = 0.0f;
     
     public TileThaumicFertilizer()
@@ -75,10 +79,14 @@ public class TileThaumicFertilizer extends TileEntity implements IAspectContaine
     	
     	for (int cx = xCoord - 8; cx <= xCoord + 8; cx++)
     	{
-    		for (int cz = zCoord - 8; cz <= zCoord + 8; cz++)
-    		{
-    			blockstomonitor.add(new Vector3F(cx, yCoord - 1, cz));
-    		}
+    		int cy = yCoord;
+    		//for (int cy = yCoord + 2; cy > yCoord - 2; cy--)
+    		//{
+	    		for (int cz = zCoord - 8; cz <= zCoord + 8; cz++)
+	    		{
+	    			blockstomonitor.add(new Vector3F(cx, cy, cz));
+	    		}
+    		//}
     	}
     	
     	Collections.shuffle(blockstomonitor);
@@ -87,24 +95,13 @@ public class TileThaumicFertilizer extends TileEntity implements IAspectContaine
     
     private void refillPoolsIfNeeded()
     {
-    	boolean changed = false;
-    	if (aquapool < 1 && aspects.getAmount(Aspect.WATER) > 0)
-    	{
-    		aspects.remove(Aspect.WATER, 1);
-    		aquapool++;
-    		changed = true;
-    	}
-    	
     	if (herbapool < 1 && aspects.getAmount(Aspect.PLANT) > 0)
     	{
     		aspects.remove(Aspect.PLANT, 1);
     		herbapool++;
-    		changed = true;
+    		worldObj.markBlockForUpdate(xCoord,  yCoord,  zCoord);
     	}
     	
-    	if (changed)
-    		worldObj.markBlockForUpdate(xCoord,  yCoord,  zCoord);
-    		
     }
     
     @Override
@@ -171,99 +168,51 @@ public class TileThaumicFertilizer extends TileEntity implements IAspectContaine
         if (arrayposition >= blockstomonitor.size())
         	arrayposition = 0;
         
-        int baseid = worldObj.getBlockId(cx, cy, cz);
-        int basemeta = worldObj.getBlockMetadata(cx, cy, cz);
-        int targetid = worldObj.getBlockId(cx, cy + 1, cz);
-        int targetmeta = worldObj.getBlockMetadata(cx, cy + 1, cz);
+        Material mat = worldObj.getBlockMaterial(cx, cy, cz);
         
-        Block block = Block.blocksList[targetid];
-            
+        Block block = Block.blocksList[worldObj.getBlockId(cx, cy, cz)];
+        
+        if (AdvThaum.debug)
+        	AdvThaum.proxy.createCustomParticle(worldObj, cx, cy, cz, 0f, .1f, 0f, 0xFFFF0000);
+        
+        if (block == null)
+        	return;
+        
         // check if the block is farmland and if it needs watered
-        if ((baseid == Block.tilledField.blockID))
+        if (block.blockID == Block.tilledField.blockID)
         {
-        	if (basemeta <= triggermeta)
-        	{
-                hydrate(cx, cy, cz);
-        	}
-            
-            if (block != null)
-        	{
-        		if ((targetmeta < 7) && ((block instanceof BlockCrops) || (block instanceof BlockStem)) && (worldObj.rand.nextInt(100) <= fertilizechance))
-        			fertilize(cx, cy + 1, cz);
-        		else if (targetmeta == 7 && block instanceof BlockStem)
-        			growFruitFromStem(cx, cy + 1, cz);
-        	}
-            
+        	int meta = worldObj.getBlockMetadata(cx, cy, cz);
+        	
+        	if (meta <= triggermeta)
+                hydrateFarmland(cx, cy, cz);
         }
-        else if (baseid == Block.dirt.blockID || baseid == Block.tilledField.blockID || baseid == Block.sand.blockID || baseid == Block.grass.blockID) // could be a tree
+       
+        /*if (worldObj.rand.nextInt(100) > fertilizechance)
+        	return;*/
+        
+        if (block instanceof BlockFlower && !(block instanceof ISpecialFlower))
+        	if (!(block instanceof BlockSapling) && worldObj.rand.nextInt(100) < 30)
+        		spreadSurfaceBlockFrom(cx, cy, cz);
+        
+        if (mat == Material.plants || block instanceof BlockSapling)
         {
-        	
-        	if (block instanceof BlockSapling && worldObj.rand.nextInt(100) < fertilizechance)
-        		fertilize(cx, cy + 1, cz);
-        	
-        	if ((targetid == Block.reed.blockID || targetid == Block.cactus.blockID) && worldObj.rand.nextInt(100) <= fertilizechance)
-        	{
-        		for (int height = cy; height <= cy + 4; height++)
-        		{
-        			baseid = worldObj.getBlockId(cx,  height, cz);
-        			if (baseid == 0)
-        			{
-        				worldObj.setBlock(cx,  height, cz, targetid);
-        				fertilize(cx, height, cz);
-        				break;
-        			}
-        		}
-        	}
-        	
+    		fertilize(cx, cy, cz);
+    		return;
         }
         
-        if (block instanceof BlockMushroom)
-        {
-        	if (worldObj.rand.nextInt(100) < fertilizechance)
-        		spreadSurfaceBlockFrom(cx, cy + 1, cz, 0);
-        }
-        else if (block instanceof BlockLilyPad && baseid == Block.waterStill.blockID)
-        {
-        	if (worldObj.rand.nextInt(100) < fertilizechance)
-        		spreadSurfaceBlockFrom(cx, cy + 1, cz, Block.waterStill.blockID);
-        }
-        else if (block instanceof BlockFlower && !(block instanceof ISpecialFlower))
-        {
-        	if (worldObj.rand.nextInt(100) < fertilizechance)
-        		spreadSurfaceBlockFrom(cx, cy + 1, cz, 0);
-        }
-    
+        // special case for mana pods because they do not grow horizontally
+        if (!BiomeDictionary.isBiomeOfType(worldObj.getBiomeGenForCoords(cx, cz), Type.MAGICAL))
+        	return;
         
-    	for (cy = yCoord; cy < yCoord + 15; cy++)
-        {
-    		targetid = worldObj.getBlockId(cx, cy, cz);
-    		block = Block.blocksList[targetid];
-    		if (block instanceof BlockVine && worldObj.rand.nextInt(100) < fertilizechance)
-    		{
-    			spreadVineFrom(cx, cy, cz);
-    			break;	
-    		}
-        }
-    
-        for (cy = yCoord; cy < yCoord + 5; cy++)
-        {
-        	baseid = worldObj.getBlockId(cx, cy, cz);
-        	basemeta = worldObj.getBlockMetadata(cx, cy, cz);
-        	int direction = basemeta & 0x03;
-        	int stage = (basemeta >> 2) & 0x03;
-        	if (baseid == ConfigBlocks.blockManaPod.blockID && stage < 2 && worldObj.rand.nextInt(100) <= fertilizechance)
-        	{
-        		stage++;
-        		worldObj.setBlockMetadataWithNotify(cx, cy, cz, (stage << 2) | direction, 3);
-        		fertilize(cx, cy, cz);
-        		break;
-        	}
-
-        }
+       
+        if (!(block.blockID == ConfigBlocks.blockManaPod.blockID))
+    		return;
+    	
+    	fertilize(cx, cy, cz);
         
     }
 
-    private void spreadVineFrom(int x, int y, int z)
+    /*private void spreadVineFrom(int x, int y, int z)
     {
     	if (herbapool < costperfertilize)
     		return;
@@ -310,138 +259,13 @@ public class TileThaumicFertilizer extends TileEntity implements IAspectContaine
             	 AdvThaum.broadcastMessage("Setting new vine");
              }
          }
-    }
-    
-    private void spreadLilypadFrom(int x, int y, int z)
+    }*/
+  
+    private void hydrateFarmland(int x, int y, int z)
     {
-    	if (herbapool < costperfertilize)
-    		return;
-    		
-    	Block block = Block.blocksList[worldObj.getBlockId(x,  y,  z)];
-    	if (!(block instanceof BlockLilyPad))
-    		return;
-    	
-    	int whichdir = worldObj.rand.nextInt(4);
-
-    	Vector3F target = null;
-    	
-    	switch (whichdir)
-    	{
-    		case 0:
-    		{
-    			if (worldObj.getBlockId(x - 1, y, z) == 0)
-    				target = new Vector3F(x - 1, y, z);
-    		}
-    		break;
-    		
-    		case 1:
-			{
-				if (worldObj.getBlockId(x + 1, y, z) == 0)
-					target = new Vector3F(x + 1, y, z);
-			}
-	        break;
-
-    		case 2:
-    		{
-    			if (worldObj.getBlockId(x, y, z - 1) == 0)
-    				target = new Vector3F(x, y, z - 1);
-    		}
-    		break;
-    		
-    		case 3:
-    		{
-    			if (worldObj.getBlockId(x, y, z + 1) == 0)
-    				target = new Vector3F(x, y, z + 1);
-    		}
-    		break;
-    	}
-
-    	if (target == null)
-    		return; // no spot to grow
-    	
-    	Block undertarget = Block.blocksList[worldObj.getBlockId((int)target.x, (int)target.y - 1, (int)target.z)];
-    	
-         if (worldObj.isAirBlock((int)target.x, (int)target.y, (int)target.z) && undertarget.blockID == Block.waterStill.blockID)
-         {
-             worldObj.setBlock((int)target.x, (int)target.y, (int)target.z, block.blockID);
-             fertilize((int)target.x, (int)target.y, (int)target.z);
-         }
-    }
-    
-    private void growFruitFromStem(int x, int y, int z)
-    {
-    	if (herbapool < costperfertilize)
-    		return;
-    		
-    	Block block = Block.blocksList[worldObj.getBlockId(x,  y,  z)];
-    	if (!(block instanceof BlockStem))
-    		return;
-    	BlockStem stem = (BlockStem)block;
-    	
-    	Block fruitType = ReflectionHelper.getPrivateValue(BlockStem.class, stem, "fruitType");
-    	int whichdir = worldObj.rand.nextInt(4);
-
-    	Vector3F target = null;
-    	
-    	if (worldObj.getBlockId(x - 1, y, z) == fruitType.blockID)
-    		return;
-    	if (worldObj.getBlockId(x + 1, y, z) == fruitType.blockID)
-    		return;
-    	if (worldObj.getBlockId(x, y, z - 1) == fruitType.blockID)
-    		return;
-    	if (worldObj.getBlockId(x, y, z + 1) == fruitType.blockID)
-    		return;
-    	
-    	switch (whichdir)
-    	{
-    		case 0:
-    		{
-    			if (worldObj.getBlockId(x - 1, y, z) == 0)
-    				target = new Vector3F(x - 1, y, z);
-    		}
-    		break;
-    		
-    		case 1:
-			{
-				if (worldObj.getBlockId(x + 1, y, z) == 0)
-					target = new Vector3F(x + 1, y, z);
-			}
-	        break;
-
-    		case 2:
-    		{
-    			if (worldObj.getBlockId(x, y, z - 1) == 0)
-    				target = new Vector3F(x, y, z - 1);
-    		}
-    		break;
-    		
-    		case 3:
-    		{
-    			if (worldObj.getBlockId(x, y, z + 1) == 0)
-    				target = new Vector3F(x, y, z + 1);
-    		}
-    		break;
-    	}
-
-    	if (target == null)
-    		return; // no spot to grow
-    	
-         int targetid = worldObj.getBlockId((int)target.x, (int)target.y - 1, (int)target.z);
-
-         boolean isSoil = (Block.blocksList[targetid] != null && Block.blocksList[targetid].canSustainPlant(worldObj, (int)target.x, (int)target.y - 1, (int)target.z, ForgeDirection.UP, stem));
-         
-         if (worldObj.isAirBlock((int)target.x, (int)target.y, (int)target.z) && (isSoil || targetid == Block.dirt.blockID || targetid == Block.grass.blockID))
-         {
-             worldObj.setBlock((int)target.x, (int)target.y, (int)target.z, fruitType.blockID);
-             fertilize((int)target.x, (int)target.y, (int)target.z);
-         }
-    }
-    
-    private void hydrate(int x, int y, int z)
-    {
-    	if (aquapool < costperhydration)
-    		return;
     	int basemeta = worldObj.getBlockMetadata(x,  y,  z);
+    	if (basemeta >= 7)
+    		return;
     	worldObj.setBlockMetadataWithNotify(x, y, z, basemeta + 1, 3);
         AdvThaum.proxy.createParticle(worldObj, xCoord + 0.5F, yCoord + 1, zCoord + 0.5F, (float)x + 0.5F, (float)y + 1, (float)z + 0.5F, 0xFF00FFFF);	
     }
@@ -453,71 +277,30 @@ public class TileThaumicFertilizer extends TileEntity implements IAspectContaine
     		AdvThaum.proxy.createParticle(worldObj, xCoord + 0.5f, yCoord + 0.7f, zCoord + 0.5f, x, y, z, Aspect.SLIME.getColor());
     		AdvThaum.proxy.createSparkleBurst(worldObj, x + 0.5F, y + 0.5F, z + 0.5F, 8, 0xFF00FF00);
     		herbapool -= costperfertilize;
+    		Block b = Block.blocksList[worldObj.getBlockId(x,  y,  z)];
+    		b.updateTick(worldObj, x, y, z, worldObj.rand);
     	}
     }
     
-    private void spreadSurfaceBlockFrom(int x, int y, int z, int reqblockbase)
+    private void spreadSurfaceBlockFrom(int x, int y, int z)
     {
     	if (herbapool < costperfertilize)
     		return;
     	
     	Block block = Block.blocksList[worldObj.getBlockId(x,  y,  z)];
+    	
+    	ForgeDirection fd = ForgeDirection.VALID_DIRECTIONS[worldObj.rand.nextInt(ForgeDirection.VALID_DIRECTIONS.length - 2) + 2];
 
-    	if (reqblockbase != 0 && worldObj.getBlockId(x,  y - 1, z) != reqblockbase)
+    	if (worldObj.getBlockId(x + fd.offsetX, y + fd.offsetY, z + fd.offsetZ) != 0)
     		return;
     	
-    	int whichdir = worldObj.rand.nextInt(4);
-
-    	Vector3F target = null;
-    	
-    	if (worldObj.getBlockId(x - 1, y, z) == block.blockID)
-    		return;
-    	if (worldObj.getBlockId(x + 1, y, z) == block.blockID)
-    		return;
-    	if (worldObj.getBlockId(x, y, z - 1) == block.blockID)
-    		return;
-    	if (worldObj.getBlockId(x, y, z + 1) == block.blockID)
+    	if (!block.canPlaceBlockAt(worldObj, x + fd.offsetX, y + fd.offsetY, z + fd.offsetZ))
     		return;
     	
-    	switch (whichdir)
-    	{
-    		case 0:
-    		{
-    			if (worldObj.getBlockId(x - 1, y, z) == 0)
-    				target = new Vector3F(x - 1, y, z);
-    		}
-    		break;
-    		
-    		case 1:
-			{
-				if (worldObj.getBlockId(x + 1, y, z) == 0)
-					target = new Vector3F(x + 1, y, z);
-			}
-	        break;
-
-    		case 2:
-    		{
-    			if (worldObj.getBlockId(x, y, z - 1) == 0)
-    				target = new Vector3F(x, y, z - 1);
-    		}
-    		break;
-    		
-    		case 3:
-    		{
-    			if (worldObj.getBlockId(x, y, z + 1) == 0)
-    				target = new Vector3F(x, y, z + 1);
-    		}
-    		break;
-    	}
-
-    	if (target == null)
-    		return; // no spot to grow
+    	int meta = worldObj.getBlockMetadata(x,  y,  z);
     	
-    	if (!block.canPlaceBlockAt(worldObj,  (int)target.x, (int)target.y, (int)target.z))
-    		return;
-    	
-    	worldObj.setBlock((int)target.x, (int)target.y, (int)target.z, block.blockID);
-    	fertilize((int)target.x, (int)target.y, (int)target.z);
+    	worldObj.setBlock(x + fd.offsetX, y + fd.offsetY, z + fd.offsetZ, block.blockID, meta, 3);
+    	fertilize(x + fd.offsetX, y + fd.offsetY, z + fd.offsetZ);
     }
     
     @Override 
