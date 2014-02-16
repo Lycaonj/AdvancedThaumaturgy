@@ -49,7 +49,7 @@ public class ItemEtherealJarRenderer implements IItemRenderer
 		{
         	case ENTITY:
         	{
-        		renderInventoryItem(item, -0.5F, 0.0F, 0.5F, 0.5F);
+        		renderInventoryItem(item, 0F, 0F, 0F, 0.5F);
                 return;
         	}
           
@@ -61,7 +61,7 @@ public class ItemEtherealJarRenderer implements IItemRenderer
           
         	case INVENTORY:
         	{
-        		renderInventoryItem(item, 1.0F, 0.8F, 1.0F, 0.5F);
+        		renderInventoryItem(item, 1.5F, 0.85F, 1.5F, 0.5F);
                 return;
         	}
         
@@ -93,8 +93,8 @@ public class ItemEtherealJarRenderer implements IItemRenderer
 	    	
 	        GL11.glPushMatrix();
 	        GL11.glDisable(2884);
-	        //GL11.glTranslatef((float)x + 0.5F, (float)y + 0.01F, (float)z + 0.5F);
-	        GL11.glRotatef(180F, 1.0F, 0.0F, 0.0F);
+	        GL11.glTranslatef((float)x, (float)y, (float)z);
+	        GL11.glRotatef(180F, 1.0F, 0.0F, 0.0F); // turns it right side up
 	        GL11.glRotatef(0.0F, 0.0F, 0.0F, 1.0F);
 	        GL11.glRotatef(0.0F, 1.0F, 0.0F, 0.0F);
 	        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -102,11 +102,11 @@ public class ItemEtherealJarRenderer implements IItemRenderer
 	        if (amount > 0)
 	            renderInventoryLiquid(stack, x, y, z, f);
 	            
-	        if (stacktag != null && stacktag.hasKey("filter"))
+	        if (stacktag != null && stacktag.hasKey("AspectFilter"))
 	        {
 	            GL11.glPushMatrix();
 	            
-	            Aspect filter = Aspect.getAspect(stacktag.getString("filter"));
+	            Aspect filter = Aspect.getAspect(stacktag.getString("AspectFilter"));
 	            GL11.glPushMatrix();
 	            GL11.glTranslatef(0.0F, -0.4F, 0.315F);
 	            UtilsFX.renderQuadCenteredFromTexture("textures/models/label.png", 0.5F, 1.0F, 1.0F, 1.0F, -99, 771, 1.0F);
