@@ -9,6 +9,7 @@ item.at.mercurialrod.name=Mercurial Rod
 item.at.mercurialrod.desc=A length of crystallized silverwood,|veined with gleaming rivulets|of solidified quicksilver.
 
 item.at.mercurialwand.name=Mercurial Crystal Wand
+item.Wand.mercurial.rod=Mercurial
 
 tile.at.creativenode.name=Creative Node
 tile.at.creativenode.desc=Places a node that contains 100 of each|primal aspect, and never drains.|Creative Only
