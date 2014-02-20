@@ -11,6 +11,8 @@ item.at.mercurialrod.desc=A length of crystallized silverwood,|veined with gleam
 item.at.mercurialwand.name=Mercurial Crystal Wand
 item.Wand.mercurial.rod=Mercurial
 
+item.at.aerosphere.name=Aerosphere
+
 tile.at.creativenode.name=Creative Node
 tile.at.creativenode.desc=Places a node that contains 100 of each|primal aspect, and never drains.|Creative Only
 
@@ -26,7 +28,7 @@ tile.at.ventilator.desc=Breaks down flux goo into flux gas, and flux gas into ha
 
 item.at.voidcage.name=Wand Focus: Void Cage [test]
 
-at.research.mercurialcore.title=Mercurial Rod
+at.research.mercurialcore.title=Mercurial Wand Core
 at.research.mercurialcore.desc=Five, five, five rods in one!
 at.research.mercurialcore.pg1=You've discovered a way to infuse a nether star, liquid quicksilver and the essence of multiple silverwood wand cores into a new core that can hold much larger amounts of vis.<BR><LINE><BR>"What a delightful find!  The Wither had in it's possession (I avoid thinking about what it's made of, exactly) an intricate, beautiful crystal of some sort.  After peering through  my Thaumometer at this jewel for days on end, I discovered a way to infuse the crystal and several silverwood cores, along with some quicksilver, into a remarkable"
 at.research.mercurialcore.pg2="wand core capable of storing vast amounts of vis.\n\nThis will certainly make node collecting easier, as well as clear up some room in my already-crowded satchel.\n\nThe creation process is marvelously complex; the infusion altar shuddered and nearly exploded upon my first attempt to craft this beauty.  The essentia required to stabilize the infusion is quite excessive; I must restock my supplies posthaste..."

@@ -22,7 +22,6 @@ import thaumcraft.common.tiles.TileJarFillable;
 import thaumcraft.common.tiles.TilePedestal;
 import net.ixios.advancedthaumaturgy.AdvThaum;
 import net.ixios.advancedthaumaturgy.blocks.BlockEssentiaEngine;
-import net.ixios.advancedthaumaturgy.blocks.BlockFluxDissipator;
 import net.ixios.advancedthaumaturgy.gui.ContainerNodeModifier;
 import net.ixios.advancedthaumaturgy.gui.GuiNodeModifier;
 import net.ixios.advancedthaumaturgy.misc.TickManager;
@@ -108,7 +107,7 @@ public class CommonProxy implements IGuiHandler, IPacketHandler
     	if (AdvThaum.config.get("Feature Control", "enable_engine", true).getBoolean(true))
 	    {
     		AdvThaum.EssentiaEngine = new BlockEssentiaEngine(essentiaengineid, Material.rock);
-    		AdvThaum.EssentiaEngine.register();
+    		//AdvThaum.EssentiaEngine.register();
 	    }
 	   
     }

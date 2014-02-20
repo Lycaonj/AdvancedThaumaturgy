@@ -35,7 +35,7 @@ public class TCItems
 	public static ItemStack wandpedestal = new ItemStack(ConfigBlocks.blockStoneDevice, 1, 5);
 	public static ItemStack wandrechargefocus = new ItemStack(ConfigBlocks.blockStoneDevice, 1, 8);
 	
-	
-	
+	public static ItemStack totem = new ItemStack(ConfigBlocks.blockCosmeticSolid, 1, 0	);
+	public static ItemStack tile = new ItemStack(ConfigBlocks.blockCosmeticSolid, 1, 1);
 	
 }

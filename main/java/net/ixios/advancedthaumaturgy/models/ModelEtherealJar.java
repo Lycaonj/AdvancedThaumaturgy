@@ -3,6 +3,8 @@ package net.ixios.advancedthaumaturgy.models;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.tileentity.TileEntity;
+
 import org.lwjgl.opengl.GL11;
 
 public class ModelEtherealJar extends ModelBase implements IModelContainer
@@ -47,7 +49,7 @@ public class ModelEtherealJar extends ModelBase implements IModelContainer
     }
 
     @Override
-    public void render()
+    public void render(TileEntity te)
     {
         Lid.render(0.0625F);
         GL11.glDepthMask(false);

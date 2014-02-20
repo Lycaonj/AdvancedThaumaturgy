@@ -1,5 +1,9 @@
 package net.ixios.advancedthaumaturgy.tileentities;
 
+
+
+import org.lwjgl.util.Color;
+
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.aspects.IAspectContainer;
@@ -14,14 +18,14 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.common.ForgeDirection;
 
-public class TileFluxDissipator extends TileEntity implements IAspectContainer
+public class TileFluxDissipator extends TileMinilithBase implements IAspectContainer
 {
 	private int tickcount = 0;
 	private AspectList aspects = new AspectList().add(Aspect.TAINT, 0);
 	
 	public TileFluxDissipator()
 	{
-		
+		super(new Color(255, 0, 255, 255 / 3));
 	}
 	
 	@Override

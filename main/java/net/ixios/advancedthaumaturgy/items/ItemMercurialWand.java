@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.lwjgl.input.Keyboard;
 
@@ -12,7 +13,7 @@ import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.ixios.advancedthaumaturgy.AdvThaum;
-import net.ixios.advancedthaumaturgy.items.ItemPommel;
+import net.ixios.advancedthaumaturgy.items.ItemMercUpgrade.ItemMercUpgrades;
 import net.ixios.advancedthaumaturgy.misc.ATResearchItem;
 import net.ixios.advancedthaumaturgy.misc.Utilities;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -32,6 +33,7 @@ import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.crafting.InfusionRecipe;
+import thaumcraft.api.crafting.ShapedArcaneRecipe;
 import thaumcraft.api.research.ResearchPage;
 import thaumcraft.api.wands.WandCap;
 import thaumcraft.api.wands.WandRod;
@@ -47,6 +49,7 @@ public class ItemMercurialWand extends ItemWandCasting
 
 	private DecimalFormat myFormatter;
     private boolean classictooltip = false;
+    private ItemMercUpgrades upgrades = ItemMercUpgrades.None;
     
     public ItemMercurialWand(int i)
     {
@@ -56,99 +59,92 @@ public class ItemMercurialWand extends ItemWandCasting
         super.maxStackSize = 1;
         setMaxDamage(0);
         setHasSubtypes(false);
-        setCreativeTab(AdvThaum.tabAdvThaum);
-        ResourceLocation texture = new ResourceLocation("advthaum:textures/models/wand_rod_mercurial.png");
-        getRod(new ItemStack(this)).setTexture(texture);
-        getRod(new ItemStack(this)).setGlowing(true);
-        setUnlocalizedName("at.mercurialwand");
-        
         classictooltip = AdvThaum.config.get("Feature Control", "classic_wand_tooltip", true).getBoolean(true);
-
-        
     }
 
     public void register()
     {
     	 GameRegistry.registerItem(this, "MercurialWand");
-		 	 
-		 this.setCap(new ItemStack(this), ConfigItems.WAND_CAP_THAUMIUM);
-		 this.setRod(new ItemStack(this), AdvThaum.MercurialRod);
-		 
+    	 setCreativeTab(AdvThaum.tabAdvThaum);
+    	 
 		 ItemStack cap = ConfigItems.WAND_CAP_THAUMIUM.getItem();
-		 
-		/*/// add recipe
-		 Shaped
-        InfusionRecipe recipe = ThaumcraftApi.addInfusionCraftingRecipe("MERCURIALWAND", new ItemStack(this), 6,
-                (new AspectList()).add(Aspect.METAL, 256).add(Aspect.FIRE, 256).add(Aspect.MAGIC, 256).add(Aspect.TREE, 256).add(Aspect.CRYSTAL, 256),
-                new ItemStack(AdvThaum.MercurialCore),
-                new ItemStack[] { cap, cap });
-        
-        
-        ConfigResearch.recipes.put("MercurialWand", recipe);*/
+
+		 // add upgrade recipes
+		 //ShapedArcaneRecipe recipe = new ShapedArcaneRecipe("merc_, result, aspects, recipe)
     
-        // add research
-         ATResearchItem ri = new ATResearchItem("MERCURIALWAND", "THAUMATURGY",
-                (new AspectList()).add(Aspect.METAL, 1).add(Aspect.SENSES, 1).add(Aspect.POISON, 1).add(Aspect.TREE, 1),
+		 // add research
+		 ATResearchItem ri = new ATResearchItem("MERCURIALWAND", "THAUMATURGY",
+				 (new AspectList()).add(Aspect.METAL, 1).add(Aspect.SENSES, 1).add(Aspect.POISON, 1).add(Aspect.TREE, 1),
                 0, 7, 3,
                 new ItemStack(this));
-        ri.setTitle("at.research.mercurialwand.title");
-        ri.setInfo("at.research.mercurialwand.desc");
-        ri.setParents("MERCURIALCORE");
-        ri.setPages(new ResearchPage("at.research.mercurialwand.pg1"),
-        		new ResearchPage("at.research.mercurialwand.pg2")/*,
-                new ResearchPage(recipe)*/);
+     
+		 ri.setStub();
+		 ri.setVirtual();
         
-        ri.setSpecial();
-        ri.setConcealed();
-        
-        ri.registerResearchItem();
-			
-        AspectList list = new AspectList();
-        list.add(Aspect.WATER, 25);
-        list.add(Aspect.AIR, 25);
-        list.add(Aspect.FIRE, 25);
-        list.add(Aspect.EARTH, 25);
-        list.add(Aspect.METAL, 25);
-        list.add(Aspect.ORDER, 25);
-        list.add(Aspect.ENTROPY, 25);
-        list.add(Aspect.CRYSTAL, 25);
-        list.add(Aspect.TREE, 25);
+		 ri.registerResearchItem();
+				 
+		 AspectList list = new AspectList();
+		 list.add(Aspect.WATER, 25);
+		 list.add(Aspect.AIR, 25);
+		 list.add(Aspect.FIRE, 25);
+		 list.add(Aspect.EARTH, 25);
+		 list.add(Aspect.METAL, 25);
+		 list.add(Aspect.ORDER, 25);
+		 list.add(Aspect.ENTROPY, 25);
+		 list.add(Aspect.CRYSTAL, 25);
+		 list.add(Aspect.TREE, 25);
         
         ThaumcraftApi.registerObjectTag(this.itemID, -1, list);
         
+        String[] keys = ConfigResearch.recipes.keySet().toArray(new String[ConfigResearch.recipes.keySet().size()]);
+        
+        for (String key : keys)
+        {
+        	Object obj = ConfigResearch.recipes.get(key); 
+        	if (obj instanceof ShapedArcaneRecipe)
+        	{
+        		if (key.toString().startsWith("WAND_") && key.toString().endsWith("_mercurial"))
+        		{
+        			ConfigResearch.recipes.remove(key);
+        			ShapedArcaneRecipe recipe = (ShapedArcaneRecipe)obj;
+        			ItemWandCasting orig = (ItemWandCasting)recipe.output.getItem();
+        			ItemStack wand = new ItemStack(AdvThaum.MercurialWand);
+        			((ItemWandCasting)wand.getItem()).setRod(wand, orig.getRod(recipe.output));
+        			((ItemWandCasting)wand.getItem()).setCap(wand, orig.getCap(recipe.output));
+        			recipe.output = wand;
+        			ConfigResearch.recipes.put(key, recipe);
+        		}
+        	}
+        }
     }
    
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister icon)
     {
-        itemIcon = icon.registerIcon("advancedthaumaturgy:wand_rod_mercurial");
-        
+        itemIcon = icon.registerIcon("advthaum:wand_quicksilver");
     }
 
-    public void setPommelType(ItemStack stack, int type)
-    {
-    	setDamage(stack, type);
-    }
-    
-    public int getPommelType(ItemStack stack)
-    {
-    	return (this.getDamage(stack));
-    }
-    
     @Override
     public Icon getIcon(ItemStack stack, int pass)
     {
         return itemIcon;
     }
-
+    
     @SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
     public void getSubItems(int par1, CreativeTabs tab, List items)
     {
         ItemStack w1 = new ItemStack(this, 1, 0);
+        ((ItemWandCasting)w1.getItem()).setRod(w1, AdvThaum.MercurialRod);
+        ((ItemWandCasting)w1.getItem()).setCap(w1, ConfigItems.WAND_CAP_THAUMIUM);
+        
         items.add(w1);
+        
         ItemStack w2 = new ItemStack(this, 1, 0);
+        ((ItemWandCasting)w2.getItem()).setRod(w2, AdvThaum.MercurialRod);
+        ((ItemWandCasting)w2.getItem()).setCap(w2, ConfigItems.WAND_CAP_THAUMIUM);
+        
         ((ItemWandCasting)w2.getItem()).addVis(w2, Aspect.EARTH, 500, true);
         ((ItemWandCasting)w2.getItem()).addVis(w2, Aspect.FIRE, 500, true);
         ((ItemWandCasting)w2.getItem()).addVis(w2, Aspect.AIR, 500, true);
@@ -157,13 +153,7 @@ public class ItemMercurialWand extends ItemWandCasting
         ((ItemWandCasting)w2.getItem()).addVis(w2, Aspect.ENTROPY, 500, true);
         
         items.add(w2);
-        
-        items.add(new ItemStack(this, 1, 1));
-        items.add(new ItemStack(this, 1, 2));
-        items.add(new ItemStack(this, 1, 3));
-        items.add(new ItemStack(this, 1, 4));
-        items.add(new ItemStack(this, 1, 5));
-        
+               
     }
     
     @Override
@@ -173,32 +163,14 @@ public class ItemMercurialWand extends ItemWandCasting
     }
 
     @Override
-    public String getItemDisplayName(ItemStack is)
-    {
-        return StatCollector.translateToLocal("item.at.mercurialwand.name") + (getPommelType(is) != ItemPommel.POMMEL_PLAIN ? " [test]" : "");
-    }
-
-    @Override
-    public WandRod getRod(ItemStack stack)
-    {
-        return AdvThaum.MercurialRod;
-    }
-
-    @Override
-    public WandCap getCap(ItemStack stack)
-    {
-        return ConfigItems.WAND_CAP_THAUMIUM;
-    }
-
-    @Override
     public int addVis(ItemStack stack, Aspect aspect, int amount, boolean doit)
     {
     	int amt = amount;
     	
-        if (getPommelType(stack) == ItemPommel.POMMEL_MULTIPLIER)
+        if ((getDamage(stack) & ItemMercUpgrades.MultiplyDrain.getFlag()) != 0)
         	amt *= 2;
         
-        if (!aspect.isPrimal() && getPommelType(stack) == ItemPommel.POMMEL_COMPOUND)
+        if (!aspect.isPrimal() && hasUpgrade(stack, ItemMercUpgrades.CompoundDrain))
         {
         	for (int i = 0; i < amount; i++)
         	{
@@ -217,7 +189,7 @@ public class ItemMercurialWand extends ItemWandCasting
     public float getConsumptionModifier(ItemStack stack, EntityPlayer player, Aspect aspect)
     {
     	float discount = 0.0f;
-    	if (getPommelType(stack) == ItemPommel.POMMEL_DISCOUNT)
+    	if (hasUpgrade(stack, ItemMercUpgrades.Discount))
     		discount = 0.2f;
     	float cost = 1f - discount;
     	float cm = super.getConsumptionModifier(stack, player, aspect);
@@ -237,7 +209,7 @@ public class ItemMercurialWand extends ItemWandCasting
     	
     	discount += (1 - (cap.getBaseCostModifier()));
     	
-    	if (classictooltip || shiftdown)
+    	if (classictooltip && !shiftdown)
     	{
     		super.addInformation(stack, player, list, detailed);
     	}
@@ -257,8 +229,9 @@ public class ItemMercurialWand extends ItemWandCasting
 	    	list.add("Vis discount: " + (int)(discount * 100) + "% total");
     	}
     	
-    	if (getPommelType(stack) != 0)
-    		list.add("Pommel: " + ItemPommel.getName(stack));
+    	if (upgrades != ItemMercUpgrades.None)
+    		list.add("Upgrades: " + upgrades.toString());
+    		
     }
     
     @Override
@@ -267,7 +240,7 @@ public class ItemMercurialWand extends ItemWandCasting
     	if (world.isRemote)
     		return;
     	
-    	if (getPommelType(stack) != ItemPommel.POMMEL_RECHARGE)
+    	if (!hasUpgrade(stack, ItemMercUpgrades.Recharge))
     		return;
     	
     	AspectList aspects = this.getAllVis(stack);
@@ -302,7 +275,7 @@ public class ItemMercurialWand extends ItemWandCasting
     @Override
     public AspectList getAspectsWithRoom(ItemStack stack)
     {
-    	if (getPommelType(stack) != ItemPommel.POMMEL_COMPOUND)
+    	if (!this.hasUpgrade(stack, ItemMercUpgrades.CompoundDrain))
     		return super.getAspectsWithRoom(stack);
      	
     	AspectList result = new AspectList();
@@ -340,7 +313,7 @@ public class ItemMercurialWand extends ItemWandCasting
 			return super.onItemUseFirst(stack, player, world, x, y, z, side, hitX, hitY, hitZ);;
 		TileInfusionMatrix im = (TileInfusionMatrix)te;
 		
-    	if (getPommelType(stack) == ItemPommel.POMMEL_STABILIZER)
+    	if (hasUpgrade(stack, ItemMercUpgrades.Stabilizer))
     	{
     		if (!im.active)
     		{
@@ -357,4 +330,40 @@ public class ItemMercurialWand extends ItemWandCasting
     	return super.onItemUseFirst(stack, player, world, x, y, z, side, hitX, hitY, hitZ);
     }
     
+    @Override
+    public int getDamage(ItemStack stack)
+    {
+        int dmg = 0;
+        if (stack.hasTagCompound() && stack.getTagCompound().hasKey("upgrade"))
+        	dmg = stack.getTagCompound().getInteger("upgrade");
+        return dmg;
+    }
+    
+    @Override
+    public void setDamage(ItemStack stack, int damage)
+    {
+    	if (!stack.hasTagCompound())
+    		stack.setTagCompound(new NBTTagCompound());
+    	stack.getTagCompound().setInteger("upgrades", damage);
+    }
+    
+    private void removeUpgrade(ItemStack stack, ItemMercUpgrades upgrade)
+    {
+    	int dmg = this.getDamage(stack);
+    	dmg = (dmg & (~upgrade.getFlag()));
+    	this.setDamage(stack, dmg);
+    }
+    
+    private void addtUpgrade(ItemStack stack, ItemMercUpgrades upgrade)
+    {
+    	int dmg = this.getDamage(stack);
+    	dmg = dmg | upgrade.getFlag();
+    	setDamage(stack,  dmg);
+    }
+    
+    private boolean hasUpgrade(ItemStack stack, ItemMercUpgrades upgrade)
+    {
+    	int dmg = this.getDamage(stack);
+    	return ((dmg & upgrade.getFlag()) != 0);
+    }
 }

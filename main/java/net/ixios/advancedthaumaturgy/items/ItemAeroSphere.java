@@ -24,13 +24,13 @@ public class ItemAeroSphere extends Item
 	public ItemAeroSphere(int id)
     {
 	    super(id);
-	    this.setCreativeTab(AdvThaum.tabAdvThaum);
 	    this.setUnlocalizedName("at.aerosphere");
     }
 	
 	public void register()
 	{
 		GameRegistry.registerItem(this, "aerosphere");
+		this.setCreativeTab(AdvThaum.tabAdvThaum);
 	}
 	
 	@Override

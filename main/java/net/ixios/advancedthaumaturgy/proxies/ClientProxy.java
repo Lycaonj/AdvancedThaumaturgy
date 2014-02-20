@@ -1,9 +1,9 @@
 package net.ixios.advancedthaumaturgy.proxies;
 
+import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.awt.Color;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -18,7 +18,7 @@ import net.ixios.advancedthaumaturgy.AdvThaum;
 import net.ixios.advancedthaumaturgy.blocks.BlockCreativeNode;
 import net.ixios.advancedthaumaturgy.blocks.BlockEssentiaEngine;
 import net.ixios.advancedthaumaturgy.blocks.BlockEtherealJar;
-import net.ixios.advancedthaumaturgy.blocks.BlockFluxDissipator;
+import net.ixios.advancedthaumaturgy.blocks.BlockMinilith;
 import net.ixios.advancedthaumaturgy.blocks.BlockNodeModifier;
 import net.ixios.advancedthaumaturgy.blocks.BlockPlaceholder;
 import net.ixios.advancedthaumaturgy.blocks.BlockThaumicFertilizer;
@@ -43,6 +43,7 @@ import net.ixios.advancedthaumaturgy.renderers.ItemEtherealJarRenderer;
 import net.ixios.advancedthaumaturgy.renderers.ItemNodeRenderer;
 import net.ixios.advancedthaumaturgy.tileentities.TileEtherealJar;
 import net.ixios.advancedthaumaturgy.tileentities.TileFluxDissipator;
+import net.ixios.advancedthaumaturgy.tileentities.TileMinilithBase;
 import net.ixios.advancedthaumaturgy.tileentities.TileNodeModifier;
 import net.ixios.advancedthaumaturgy.tileentities.TileNodeModifier.Operation;
 import net.ixios.advancedthaumaturgy.tileentities.TilePlaceholder;
@@ -90,9 +91,9 @@ public class ClientProxy extends CommonProxy
 		MinecraftForgeClient.registerItemRenderer(BlockPlaceholder.blockID, renderer);
 		ClientRegistry.bindTileEntitySpecialRenderer(TilePlaceholder.class, renderer);
         
-        renderer = new GenericRenderer(new ModelMinilith(Color.MAGENTA));
-        MinecraftForgeClient.registerItemRenderer(BlockFluxDissipator.blockID, renderer);
-        ClientRegistry.bindTileEntitySpecialRenderer(TileFluxDissipator.class, renderer);
+        renderer = new GenericRenderer(new ModelMinilith());
+        MinecraftForgeClient.registerItemRenderer(BlockMinilith.blockID, renderer);
+        ClientRegistry.bindTileEntitySpecialRenderer(TileMinilithBase.class, renderer);
         
         TileEntitySpecialRenderer special = new BlockEtherealJarRenderer();
 

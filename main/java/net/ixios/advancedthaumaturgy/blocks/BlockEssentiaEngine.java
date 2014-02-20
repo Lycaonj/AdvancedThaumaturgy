@@ -76,7 +76,7 @@ public class BlockEssentiaEngine extends Block implements ITileEntityProvider
 	        ri.setRound();
 	        ri.setConcealed();
 	        	        
-	        ri.registerResearchItem();
+	       // ri.registerResearchItem();
 	        
 	        
 	        

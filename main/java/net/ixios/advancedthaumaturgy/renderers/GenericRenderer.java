@@ -92,7 +92,7 @@ public class GenericRenderer extends TileEntitySpecialRenderer implements IItemR
          GL11.glScalef(scale, scale, scale);
          GL11.glTranslatef(x, y, z);
 
-         model.render();
+         model.render(null);
 
          GL11.glEnable(GL11.GL_LIGHTING);
          GL11.glPopMatrix();
@@ -110,7 +110,7 @@ public class GenericRenderer extends TileEntitySpecialRenderer implements IItemR
          GL11.glTranslated(x + .5, y, z + .5);
          GL11.glScaled(.5, .5, .5);
      
-         model.render();
+         model.render(te);
 
          GL11.glPopMatrix();	
 	}

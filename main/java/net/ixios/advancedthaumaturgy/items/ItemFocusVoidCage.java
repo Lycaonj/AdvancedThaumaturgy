@@ -38,12 +38,12 @@ public class ItemFocusVoidCage extends ItemFocusBasic
 	    super(id);
 	    cost = new AspectList().add(Aspect.ORDER, 5000).add(Aspect.ENTROPY, 5000);
 	    setUnlocalizedName("at.voidcage");
-	    setCreativeTab(AdvThaum.tabAdvThaum);
     }
 
 	public void register()
 	{
 		GameRegistry.registerItem(this, "focusvoidcage");
+		setCreativeTab(AdvThaum.tabAdvThaum);
 		
 		// research
 		// if tt parent to dislocation and place off
@@ -57,17 +57,8 @@ public class ItemFocusVoidCage extends ItemFocusBasic
 	@Override
 	public void registerIcons(IconRegister ir)
 	{
-        super.icon = ir.registerIcon("thaumcraft:focus_frost");
+        super.icon = ir.registerIcon("advthaum:voidcage");
     }
-	
-	@Override
-	public boolean itemInteractionForEntity(ItemStack par1ItemStack,
-	        EntityPlayer par2EntityPlayer, EntityLivingBase par3EntityLivingBase)
-	{
-	    // TODO Auto-generated method stub
-	    return super.itemInteractionForEntity(par1ItemStack, par2EntityPlayer,
-	            par3EntityLivingBase);
-	}
 	
 	@Override
     public ItemStack onFocusRightClick(ItemStack itemstack, World world, EntityPlayer player, MovingObjectPosition mop)
@@ -103,7 +94,9 @@ public class ItemFocusVoidCage extends ItemFocusBasic
 			EntityLivingBase entity = null;
 			String classname = tag.getString("classname");
 			Class c;
-							
+			
+			ForgeDirection fd = ForgeDirection.getOrientation(mop.sideHit);
+			
             try
             {
                 c = Class.forName(classname);
@@ -118,9 +111,9 @@ public class ItemFocusVoidCage extends ItemFocusBasic
 				entity = constructor.newInstance(world);
 				
 				NBTTagList newpos = new NBTTagList();
-				newpos.appendTag(new NBTTagDouble((String)null, mop.blockX + 0.5F));
-				newpos.appendTag(new NBTTagDouble((String)null, mop.blockY + 1.5F));
-				newpos.appendTag(new NBTTagDouble((String)null, mop.blockZ + 0.5F));
+				newpos.appendTag(new NBTTagDouble((String)null, mop.blockX + fd.offsetX));
+				newpos.appendTag(new NBTTagDouble((String)null, mop.blockY + fd.offsetY));
+				newpos.appendTag(new NBTTagDouble((String)null, mop.blockZ + fd.offsetZ));
 
 				NBTTagList motion = new NBTTagList();
 				motion.appendTag(new NBTTagDouble((String)null, 0D));

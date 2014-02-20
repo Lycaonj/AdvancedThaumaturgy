@@ -1,4 +1,4 @@
-package net.ixios.advancedthaumaturgy.blocks;
+	package net.ixios.advancedthaumaturgy.blocks;
 
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
@@ -71,7 +71,7 @@ public class BlockThaumicFertilizer extends BlockContainer
 
 		ri.setConcealed();
 		
-		ri.registerResearchItem();
+		//ri.registerResearchItem();
     }
     
     @Override

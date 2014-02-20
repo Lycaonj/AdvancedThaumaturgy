@@ -1,5 +1,6 @@
 Build 21
 Removed mercurial wand infusion recipe, you can now properly use any cap you like on the core.
+Gave the mercurial wand core a name that more closely follows the naming convention of the rest of the cores
 
 Build 20
 Fixed several issues with the ethereal jar which was causing desync issues between client and server

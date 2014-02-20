@@ -48,7 +48,6 @@ public class BlockNodeModifier extends BlockContainer implements IWandable
 		super(id, material);
 		blockID = id;
 		this.setHardness(1.0F);
-		this.setCreativeTab(AdvThaum.tabAdvThaum);
 		this.setUnlocalizedName("at.modifier");
 	    renderID = RenderingRegistry.getNextAvailableRenderId();
 	}
@@ -57,6 +56,7 @@ public class BlockNodeModifier extends BlockContainer implements IWandable
 	{
 		GameRegistry.registerBlock(this, ItemNodeModifier.class, "blockNodeModifier");
 		GameRegistry.registerTileEntity(TileNodeModifier.class, "tileentityNodeModifier");
+		this.setCreativeTab(AdvThaum.tabAdvThaum);
 		
 		ItemStack gold = new ItemStack(Block.blockGold);
 		ItemStack wood = new ItemStack(ConfigBlocks.blockMagicalLog, 1, 0);
@@ -83,7 +83,7 @@ public class BlockNodeModifier extends BlockContainer implements IWandable
 		 List list = (List)ConfigResearch.recipes.get("NodeSetup");
 		 
 		 ATResearchItem ri = new ATResearchItem("NODEMODIFIER", "BASICS",
-					(new AspectList()).add(Aspect.AURA, 1).add(Aspect.SENSES, 1).add(Aspect.MAGIC, 1),
+					(new AspectList()),
 					-5, 6, 4,
 					new ItemStack(this));
 			ri.setTitle("at.research.nodemodifier.title");
@@ -95,7 +95,6 @@ public class BlockNodeModifier extends BlockContainer implements IWandable
 			ri.setSpecial();
 			
 			ri.registerResearchItem();
-			
 			
 	}
 	

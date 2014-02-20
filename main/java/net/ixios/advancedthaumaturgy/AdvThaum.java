@@ -23,9 +23,9 @@ import net.ixios.advancedthaumaturgy.items.ItemAeroSphere;
 import net.ixios.advancedthaumaturgy.items.ItemEtherealJar;
 import net.ixios.advancedthaumaturgy.items.ItemFocusVoidCage;
 import net.ixios.advancedthaumaturgy.items.ItemInfusedThaumium;
-import net.ixios.advancedthaumaturgy.items.ItemMercurialCore;
+import net.ixios.advancedthaumaturgy.items.ItemMercurialRod;
+import net.ixios.advancedthaumaturgy.items.ItemMercurialRodBase;
 import net.ixios.advancedthaumaturgy.items.ItemMercurialWand;
-import net.ixios.advancedthaumaturgy.items.ItemPommel;
 import net.ixios.advancedthaumaturgy.misc.ATCreativeTab;
 import net.ixios.advancedthaumaturgy.misc.ATEventHandler;
 import net.ixios.advancedthaumaturgy.misc.ATServerCommand;
@@ -92,12 +92,12 @@ public class AdvThaum
 	public static Configuration config = null;
 	
 	// items
-	public static ItemMercurialCore MercurialCore;
-	public static WandRod MercurialRod;
+	public static ItemMercurialRod MercurialRod;
+	public static ItemMercurialRodBase MercurialRodBase;
 	public static ItemMercurialWand MercurialWand;
 	public static ItemInfusedThaumium InfusedThaumium;
 	//public static ItemThaumInkwell ThaumicInkwell;
-	public static ItemPommel PommelBase;
+	
 	public static ItemFocusVoidCage FocusVoidCage;
 	public static ItemEtherealJar itemEtherealJar;
 	public static ItemAeroSphere AeroSphere;
@@ -153,8 +153,8 @@ public class AdvThaum
 	     
 	     if (config.get("Feature Control", "enable_mercurial_core", true).getBoolean(true))
 	     {
-	    	 MercurialCore = new ItemMercurialCore(mercurialcoreid);
-	    	 MercurialRod = new WandRod("mercurial", 500, new ItemStack(MercurialCore), 90);
+	    	 MercurialRodBase = new ItemMercurialRodBase(mercurialcoreid);
+	    	 MercurialRod = new ItemMercurialRod();
 	    	 
 	    	 if (config.get("Feature Control", "enable_mercurial_wand", true).getBoolean(true))
 	    		 MercurialWand = new ItemMercurialWand(mercurialwandid);
@@ -183,10 +183,7 @@ public class AdvThaum
 	     
 	     if (config.get("Feature Control", "enable_ventilator", true).getBoolean(true))
 	    	 FluxDissipator = new BlockFluxDissipator(fluxdissipatorid, Material.ground);
-	     
-	     if (config.get("Feature Control", "enable_pommels", true).getBoolean(true))
-	    	 PommelBase = new ItemPommel(pommelid);
-	     
+	      
 	     if (config.get("Feature Control", "enable_focus_void_cage", true).getBoolean(true))
 	    	 FocusVoidCage = new ItemFocusVoidCage(focusvoidcageid);
 	     
@@ -240,8 +237,8 @@ public class AdvThaum
      {
 		 proxy.registerAllTheThings();
 		 
-		 if (MercurialCore != null)
-			 MercurialCore.register();
+		 if (MercurialRodBase != null)
+			 MercurialRodBase.register();
 		 
 		 if (MercurialWand != null)
 			 MercurialWand.register();
@@ -263,10 +260,7 @@ public class AdvThaum
 		 
 		 if (FluxDissipator != null)
 			 FluxDissipator.register();
-		 
-		 if (PommelBase != null && MercurialWand != null)
-			 PommelBase.register();
-		 
+		  
 		 if (FocusVoidCage != null)
 			 FocusVoidCage.register();
 		 

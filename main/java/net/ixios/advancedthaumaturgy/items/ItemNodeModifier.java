@@ -2,6 +2,8 @@ package net.ixios.advancedthaumaturgy.items;
 
 import java.util.List;
 
+import org.lwjgl.input.Keyboard;
+
 import net.ixios.advancedthaumaturgy.AdvThaum;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
@@ -35,7 +37,10 @@ public class ItemNodeModifier extends ItemBlock
 	@Override
 	public void addInformation(ItemStack stack,	EntityPlayer player, List list, boolean par4)
 	{
-		String desc = StatCollector.translateToLocal("tile.at.modifier.desc");
+		boolean shiftdown = Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT);
+    	if (!shiftdown)
+    		return;
+    	String desc = StatCollector.translateToLocal("tile.at.modifier.desc");
 		String[] lines = desc.split("\\|");
 		for (String s : lines)
 			list.add(s);

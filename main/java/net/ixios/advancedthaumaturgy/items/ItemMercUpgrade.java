@@ -14,10 +14,30 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.ixios.advancedthaumaturgy.items.ItemMercurialWand;
 
-public class ItemPommel extends Item
+public class ItemMercUpgrade extends Item
 {
 
-	public ItemPommel(int id)
+	public enum ItemMercUpgrades
+	{
+		None(0),
+		Recharge(1),
+		CompoundDrain(2),
+		MultiplyDrain(4),
+		Stabilizer(8),
+		Discount(16);
+			
+		private int flag;
+		ItemMercUpgrades(int flag)
+		{
+			this.flag = flag;
+		}
+		public int getFlag()
+		{
+			return flag;
+		}
+	}
+	
+	public ItemMercUpgrade(int id)
 	{
 		super(id);
 		setHasSubtypes(true);
@@ -36,7 +56,7 @@ public class ItemPommel extends Item
 	
 	public void register()
 	{
-		ItemStack wand = new ItemStack(AdvThaum.MercurialWand);
+		/*ItemStack wand = new ItemStack(AdvThaum.MercurialWand);
 	
 		GameRegistry.registerItem(this, "itemPommel");
 
@@ -46,10 +66,10 @@ public class ItemPommel extends Item
 		ATResearchItem ri = new ATResearchItem("POMMELS", "ARTIFICE", new AspectList(), 0, 0, 0, new ItemStack(this));
 		ri.setVirtual();
 		ri.setParentsHidden("MERCURIALWAND");
-		ri.setAutoUnlock();
-		ri.registerResearchItem();
+		ri.setAutoUnlock();*/
+		//ri.registerResearchItem();
 		
-		for (ItemStack stack : list)
+	/*	for (ItemStack stack : list)
 		{
 			((ItemMercurialWand)wand.getItem()).setPommelType(wand, stack.getItemDamage());
 			ThaumcraftApi.addArcaneCraftingRecipe("POMMELS", wand, new AspectList(), 
@@ -57,7 +77,7 @@ public class ItemPommel extends Item
 					" P ",
 					"   ",
 					'W', wand, 'P', stack);
-		}
+		}*/
 	}
 	
 	@Override
@@ -82,33 +102,4 @@ public class ItemPommel extends Item
 		}
 	}
 	
-	public static String getName(ItemStack wand)
-	{
-		switch (wand.getItem().getDamage(wand))
-		{
-			case POMMEL_PLAIN:
-				return "Inert";
-			case POMMEL_RECHARGE:
-				return "Recharge";
-			case POMMEL_COMPOUND:
-				return "Compound Drainer";
-			case POMMEL_MULTIPLIER:
-				return "Drain Multiplier";
-			case POMMEL_STABILIZER:
-				return "Infusion Stabilizer";
-			case POMMEL_DISCOUNT:
-				return "Discount";
-			default:
-				return "Unknown";
-		}
-		
-	}
-
-	public static final int POMMEL_PLAIN = 0;
-	public static final int POMMEL_RECHARGE = 1; // tested
-	public static final int POMMEL_COMPOUND = 2; // tested
-	public static final int POMMEL_MULTIPLIER = 3; // tested
-	public static final int POMMEL_STABILIZER = 4;
-	public static final int POMMEL_DISCOUNT = 5;  // tested
-    
 }

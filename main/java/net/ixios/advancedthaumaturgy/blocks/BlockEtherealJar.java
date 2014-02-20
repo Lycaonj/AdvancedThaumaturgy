@@ -56,7 +56,6 @@ public class BlockEtherealJar extends BlockJar
     public void getSubBlocks(int blockid, CreativeTabs tab, List list) 
     {
     	// don't show in creative menu
-    	//list.clear(); //add(new ItemStack(blockid, 1, 0));
     }
     
     @Override
@@ -69,6 +68,7 @@ public class BlockEtherealJar extends BlockJar
     {
     	GameRegistry.registerBlock(this, "blockEtherealJar");
     	GameRegistry.registerTileEntity(TileEtherealJar.class, "tileEtherealJar");
+    	AdvThaum.EtherealJar.setCreativeTab(AdvThaum.tabAdvThaum);
     	
     	// do research
     	ItemStack crystal = new ItemStack(ConfigBlocks.blockCrystal, 1, 32767);
@@ -82,25 +82,23 @@ public class BlockEtherealJar extends BlockJar
    	 			 		    "JCJ", 'C', crystal, 'J', new ItemStack(ConfigBlocks.blockJar, 1, 0), 'S', silverwood,
    	 			 		    		'Q', quicksilver });
      
-     ConfigResearch.recipes.put("EtherealJar", recipe);
- 
-     // add research
-      ATResearchItem ri = new ATResearchItem("ETHEREALJAR", "ALCHEMY",
-    		  (new AspectList()).add(Aspect.AIR, 50).add(Aspect.ENTROPY, 50),
-             7, -7, 3,
-             new ItemStack(AdvThaum.itemEtherealJar, 1, 0));
-     ri.setTitle("at.research.etherealjar.title");
-     ri.setInfo("at.research.etherealjar.desc");
-     ri.setParents("JARVOID");
-     ri.setPages(new ResearchPage("at.research.etherealjar.pg1"), new ResearchPage("at.research.etherealjar.pg2"),
-             new ResearchPage(recipe));
-     
-     ri.setConcealed();
-     	        
-     ri.registerResearchItem();
-     
-     
-     
+	     ConfigResearch.recipes.put("EtherealJar", recipe);
+	 
+	     // add research
+	      ATResearchItem ri = new ATResearchItem("ETHEREALJAR", "ALCHEMY",
+	    		  (new AspectList()).add(Aspect.AIR, 50).add(Aspect.ENTROPY, 50),
+	             7, -7, 3,
+	             new ItemStack(AdvThaum.itemEtherealJar, 1, 0));
+	     ri.setTitle("at.research.etherealjar.title");
+	     ri.setInfo("at.research.etherealjar.desc");
+	     ri.setParents("JARVOID");
+	     ri.setPages(new ResearchPage("at.research.etherealjar.pg1"), new ResearchPage("at.research.etherealjar.pg2"),
+	             new ResearchPage(recipe));
+	     
+	     ri.setConcealed();
+	     	        
+	     ri.registerResearchItem();
+	     
     }
     
     @Override
@@ -112,110 +110,122 @@ public class BlockEtherealJar extends BlockJar
         
         if (!(te instanceof TileEtherealJar))
     		return true;
-          
-    	// world.playSound((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), "thaumcraft:jar", 0.2F, 1.0F, false);
+
     	TileEtherealJar jar = (TileEtherealJar)te;;
-    	ItemEssence phial = null;
-    	IEssentiaContainerItem container = null;
     		
     	boolean noitem = (helditem == null);
-    	
-    	if (!noitem && helditem.getItem() instanceof ItemEssence)
-    		phial = (ItemEssence)helditem.getItem();
-    	if (!noitem && helditem.getItem() instanceof IEssentiaContainerItem)
-    		container = (IEssentiaContainerItem)helditem.getItem();
-    	
-        if (noitem && player.isSneaking() && jar.aspectFilter != null && side == jar.facing)
-        {
-        	jar.aspectFilter = null;
-        	if (world.isRemote) 
-        	{
-        		world.playSound(x + 0.5F, y + 0.5F, z + 0.5F, "thaumcraft:page", 1.0F, 1.0F, false);
-        	}
-        	else
-        	{
-        		ForgeDirection fd = ForgeDirection.getOrientation(side);
-        		world.spawnEntityInWorld(new EntityItem(world, x + 0.5F + fd.offsetX / 3.0F, y + 0.5F, z + 0.5F + fd.offsetZ / 3.0F, new ItemStack(ConfigItems.itemResource, 1, 13)));
-        	}
-        	world.markBlockForUpdate(x,  y,  z);
-        }
-        else if (player.isSneaking() && noitem)
-        {
-        	jar.amount = 0;
-        	if (world.isRemote) 
-        	{
-        		world.playSound(x + 0.5F, y + 0.5F, z + 0.5F, "thaumcraft:jar", 0.4F, 1.0F, false);
-        		world.playSound(x + 0.5F, y + 0.5F, z + 0.5F, "liquid.swim", 0.5F, 1.0F + world.rand.nextFloat() - world.rand.nextFloat() * 0.3F, false);
-        	}
-        	world.markBlockForUpdate(x,  y,  z);
-        }
-        else if (!noitem && jar.amount == 0 && container.getAspects(helditem) != null)
-        {
-        	jar.aspectFilter = container.getAspects(helditem).getAspects()[0];
-            
-            --helditem.stackSize;
-            this.onBlockPlacedBy(world, x, y, z, player, (ItemStack)null);
-            
-            if (world.isRemote)
-         	   world.playSound(x + 0.5F, y + 0.5F, z + 0.5F, "thaumcraft:page", 0.4F, 1.0F, false);
-            world.markBlockForUpdate(x,  y,  z);
-        }
-        else if (!noitem && jar.aspectFilter == null && helditem.itemID == ConfigItems.itemResource.itemID && helditem.getItemDamage() == 13) 
-        {  // applying a blank label
-        	if (jar.amount == 0 || jar.aspect == null) 
-        		return true;
+    	boolean isLabel = !noitem && helditem.itemID == ConfigItems.itemResource.itemID && helditem.getItemDamage() == 13;
+    	boolean isPhial = !noitem && helditem.getItem() instanceof IEssentiaContainerItem; //itemID == ConfigItems.itemResource.itemID && helditem.getItemDamage() == 13;
 
-           jar.aspectFilter = jar.aspect;
-           
-           --helditem.stackSize;
-           this.onBlockPlacedBy(world, x, y, z, player, (ItemStack)null);
-           
-           if (world.isRemote)
-        	   world.playSound(x + 0.5F, y + 0.5F, z + 0.5F, "thaumcraft:jar", 0.4F, 1.0F, false);
-           world.markBlockForUpdate(x,  y,  z);
-        }
-        else if (helditem != null && (helditem.getItem() instanceof ItemEssence))
-    	{
-        	AspectList aspects = phial.getAspects(helditem);
-        	if (jar.amount >= 8 && jar.aspect != null && aspects == null)
-        	{ // empty phial, full jar
-        		helditem.stackSize--;
-        		ItemStack phialstack = new ItemStack(ConfigItems.itemEssence, 1, 1);
-        		((ItemEssence)phialstack.getItem()).setAspects(phialstack, new AspectList().add(jar.aspect, 8));
-        		
-        		jar.takeFromContainer(jar.aspect, 8);
-        		world.markBlockForUpdate(jar.xCoord, jar.yCoord, jar.zCoord);
-        		
-        		if (!player.inventory.addItemStackToInventory(phialstack))
-        			world.spawnEntityInWorld(new EntityItem(world,x + 0.5f, y + 0.5f, z + 0.5f, phialstack));
-        		
-        		if (world.isRemote)
-        			world.playSound(x + 0.5F, y + 0.5F, z + 0.5F, "liquid.swim", 0.5F, 1.0F + world.rand.nextFloat() - world.rand.nextFloat() * 0.3F, false);
-        		world.markBlockForUpdate(x,  y,  z);
-        	}
-        	else if (phial.getAspects(helditem) != null && jar.amount <= jar.maxAmount - 8)
-        	{ // empty jar, full phial
-        		if (jar.aspect != null && phial.getAspects(helditem).getAspects()[0] != jar.aspect)
-        			return true;
-        		
-        		helditem.stackSize--;
-        		ItemStack emptyphial = new ItemStack(ConfigItems.itemEssence, 1, 0);
-        		
-        		Aspect aspect = phial.getAspects(helditem).getAspects()[0];
-        		jar.addToContainer(aspect, 8);
-        		jar.aspect = aspect;
-        		
-        		if (!player.inventory.addItemStackToInventory(emptyphial))
-        			world.spawnEntityInWorld(new EntityItem(world,x + 0.5f, y + 0.5f, z + 0.5f, emptyphial));
-        		
-        		if (world.isRemote)
-        			world.playSound(x + 0.5F, y + 0.5F, z + 0.5F, "liquid.swim", 0.5F, 1.0F + world.rand.nextFloat() - world.rand.nextFloat() * 0.3F, false);
-        		
-        		world.markBlockForUpdate(x,  y,  z);
-        	}
-		}
-        return true;
+    	if (noitem)
+    		handleEmptyHandClick(jar, player, side);
+    	else if (isLabel)
+    		handleLabelClick(jar, player, helditem);
+    	else if (isPhial)
+    		handlePhial(jar, player, helditem);
+    	
+    	world.markBlockForUpdate(x, y, z);
+    	return true;
 	}
+   
+    private void handleEmptyHandClick(TileEtherealJar jar, EntityPlayer player, int side)
+    {
+    	if (player.isSneaking() && jar.aspectFilter != null && side == jar.facing)
+    	{ // shift right clicking a label, remove it
+    		jar.aspectFilter = null;
+          	if (jar.worldObj.isRemote) 
+          	{
+          		jar.worldObj.playSound(jar.xCoord + 0.5F, jar.yCoord + 0.5F, jar.zCoord + 0.5F, "thaumcraft:page", 1.0F, 1.0F, false);
+          	}
+          	else
+          	{
+          		ForgeDirection fd = ForgeDirection.getOrientation(side);
+          		jar.worldObj.spawnEntityInWorld(new EntityItem(jar.worldObj, jar.xCoord + 0.5F + fd.offsetX / 3.0F, jar.yCoord + 0.5F, jar.zCoord + 0.5F + fd.offsetZ / 3.0F, new ItemStack(ConfigItems.itemResource, 1, 13)));
+          	}
+          
+    	}
+    	else if (player.isSneaking())
+    	{// shift right clickign a jar, empty it
+    		jar.amount = 0;
+    		if (jar.worldObj.isRemote) 
+    		{
+    			jar.worldObj.playSound(jar.xCoord + 0.5F, jar.yCoord + 0.5F, jar.zCoord + 0.5F, "thaumcraft:jar", 0.4F, 1.0F, false);
+    			jar.worldObj.playSound(jar.xCoord + 0.5F, jar.yCoord + 0.5F, jar.zCoord + 0.5F, "liquid.swim", 0.5F, 1.0F + jar.worldObj.rand.nextFloat() - jar.worldObj.rand.nextFloat() * 0.3F, false);
+    		}
+    	}
+    }
+        
+    private void handleLabelClick(TileEtherealJar jar, EntityPlayer player, ItemStack stack)
+    {
+    	World world = jar.worldObj;
+    	ItemResource label = (ItemResource)stack.getItem();
+    	
+    	if (jar.amount == 0 && label.getAspects(stack) != null && jar.aspectFilter == null)
+    	{ // empty jar, marked label
+         	jar.aspectFilter = label.getAspects(stack).getAspects()[0];
+              
+            --stack.stackSize;
+            this.onBlockPlacedBy(world, jar.xCoord, jar.yCoord, jar.zCoord, player, (ItemStack)null);
+              
+            if (world.isRemote)
+            	world.playSound(jar.xCoord + 0.5F, jar.yCoord + 0.5F, jar.zCoord + 0.5F, "thaumcraft:page", 0.4F, 1.0F, false);
+    	}
+        else if (jar.aspectFilter == null && jar.amount != 0 && jar.aspect != null) 
+        {  // applying a blank label
+        	jar.aspectFilter = jar.aspect;
+             
+            --stack.stackSize;
+            this.onBlockPlacedBy(world, jar.xCoord, jar.yCoord, jar.zCoord, player, (ItemStack)null);
+             
+            if (world.isRemote)
+            	world.playSound(jar.xCoord + 0.5F, jar.yCoord + 0.5F, jar.zCoord + 0.5F, "thaumcraft:jar", 0.4F, 1.0F, false);
+          }
+    }
+    
+    private void handlePhial(TileEtherealJar jar, EntityPlayer player, ItemStack stack)
+    {
+    	IEssentiaContainerItem container = (IEssentiaContainerItem)stack.getItem();
+    	AspectList aspects = container.getAspects(stack);
+    	World world = jar.worldObj;
+    	Aspect aspect = aspects == null ? null : container.getAspects(stack).getAspects()[0];
+    	
+        if (jar.amount >= 8 && jar.aspect != null && container.getAspects(stack) == null && aspects == null)
+       	{ // empty phial, semi full jar
+        	stack.stackSize--;
+       		ItemStack phialstack = new ItemStack(ConfigItems.itemEssence, 1, 1);
+       		((ItemEssence)phialstack.getItem()).setAspects(phialstack, new AspectList().add(jar.aspect, 8));
+       		
+       		jar.takeFromContainer(jar.aspect, 8);
+       		world.markBlockForUpdate(jar.xCoord, jar.yCoord, jar.zCoord);
+       		
+       		if (!player.inventory.addItemStackToInventory(phialstack))
+       			world.spawnEntityInWorld(new EntityItem(world, jar.xCoord + 0.5f, jar.yCoord + 0.5f, jar.zCoord + 0.5f, phialstack));
+       		
+       		if (world.isRemote)
+       			world.playSound(jar.xCoord + 0.5F, jar.yCoord + 0.5F, jar.zCoord + 0.5F, "liquid.swim", 0.5F, 1.0F + world.rand.nextFloat() - world.rand.nextFloat() * 0.3F, false);
+
+       	}
+       	else if (aspects != null && ((jar.amount <= jar.maxAmount - 8 && jar.aspect != null && jar.aspect == aspect) || (jar.amount == 0 && jar.aspect == null)))
+       	{ // empty jar, full phial
+       		
+       		if (jar.aspectFilter != null && jar.aspectFilter != aspect)
+       			return;
+       		
+       		stack.stackSize--;
+       		ItemStack emptyphial = new ItemStack(ConfigItems.itemEssence, 1, 0);
+       		
+       		jar.addToContainer(aspect, 8);
+       		jar.aspect = aspect;
+       		
+       		if (!player.inventory.addItemStackToInventory(emptyphial))
+       			world.spawnEntityInWorld(new EntityItem(world, jar.xCoord + 0.5f, jar.yCoord + 0.5f, jar.zCoord + 0.5f, emptyphial));
+       		
+       		if (world.isRemote)
+       			world.playSound(jar.xCoord + 0.5F, jar.yCoord + 0.5F, jar.zCoord + 0.5F, "liquid.swim", 0.5F, 1.0F + world.rand.nextFloat() - world.rand.nextFloat() * 0.3F, false);
+
+       	}
+   	    
+    }
     
     @Override
     public void breakBlock(World world, int x, int y, int z, int arg4, int arg5)

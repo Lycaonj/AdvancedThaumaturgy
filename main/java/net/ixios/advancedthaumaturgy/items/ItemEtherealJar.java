@@ -25,7 +25,6 @@ public class ItemEtherealJar extends ItemJarFilled
 	public ItemEtherealJar(int id)
 	{
 		super(id);
-		this.setCreativeTab(AdvThaum.tabAdvThaum);
 		this.setMaxStackSize(4);
 		this.setUnlocalizedName("at.etherealjar");
 	}
@@ -84,28 +83,7 @@ public class ItemEtherealJar extends ItemJarFilled
 		
 		if (aspects != null)
 			list.add(aspects.getAspects()[0].getName() + " x " + aspects.getAmount(aspects.getAspects()[0]));
-		
-		//AdvThaum.log("IA: " + isItemValidForSlot(0, stack));
-		
+			
 	}
-	
-	public boolean isItemValidForSlot(int i, ItemStack jar)
-    {
-		boolean nn = (jar != null);
-		boolean ia = (jar.getItem() instanceof ItemJarFilled);
-		boolean hc = jar.hasTagCompound();
-		
-		AdvThaum.log("nn: " + nn);
-		AdvThaum.log("ia: " + ia);
-		AdvThaum.log("hc: " + hc);
-				
-         if(nn && ia && hc)
-        { 
-            AspectList aspects = ((ItemJarFilled)jar.getItem()).getAspects(jar);
-            if(aspects != null && aspects.size() > 0 && aspects.getAmount(Aspect.ENERGY) > 0)
-            	return true;
-        }
-        return false;
-    }
 	
 }
