@@ -1,6 +1,13 @@
-Build 21
+Build 22
+Updated to 4.1
 Removed mercurial wand infusion recipe, you can now properly use any cap you like on the core.
 Gave the mercurial wand core a name that more closely follows the naming convention of the rest of the cores
+Fixed misspelling in mercurial wand ore page.  Also fixed \n's in the same page.
+Fixed break texture on fertilizer.
+Ethereal jars now show up in creative again.
+Removed [beta] tag from ethereal jars.  Bugs might exist but they should be working now.
+Added Minilith stuff.
+Flux Dissipator, one of the new Miniliths, now has research and a recipe.
 
 Build 20
 Fixed several issues with the ethereal jar which was causing desync issues between client and server

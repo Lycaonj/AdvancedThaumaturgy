@@ -22,6 +22,7 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 
 public class BlockThaumicFertilizer extends BlockContainer
@@ -71,7 +72,7 @@ public class BlockThaumicFertilizer extends BlockContainer
 
 		ri.setConcealed();
 		
-		//ri.registerResearchItem();
+		ri.registerResearchItem();
     }
     
     @Override
@@ -90,9 +91,14 @@ public class BlockThaumicFertilizer extends BlockContainer
 	@Override
 	public void registerIcons(IconRegister ir)
 	{
-		blockIcon = ir.registerIcon("advthaum:thaumic_fertilizer");
+		blockIcon = ir.registerIcon("advthaum:thaum_sprinkler_tex");
 	}
 
+	@Override
+	public Icon getIcon(int par1, int par2)
+	{
+	    return blockIcon;
+	}
 
 	@Override
 	public boolean isOpaqueCube()

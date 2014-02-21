@@ -14,12 +14,4 @@ public class TileEtherealJar extends TileJarFillable
 		this.maxAmount = maxAmt;
 	}
 	
-	@Override
-	public AspectList getSuction(ForgeDirection loc)
-	{
-		AspectList list = super.getSuction(loc);
-		for (Aspect a : list.getAspects())
-			list.merge(a, 5);
-	      return list;
-	}
 }

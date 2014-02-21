@@ -74,7 +74,7 @@ import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry.EntityRegistration;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid="AdvancedThaumaturgy", version="0.0.20", name="Advanced Thaumaturgy", 
+@Mod(modid="AdvancedThaumaturgy", version="0.0.22", name="Advanced Thaumaturgy", 
 	dependencies="required-after:Thaumcraft", acceptedMinecraftVersions="1.6.4")
 @NetworkMod(clientSideRequired=true, channels={"AdvThaum"}, packetHandler = CommonProxy.class)
 
@@ -196,8 +196,9 @@ public class AdvThaum
 	     
 	     LanguageRegistry.instance().addStringLocalization("itemGroup.advthaum", "en_US", "Advanced Thaumaturgy");
 	     
-
-	     
+		 if (MercurialRodBase != null)
+			 MercurialRodBase.register();
+		 
 	     MinecraftForge.EVENT_BUS.register(new ATEventHandler());
 	     
 	     TickRegistry.registerTickHandler(new ArcingDamageManager(), Side.SERVER);
@@ -236,10 +237,7 @@ public class AdvThaum
      public void postInit(FMLPostInitializationEvent event) 
      {
 		 proxy.registerAllTheThings();
-		 
-		 if (MercurialRodBase != null)
-			 MercurialRodBase.register();
-		 
+	 
 		 if (MercurialWand != null)
 			 MercurialWand.register();
 		 

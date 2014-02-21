@@ -2,6 +2,7 @@ package net.ixios.advancedthaumaturgy.tileentities;
 
 import java.util.HashMap;
 
+import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.aspects.IAspectContainer;
@@ -268,21 +269,9 @@ public class TileEssentiaEngine extends TileEntity implements IPowerEmitter, IPi
 	}
 
 	@Override
-	public AspectList getEssentia(ForgeDirection arg0) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public int getMinimumSuction() {
 		// TODO Auto-generated method stub
 		return 0;
-	}
-
-	@Override
-	public AspectList getSuction(ForgeDirection arg0)
-	{
-		return new AspectList().add(curraspect, 256);
 	}
 
 	@Override
@@ -299,12 +288,6 @@ public class TileEssentiaEngine extends TileEntity implements IPowerEmitter, IPi
 	}
 
 	@Override
-	public void setSuction(AspectList arg0)
-	{
-		
-	}
-
-	@Override
 	public void setSuction(Aspect arg0, int arg1)
 	{
 		
@@ -318,29 +301,57 @@ public class TileEssentiaEngine extends TileEntity implements IPowerEmitter, IPi
 	
 	private int fillFromPipe()
 	{
-		 TileEntity te = worldObj.getBlockTileEntity(xCoord, yCoord + 1, zCoord);
-	        
-		 if (te != null)
-		 {
-			 IEssentiaTransport ic = (IEssentiaTransport)te;
-	         
-			 if(!ic.canOutputTo(ForgeDirection.DOWN))
-				 return 0;
-	         
-	         AspectList available = ic.getEssentia(ForgeDirection.DOWN);
-	         
-	         if (available == null)
-	        	 return 0;
-	                
-	         for (Aspect a : available.getAspects())       
-	         {
-	        	 if (a != curraspect)
-	        		 continue;
-	        	 
-	        	 if ((int)energy < maxEnergy && ic.getSuction(ForgeDirection.DOWN).getAmount(a) < getSuction(ForgeDirection.UP).getAmount(a) && getSuction(ForgeDirection.UP).getAmount(a) >= ic.getMinimumSuction())
-	        		 return 1;               
-	         }
-		 }
-		 return 0;
+		TileEntity te = ThaumcraftApiHelper.getConnectableTile(worldObj, xCoord, yCoord, zCoord, ForgeDirection.DOWN);
+		
+		if (te != null) 
+		{
+			IEssentiaTransport ic = (IEssentiaTransport)te;
+			if (!ic.canOutputTo(ForgeDirection.UP))
+				return 0;
+
+			for (Aspect aspect : aspectvalues.keySet())
+			{
+				if (ic.getSuctionType(ForgeDirection.UP) == aspect &&
+						ic.getSuctionAmount(ForgeDirection.UP) < getSuctionAmount(ForgeDirection.DOWN) &&
+						ic.takeVis(aspect, 1) == 1)
+					return 1;
+			}
+		}
+		return 0;
 	}
+
+	@Override
+    public int addVis(Aspect arg0, int arg1)
+    {
+	    // TODO Auto-generated method stub
+	    return 0;
+    }
+
+	@Override
+    public int getEssentiaAmount(ForgeDirection arg0)
+    {
+	    // TODO Auto-generated method stub
+	    return 0;
+    }
+
+	@Override
+    public Aspect getEssentiaType(ForgeDirection arg0)
+    {
+	    // TODO Auto-generated method stub
+	    return null;
+    }
+
+	@Override
+    public int getSuctionAmount(ForgeDirection arg0)
+    {
+	    // TODO Auto-generated method stub
+	    return 0;
+    }
+
+	@Override
+    public Aspect getSuctionType(ForgeDirection arg0)
+    {
+	    // TODO Auto-generated method stub
+	    return null;
+    }
 }

@@ -68,7 +68,7 @@ public class BlockEtherealJar extends BlockJar
     {
     	GameRegistry.registerBlock(this, "blockEtherealJar");
     	GameRegistry.registerTileEntity(TileEtherealJar.class, "tileEtherealJar");
-    	AdvThaum.EtherealJar.setCreativeTab(AdvThaum.tabAdvThaum);
+    	AdvThaum.itemEtherealJar.setCreativeTab(AdvThaum.tabAdvThaum);
     	
     	// do research
     	ItemStack crystal = new ItemStack(ConfigBlocks.blockCrystal, 1, 32767);

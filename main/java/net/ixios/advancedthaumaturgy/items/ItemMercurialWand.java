@@ -47,19 +47,18 @@ import thaumcraft.common.tiles.TileInfusionMatrix;
 public class ItemMercurialWand extends ItemWandCasting
 {
 
-	private DecimalFormat myFormatter;
-    private boolean classictooltip = false;
+	private boolean classictooltip = false;
     private ItemMercUpgrades upgrades = ItemMercUpgrades.None;
     
     public ItemMercurialWand(int i)
     {
         super(i);
-        myFormatter = new DecimalFormat("#######.##");
         animation = null;
         super.maxStackSize = 1;
         setMaxDamage(0);
         setHasSubtypes(false);
         classictooltip = AdvThaum.config.get("Feature Control", "classic_wand_tooltip", true).getBoolean(true);
+        AdvThaum.log("Created mercurial wand");
     }
 
     public void register()
@@ -69,33 +68,36 @@ public class ItemMercurialWand extends ItemWandCasting
     	 
 		 ItemStack cap = ConfigItems.WAND_CAP_THAUMIUM.getItem();
 
+		 for (String key : ConfigResearch.recipes.keySet())
+			 AdvThaum.log("Found research: " + key);
+		 
 		 // add upgrade recipes
 		 //ShapedArcaneRecipe recipe = new ShapedArcaneRecipe("merc_, result, aspects, recipe)
     
 		 // add research
-		 ATResearchItem ri = new ATResearchItem("MERCURIALWAND", "THAUMATURGY",
+		/* ATResearchItem ri = new ATResearchItem("MERCURIALWAND", "THAUMATURGY",
 				 (new AspectList()).add(Aspect.METAL, 1).add(Aspect.SENSES, 1).add(Aspect.POISON, 1).add(Aspect.TREE, 1),
                 0, 7, 3,
                 new ItemStack(this));
      
-		 ri.setStub();
-		 ri.setVirtual();
-        
-		 ri.registerResearchItem();
+		 ri.setParents("MERCURIALROD");
+		ri.setStub();*/
+
+		//ri.registerResearchItem();
 				 
-		 AspectList list = new AspectList();
-		 list.add(Aspect.WATER, 25);
-		 list.add(Aspect.AIR, 25);
-		 list.add(Aspect.FIRE, 25);
-		 list.add(Aspect.EARTH, 25);
-		 list.add(Aspect.METAL, 25);
-		 list.add(Aspect.ORDER, 25);
-		 list.add(Aspect.ENTROPY, 25);
-		 list.add(Aspect.CRYSTAL, 25);
-		 list.add(Aspect.TREE, 25);
+		AspectList list = new AspectList();
+		list.add(Aspect.WATER, 25);
+		list.add(Aspect.AIR, 25);
+		list.add(Aspect.FIRE, 25);
+		list.add(Aspect.EARTH, 25);
+		list.add(Aspect.METAL, 25);
+		list.add(Aspect.ORDER, 25);
+		list.add(Aspect.ENTROPY, 25);
+		list.add(Aspect.CRYSTAL, 25);
+		list.add(Aspect.TREE, 25);
         
         ThaumcraftApi.registerObjectTag(this.itemID, -1, list);
-        
+   
         String[] keys = ConfigResearch.recipes.keySet().toArray(new String[ConfigResearch.recipes.keySet().size()]);
         
         for (String key : keys)
@@ -103,8 +105,10 @@ public class ItemMercurialWand extends ItemWandCasting
         	Object obj = ConfigResearch.recipes.get(key); 
         	if (obj instanceof ShapedArcaneRecipe)
         	{
-        		if (key.toString().startsWith("WAND_") && key.toString().endsWith("_mercurial"))
+        		if (key.contains("mercurial")) // && key.endsWith("_mercurial"))
         		{
+        			AdvThaum.log("Found " + key);
+        			
         			ConfigResearch.recipes.remove(key);
         			ShapedArcaneRecipe recipe = (ShapedArcaneRecipe)obj;
         			ItemWandCasting orig = (ItemWandCasting)recipe.output.getItem();
@@ -113,6 +117,7 @@ public class ItemMercurialWand extends ItemWandCasting
         			((ItemWandCasting)wand.getItem()).setCap(wand, orig.getCap(recipe.output));
         			recipe.output = wand;
         			ConfigResearch.recipes.put(key, recipe);
+        			AdvThaum.log("Replaced " + key);
         		}
         	}
         }
@@ -203,7 +208,7 @@ public class ItemMercurialWand extends ItemWandCasting
     	AspectList vis = this.getAllVis(stack);
     	StringBuilder result = new StringBuilder();
     	result.append("\u00a7r");
-    	float discount = WandManager.getTotalVisDiscount(player);
+    	float discount = WandManager.getTotalVisDiscount(player, null);
     	boolean shiftdown = Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT);
     	WandCap cap = getCap(stack);
     	

@@ -33,9 +33,9 @@ public class ItemMercurialRod extends WandRod
 	
 	public ItemMercurialRod()
 	{
-		super("mercurial", 500, new ItemStack(AdvThaum.MercurialRodBase), (int)20);
+		super("mercurial", 500, new ItemStack(AdvThaum.MercurialRodBase), 20);
+		AdvThaum.log("Adding mercurial wandrod");
 		setGlowing(true);
-		WandRod.rods.put("ROD_mercurial", this);
 		texture = new ResourceLocation("advthaum:textures/models/wand_rod_mercurial.png");
 	}
 

@@ -4,6 +4,7 @@ import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.crafting.InfusionRecipe;
+import thaumcraft.api.research.ResearchItem;
 import thaumcraft.api.research.ResearchPage;
 import thaumcraft.common.config.ConfigItems;
 import thaumcraft.common.config.ConfigResearch;
@@ -23,13 +24,13 @@ public class ItemMercurialRodBase extends Item
 	{
 		super(id);
 		setUnlocalizedName("at.mercurialrod");
+		AdvThaum.log("Creaated mercurial wandrod base item");
 	}
 	
 	@Override
 	public void registerIcons(IconRegister ic)
 	{
 		itemIcon = ic.registerIcon("advthaum:wand_rod_quicksilver");
-
 	}
 	
 	@Override
@@ -53,12 +54,12 @@ public class ItemMercurialRodBase extends Item
         		TCItems.quicksilver, silverwoodrod, TCItems.quicksilver, silverwoodrod });
 	 	
 	 	
-	 	ConfigResearch.recipes.put("MercurialCore", recipe);
+	 	ConfigResearch.recipes.put("MERCURIALROD", recipe);
 	
 		// add research
 		 ATResearchItem ri = new ATResearchItem("MERCURIALROD", "THAUMATURGY",
 				(new AspectList()).add(Aspect.METAL, 1).add(Aspect.CRYSTAL, 1).add(Aspect.POISON, 1).add(Aspect.TREE, 1),
-				0, 6, 5,
+				0, 3, 5,
 				new ItemStack(this));
 		ri.setTitle("at.research.mercurialcore.title");
 		ri.setInfo("at.research.mercurialcore.desc");
@@ -70,7 +71,7 @@ public class ItemMercurialRodBase extends Item
 				new ResearchPage(recipe));
 		
 		ri.setConcealed();
-		
+				
 		ri.registerResearchItem();
 
 		AspectList list = new AspectList();
