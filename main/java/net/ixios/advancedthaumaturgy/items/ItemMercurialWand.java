@@ -44,7 +44,7 @@ import thaumcraft.common.items.wands.WandManager;
 import thaumcraft.common.lib.research.ResearchManager;
 import thaumcraft.common.tiles.TileInfusionMatrix;
 
-public class ItemMercurialWand extends ItemWandCasting 
+public class ItemMercurialWand extends ItemWandCasting
 {
 
     private DecimalFormat myFormatter;
