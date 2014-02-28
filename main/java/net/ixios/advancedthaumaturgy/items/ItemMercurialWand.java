@@ -47,7 +47,7 @@ import thaumcraft.common.tiles.TileInfusionMatrix;
 public class ItemMercurialWand extends ItemWandCasting
 {
 
-	private DecimalFormat myFormatter;
+    private DecimalFormat myFormatter;
     private boolean classictooltip = false;
     private ItemMercUpgrades upgrades = ItemMercUpgrades.None;
     
@@ -196,6 +196,7 @@ public class ItemMercurialWand extends ItemWandCasting
     	return (super.getConsumptionModifier(stack, player, aspect) - discount);
     }
     
+    
     @SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean detailed)
@@ -203,11 +204,11 @@ public class ItemMercurialWand extends ItemWandCasting
     	AspectList vis = this.getAllVis(stack);
     	StringBuilder result = new StringBuilder();
     	result.append("\u00a7r");
-    	float discount = WandManager.getTotalVisDiscount(player);
+    	//float discount = WandManager.getTotalVisDiscount(player);
     	boolean shiftdown = Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT);
     	WandCap cap = getCap(stack);
     	
-    	discount += (1 - (cap.getBaseCostModifier()));
+    	//discount += (1 - (cap.getBaseCostModifier()));
     	
     	if (classictooltip && !shiftdown)
     	{
@@ -226,7 +227,7 @@ public class ItemMercurialWand extends ItemWandCasting
 	    	result.setLength(result.length() - 2);
 	    	
 	    	list.add(result.toString());
-	    	list.add("Vis discount: " + (int)(discount * 100) + "% total");
+	    	//list.add("Vis discount: " + (int)(discount * 100) + "% total");
     	}
     	
     	if (upgrades != ItemMercUpgrades.None)
