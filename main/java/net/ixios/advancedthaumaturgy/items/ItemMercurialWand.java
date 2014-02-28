@@ -44,10 +44,10 @@ import thaumcraft.common.items.wands.WandManager;
 import thaumcraft.common.lib.research.ResearchManager;
 import thaumcraft.common.tiles.TileInfusionMatrix;
 
-public class ItemMercurialWand extends ItemWandCasting implements IVisDiscountGear
+public class ItemMercurialWand extends ItemWandCasting 
 {
 
-	private DecimalFormat myFormatter;
+    private DecimalFormat myFormatter;
     private boolean classictooltip = false;
     private ItemMercUpgrades upgrades = ItemMercUpgrades.None;
     
@@ -196,11 +196,6 @@ public class ItemMercurialWand extends ItemWandCasting implements IVisDiscountGe
     	return (super.getConsumptionModifier(stack, player, aspect) - discount);
     }
     
-    
-    public int getVisDiscount(ItemStack stack, EntityPlayer player, Aspect aspect)
-    {
-        return (1 - cap.getBaseCostModifier());
-    }
     
     @SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
