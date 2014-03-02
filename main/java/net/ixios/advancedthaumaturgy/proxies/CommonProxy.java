@@ -104,22 +104,6 @@ public class CommonProxy implements IGuiHandler, IPacketHandler
 	{
 		//nm.startProcess(op); 
 	}
-
-    public void registerBuildcraftThings()
-    {
-    	int essentiaengineid = AdvThaum.config.getBlock("BlockIDs", "essentiaengine", 3436).getInt();
-    	
-    	if (AdvThaum.config.get("Feature Control", "enable_engine", true).getBoolean(true))
-	    {
-    		AdvThaum.EssentiaEngine = new BlockEssentiaEngine(essentiaengineid, Material.rock);
-    		//AdvThaum.EssentiaEngine.register();
-	    }
-	   
-    }
-    
-    
-    
-
     
     public static boolean AspectListcontains(AspectList list, Aspect aspect)
     {
