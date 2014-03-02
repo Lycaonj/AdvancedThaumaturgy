@@ -151,9 +151,9 @@ public class ATServerCommand implements ICommand
 		}
 	}
 
-	private static void showHelp(EntityPlayer plr)
+	private static void showHelp(ICommandSender sender)
 	{
-		plr.addChatMessage("Usage:  /at <command> <option> <parameters>");
-		plr.addChatMessage("     :  /at research add|remove ResearchKey");
+		sender.sendChatToPlayer(ChatMessageComponent.createFromText("Usage:  /at <command> <option> <parameters>"));
+		sender.sendChatToPlayer(ChatMessageComponent.createFromText("     :  /at research add|remove ResearchKey"));
 	}
 }
