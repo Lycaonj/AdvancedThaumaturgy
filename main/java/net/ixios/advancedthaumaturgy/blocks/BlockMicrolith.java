@@ -70,7 +70,8 @@ public class BlockMicrolith extends BlockContainer implements IWailaBlock
     {
     	list.add(new ItemStack(this, 1, 1)); // flux dissipator
     	list.add(new ItemStack(this, 1, 2)); // chunk loader
-    	//list.add(new ItemStack(this, 1, 3)); // burning 
+    	//list.add(new ItemStack(this, 1, 3)); // burning
+    	list.add(new ItemStack(this, 1, 10)); // excavator
     }
     
 	 @Override
