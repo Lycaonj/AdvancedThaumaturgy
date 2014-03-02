@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 
 import javax.print.attribute.standard.MediaSize.Engineering;
 
+import net.ixios.advancedthaumaturgy.blocks.BlockAltarDeployer;
 import net.ixios.advancedthaumaturgy.blocks.BlockCreativeNode;
 import net.ixios.advancedthaumaturgy.blocks.BlockEssentiaEngine;
 import net.ixios.advancedthaumaturgy.blocks.BlockEtherealJar;
@@ -123,7 +124,8 @@ public class AdvThaum
 	public static BlockPlaceholder Placeholder;
 	public static BlockEtherealJar EtherealJar;
 	public static BlockMicrolith Microlith;
-		
+	public static BlockAltarDeployer AltarDeployer;
+	
 	//public static RenderTickManager rendermanager = new RenderTickManager();
 	
 	private static Logger logger = Logger.getLogger("Advanced Thaumaturgy");
@@ -157,11 +159,15 @@ public class AdvThaum
 	     int placeholderid = config.getBlock("BlockIDs", "placeholder", 3438).getInt();
 	     int etherealjarid = config.getBlock("BlockIDs", "etherealjar", 3439).getInt();
 	     int fluxdissipatorid = config.getBlock("BlockIDs", "fluxdissipator", 3440).getInt();
+	     int altardeployerid = config.getBlock("BlockIDs", "altardeployer", 3441).getInt();;
 	     
 	     boolean useClassicTooltip = config.get("Feature Control", "classic_wand_tooltip", false).getBoolean(false);
 	     
 	     ////////////////////////////////////////////////////////
 	 	     
+	     if (config.get("Feature Control", "enable_altar_deployer", true).getBoolean(true))
+	    	 AltarDeployer = new BlockAltarDeployer(altardeployerid);
+	     
 	     if (config.get("Feature Control", "enable_infused_thaumium", true).getBoolean(true))
 	    	 InfusedThaumium = new ItemInfusedThaumium(infusedthaumiumid);
 	     
@@ -286,6 +292,9 @@ public class AdvThaum
 		 if (EndstoneChunk != null)
 			 EndstoneChunk.register();
 
+		 if (AltarDeployer != null)
+			 AltarDeployer.register();
+		 
 		 //ThaumicInkwell.register();
 		 //ThaumicVulcanizer.register();
 		 

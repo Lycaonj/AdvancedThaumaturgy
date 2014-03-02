@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import cpw.mods.fml.client.FMLClientHandler;
@@ -11,6 +13,7 @@ import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.wands.IWandFocus;
 import thaumcraft.client.fx.FXScorch;
 import thaumcraft.common.items.wands.ItemWandCasting;
+import thaumcraft.common.lib.research.ResearchManager;
 import thaumcraft.common.tiles.TileJarFillable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -150,4 +153,20 @@ public class Utilities
             FMLClientHandler.instance().getClient().effectRenderer.addEffect(ef);
         }
 	}
+	 
+	 public static boolean removeResearch(EntityPlayer player, String research)
+	 {
+		 ArrayList<String> list = (ArrayList<String>) ResearchManager.getResearchForPlayer(player.username);
+		for (Iterator<String>it = list.iterator(); it.hasNext();)
+		{
+			String current = (String)it.next();
+			
+			if (current.equalsIgnoreCase(research))
+			{
+				it.remove();
+				return true;
+			}
+		}
+		return false;
+	 }
 }

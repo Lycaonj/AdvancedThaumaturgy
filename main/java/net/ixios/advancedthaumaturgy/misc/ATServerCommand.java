@@ -131,18 +131,10 @@ public class ATServerCommand implements ICommand
 			}
 			else if (option.equals("remove"))
 			{
-				ArrayList<String> list = (ArrayList<String>) ResearchManager.getResearchForPlayer(player.username);
-				for (Iterator<String>it = list.iterator(); it.hasNext();)
-				{
-					String research = (String)it.next();
-					
-					if (research.equalsIgnoreCase(option))
-					{
-						player.addChatMessage("Removing research: " + research);
-						it.remove();
-					}
-				}
-				player.addChatMessage("Research removal complete.");
+				if (Utilities.removeResearch(player, which))
+					player.addChatMessage("Research removal complete.");
+				else
+					player.addChatMessage("Research '" + which + "' not found.");
 			}
 			else
 			{
