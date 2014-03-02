@@ -1,3 +1,9 @@
+Build 23
+Finished off mercurial wand upgrade recipes, research.  They are now live and can be applied to the wand.
+Mercurial Rod is now adaptive, to a point.  It will increase its capacity to the highest rod known.
+Flux Dissipator is now part of the new Microlith content, and is now craftable.
+Watchful Microlith is a chunkloader and is currently untested.  Use at your own risk! (Right click it to toggle)
+
 Build 22
 Updated to 4.1
 Removed mercurial wand infusion recipe, you can now properly use any cap you like on the core.
