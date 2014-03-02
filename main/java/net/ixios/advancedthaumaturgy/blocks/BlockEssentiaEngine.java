@@ -65,20 +65,18 @@ public class BlockEssentiaEngine extends Block implements ITileEntityProvider
 	        // add research
 	         ATResearchItem ri = new ATResearchItem("ESSENTIAENGINE", "ARTIFICE",
 	                (new AspectList()).add(Aspect.STONE, 1).add(Aspect.FIRE, 1).add(Aspect.MAGIC, 1).add(Aspect.TREE, 1),
-	                -6, -1, 2,
+	                -6, 0, 2,
 	                new ItemStack(this));
 	        ri.setTitle("at.research.essentiaengine.title");
 	        ri.setInfo("at.research.essentiaengine.desc");
-	        ri.setParents("INFERNALFURNACE", "INFUSION");
+	        ri.setParents("INFERNALFURNACE");
+	        ri.setParentsHidden("INFUSION");
 	        ri.setPages(new ResearchPage("at.research.essentiaengine.pg1"),
 	                new ResearchPage(recipe));
 	        
-	        ri.setRound();
 	        ri.setConcealed();
 	        	        
-	       // ri.registerResearchItem();
-	        
-	        
+	        ri.registerResearchItem();
 	        
 	}
 
