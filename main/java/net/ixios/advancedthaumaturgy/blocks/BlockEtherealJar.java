@@ -87,7 +87,7 @@ public class BlockEtherealJar extends BlockJar
 	 
 	     // add research
 	      ATResearchItem ri = new ATResearchItem("ETHEREALJAR", "ALCHEMY",
-	    		  (new AspectList()).add(Aspect.AIR, 50).add(Aspect.ENTROPY, 50),
+	    		  (new AspectList()).add(Aspect.AIR, 4).add(Aspect.ENTROPY, 4).add(Aspect.VOID, 8).add(Aspect.MAGIC, 8),
 	             7, -7, 3,
 	             new ItemStack(AdvThaum.itemEtherealJar, 1, 0));
 	     ri.setTitle("at.research.etherealjar.title");
@@ -97,7 +97,8 @@ public class BlockEtherealJar extends BlockJar
 	             new ResearchPage(recipe));
 	     
 	     ri.setConcealed();
-	     	        
+	     ri.setSecondary();
+	     
 	     ri.registerResearchItem();
 	     
     }
