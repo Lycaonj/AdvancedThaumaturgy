@@ -1,3 +1,10 @@
+Build 24
+Fixed server crash regarding a NCDFE for lwjgl's Color class.
+Added an aspect price to the Node Modifer research to make it obtainable.
+Added an aspect cost to the Microlith research to make it obtainable.
+Readded research for essentia engine (whoops) - adjusted cost
+Added [AT] tag to any research not on the AT tab.
+
 Build 23
 Finished off mercurial wand upgrade recipes, research.  They are now live and can be applied to the wand.
 Mercurial Rod is now adaptive, to a point.  It will increase its capacity to the highest rod known.
