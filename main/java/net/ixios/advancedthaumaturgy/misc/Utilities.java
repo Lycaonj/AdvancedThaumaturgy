@@ -10,8 +10,12 @@ import java.util.List;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.research.ResearchCategories;
+import thaumcraft.api.research.ResearchCategoryList;
+import thaumcraft.api.research.ResearchItem;
 import thaumcraft.api.wands.IWandFocus;
 import thaumcraft.client.fx.FXScorch;
+import thaumcraft.common.Thaumcraft;
 import thaumcraft.common.items.wands.ItemWandCasting;
 import thaumcraft.common.lib.research.ResearchManager;
 import thaumcraft.common.tiles.TileJarFillable;
@@ -157,16 +161,31 @@ public class Utilities
 	 public static boolean removeResearch(EntityPlayer player, String research)
 	 {
 		 ArrayList<String> list = (ArrayList<String>) ResearchManager.getResearchForPlayer(player.username);
-		for (Iterator<String>it = list.iterator(); it.hasNext();)
-		{
-			String current = (String)it.next();
+		 for (Iterator<String>it = list.iterator(); it.hasNext();)
+		 {
+			 String current = (String)it.next();
 			
-			if (current.equalsIgnoreCase(research))
-			{
-				it.remove();
-				return true;
-			}
-		}
-		return false;
+			 if (current.equalsIgnoreCase(research))
+			 {
+				 it.remove();
+				 return true;
+			 }
+		 }
+		 return false;
+	 }
+	 
+	 public static ResearchItem findResearch(String key)
+	 {
+		 for (String categorykey : ResearchCategories.researchCategories.keySet())
+         {
+             ResearchCategoryList cat = ResearchCategories.researchCategories.get(categorykey);
+             
+             for (ResearchItem ri : cat.research.values())
+             {       
+             	if (ri.key.equalsIgnoreCase(key))
+             		return ri;
+             }
+         }
+		 return null;
 	 }
 }
