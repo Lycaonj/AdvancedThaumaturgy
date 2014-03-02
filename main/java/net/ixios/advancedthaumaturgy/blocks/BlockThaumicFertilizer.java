@@ -4,6 +4,7 @@ import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.crafting.InfusionRecipe;
+import thaumcraft.api.crafting.ShapedArcaneRecipe;
 import thaumcraft.api.research.ResearchPage;
 import thaumcraft.common.config.ConfigBlocks;
 import thaumcraft.common.config.ConfigItems;
@@ -14,6 +15,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.ixios.advancedthaumaturgy.AdvThaum;
 import net.ixios.advancedthaumaturgy.items.ItemFertilizer;
+import net.ixios.advancedthaumaturgy.items.TCItems;
 import net.ixios.advancedthaumaturgy.misc.ATResearchItem;
 import net.ixios.advancedthaumaturgy.tileentities.TileThaumicFertilizer;
 import net.minecraft.block.BlockContainer;
@@ -46,25 +48,18 @@ public class BlockThaumicFertilizer extends BlockContainer
         GameRegistry.registerBlock(this, ItemFertilizer.class, "blockThaumicFertilizer");
         GameRegistry.registerTileEntity(TileThaumicFertilizer.class, "tileentityThaumicFertilizer");
   
-        
-        ItemStack watershard = new ItemStack(ConfigItems.itemShard, 1, 2);
         ItemStack jar = new ItemStack(ConfigBlocks.blockJar, 1, 0);
 		ItemStack water = new ItemStack(Item.bucketWater);
 					
-		 InfusionRecipe recipe = ThaumcraftApi.addInfusionCraftingRecipe("FERTILIZER", new ItemStack(this), 2,
-	                (new AspectList()).add(Aspect.WATER, 16).add(Aspect.AIR, 16).add(Aspect.MAGIC, 16).add(Aspect.METAL, 16),
-	                jar,
-	                new ItemStack[] { watershard, water, watershard, water });
+		 ShapedArcaneRecipe recipe = ThaumcraftApi.addArcaneCraftingRecipe("FERTILIZER", new ItemStack(this),
+	                (new AspectList()).add(Aspect.WATER, 16).add(Aspect.AIR, 16),
+	                "BSB", "SJS", "BSB", 'B', water, 'S', TCItems.watershard, 'J', jar );
 	        
+	    ConfigResearch.recipes.put("Fertilizer", recipe);
 	        
-	        ConfigResearch.recipes.put("Fertilizer", recipe);
-	        
-	        
-	        
-        // to the right od research table
         ATResearchItem ri = new ATResearchItem("FERTILIZER", "ARTIFICE",
 				(new AspectList()).add(Aspect.PLANT, 1).add(Aspect.WATER, 1).add(Aspect.AIR, 1).add(Aspect.CROP, 1),
-				5, 3, 3,
+				-7, 9, 3,
 				new ItemStack(this));
 		ri.setTitle("at.research.fertilizer.title");
 		ri.setInfo("at.research.fertilizer.desc");
