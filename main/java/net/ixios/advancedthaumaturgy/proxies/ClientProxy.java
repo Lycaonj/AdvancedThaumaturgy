@@ -50,6 +50,7 @@ import net.ixios.advancedthaumaturgy.tileentities.TilePlaceholder;
 import net.ixios.advancedthaumaturgy.tileentities.TileThaumicFertilizer;
 import net.ixios.advancedthaumaturgy.tileentities.TileEssentiaEngine;
 import net.ixios.advancedthaumaturgy.tileentities.TileVulcanizer;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityAuraFX;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -110,16 +111,6 @@ public class ClientProxy extends CommonProxy
 		if (AdvThaum.MercurialWand != null)
 			MinecraftForgeClient.registerItemRenderer(AdvThaum.MercurialWand.itemID, new ItemWandRenderer());
     
-	}
-	
-	@Override
-	public void registerBuildcraftThings() 
-	{
-		super.registerBuildcraftThings();
-		
-		GenericRenderer renderer = new GenericRenderer(new ModelEngine());
-		MinecraftForgeClient.registerItemRenderer(BlockEssentiaEngine.blockID, renderer);
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEssentiaEngine.class, renderer);
 	}
 	
 	@Override
