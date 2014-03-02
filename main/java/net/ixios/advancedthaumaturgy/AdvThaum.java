@@ -11,7 +11,7 @@ import javax.print.attribute.standard.MediaSize.Engineering;
 import net.ixios.advancedthaumaturgy.blocks.BlockCreativeNode;
 import net.ixios.advancedthaumaturgy.blocks.BlockEssentiaEngine;
 import net.ixios.advancedthaumaturgy.blocks.BlockEtherealJar;
-import net.ixios.advancedthaumaturgy.blocks.BlockFluxDissipator;
+import net.ixios.advancedthaumaturgy.blocks.BlockMicrolith;
 import net.ixios.advancedthaumaturgy.blocks.BlockNodeModifier;
 import net.ixios.advancedthaumaturgy.blocks.BlockPlaceholder;
 import net.ixios.advancedthaumaturgy.blocks.BlockThaumicFertilizer;
@@ -20,6 +20,8 @@ import net.ixios.advancedthaumaturgy.compat.energy.EnergyCompatBase;
 //import net.ixios.advancedthaumaturgy.compat.energy.TECompatChecker;
 import net.ixios.advancedthaumaturgy.compat.energy.BCCompatChecker;
 import net.ixios.advancedthaumaturgy.items.ItemAeroSphere;
+import net.ixios.advancedthaumaturgy.items.ItemArcaneCrystal;
+import net.ixios.advancedthaumaturgy.items.ItemEndstoneChunk;
 import net.ixios.advancedthaumaturgy.items.ItemEtherealJar;
 import net.ixios.advancedthaumaturgy.items.ItemFocusVoidCage;
 import net.ixios.advancedthaumaturgy.items.ItemInfusedThaumium;
@@ -28,8 +30,10 @@ import net.ixios.advancedthaumaturgy.items.ItemMercurialRodBase;
 import net.ixios.advancedthaumaturgy.items.ItemMercurialWand;
 import net.ixios.advancedthaumaturgy.misc.ATCreativeTab;
 import net.ixios.advancedthaumaturgy.misc.ATEventHandler;
+import net.ixios.advancedthaumaturgy.misc.ATResearchItem;
 import net.ixios.advancedthaumaturgy.misc.ATServerCommand;
 import net.ixios.advancedthaumaturgy.misc.ArcingDamageManager;
+import net.ixios.advancedthaumaturgy.misc.ChunkLoadingClass;
 import net.ixios.advancedthaumaturgy.misc.Utilities;
 import net.ixios.advancedthaumaturgy.proxies.CommonProxy;
 import net.minecraft.block.Block;
@@ -43,13 +47,18 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntityCommandBlock;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
+import thaumcraft.api.research.ResearchCategories;
+import thaumcraft.api.research.ResearchItem;
+import thaumcraft.api.research.ResearchPage;
 import thaumcraft.api.wands.WandRod;
 import thaumcraft.api.wands.WandTriggerRegistry;
 import thaumcraft.common.Thaumcraft;
@@ -74,7 +83,7 @@ import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry.EntityRegistration;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid="AdvancedThaumaturgy", version="0.0.22", name="Advanced Thaumaturgy", 
+@Mod(modid="AdvancedThaumaturgy", version="0.0.23", name="Advanced Thaumaturgy", 
 	dependencies="required-after:Thaumcraft", acceptedMinecraftVersions="1.6.4")
 @NetworkMod(clientSideRequired=true, channels={"AdvThaum"}, packetHandler = CommonProxy.class)
 
@@ -101,6 +110,8 @@ public class AdvThaum
 	public static ItemFocusVoidCage FocusVoidCage;
 	public static ItemEtherealJar itemEtherealJar;
 	public static ItemAeroSphere AeroSphere;
+	public static ItemArcaneCrystal ArcaneCrystal;
+	public static ItemEndstoneChunk EndstoneChunk;
 	
 	// blocks
 	public static BlockNodeModifier NodeModifier;
@@ -111,7 +122,7 @@ public class AdvThaum
 	public static BlockThaumicVulcanizer ThaumicVulcanizer;
 	public static BlockPlaceholder Placeholder;
 	public static BlockEtherealJar EtherealJar;
-	public static BlockFluxDissipator FluxDissipator;
+	public static BlockMicrolith Microlith;
 		
 	//public static RenderTickManager rendermanager = new RenderTickManager();
 	
@@ -129,15 +140,15 @@ public class AdvThaum
 	     config = new Configuration(event.getSuggestedConfigurationFile());
 	     
 	     config.load();
-	      
-	     int mercurialcoreid = config.getItem("ItemIDs", "mercurialcore", 13333).getInt();
-	     int mercurialwandid = config.getItem("ItemIDs", "mercurialwand", 13334).getInt();
+	     
 	     int infusedthaumiumid = config.getItem("ItemIDs", "infusedthaumium", 13335).getInt();
 	     //int thaumicwellid = config.getItem("ItemIDs", "thaumicinkwell", 13336).getInt();
 	     int pommelid = config.getItem("ItemIDs", "pommel", 13337).getInt();
 	     int focusvoidcageid = config.getItem("ItemIDs", "focusvoidcage", 13338).getInt();
 	     int itemetherealjar = config.getItem("ItemIDs", "ethereal_jar", 13339).getInt();
 	     int aerosphereid = config.getItem("ItemIDs", "aerosphere", 13340).getInt();
+	     int wandcrystalid = config.getItem("ItemIDs", "arcanecrystal", 13341).getInt();
+	     int endstonechunk = config.getItem("ItemIDs", "endstone", 13342).getInt();;
 	     
 	     int nodemodifierid = config.getBlock("BlockIDs", "nodemodifier", 3433).getInt();
 	     int thaumicfertilizerid = config.getBlock("BlockIDs", "thaumicfertilizer", 3434).getInt();
@@ -150,16 +161,7 @@ public class AdvThaum
 	     boolean useClassicTooltip = config.get("Feature Control", "classic_wand_tooltip", false).getBoolean(false);
 	     
 	     ////////////////////////////////////////////////////////
-	     
-	     if (config.get("Feature Control", "enable_mercurial_core", true).getBoolean(true))
-	     {
-	    	 MercurialRodBase = new ItemMercurialRodBase(mercurialcoreid);
-	    	 MercurialRod = new ItemMercurialRod();
-	    	 
-	    	 if (config.get("Feature Control", "enable_mercurial_wand", true).getBoolean(true))
-	    		 MercurialWand = new ItemMercurialWand(mercurialwandid);
-	     }
-	     
+	 	     
 	     if (config.get("Feature Control", "enable_infused_thaumium", true).getBoolean(true))
 	    	 InfusedThaumium = new ItemInfusedThaumium(infusedthaumiumid);
 	     
@@ -181,8 +183,8 @@ public class AdvThaum
 	    	 itemEtherealJar = new ItemEtherealJar(itemetherealjar); 
 	     }
 	     
-	     if (config.get("Feature Control", "enable_ventilator", true).getBoolean(true))
-	    	 FluxDissipator = new BlockFluxDissipator(fluxdissipatorid, Material.ground);
+	     if (config.get("Feature Control", "enable_miniligh", true).getBoolean(true))
+	    	 Microlith = new BlockMicrolith(fluxdissipatorid, Material.ground);
 	      
 	     if (config.get("Feature Control", "enable_focus_void_cage", true).getBoolean(true))
 	    	 FocusVoidCage = new ItemFocusVoidCage(focusvoidcageid);
@@ -190,41 +192,30 @@ public class AdvThaum
 	     if (config.get("Feature Control", "enable_aerosphere", true).getBoolean(true))
 	    	 AeroSphere = new ItemAeroSphere(aerosphereid);
 	     
+	     if (config.get("Feature Control", "enable_wand_upgrades", true).getBoolean(true))
+	     {
+	    	 ArcaneCrystal = new ItemArcaneCrystal(wandcrystalid);	    
+	    	 EndstoneChunk = new ItemEndstoneChunk(endstonechunk);
+	     }
+	     
 	     Placeholder = new BlockPlaceholder(placeholderid, Material.air);
 	     
 	     //ThaumicInkwell = new ItemThaumInkwell(thaumicwellid);
-	     
+	  
 	     LanguageRegistry.instance().addStringLocalization("itemGroup.advthaum", "en_US", "Advanced Thaumaturgy");
+	     LanguageRegistry.instance().addStringLocalization("tc.research_category.ADVTHAUM", "en_US", "Advanced Thaumaturgy");
 	     
-		 if (MercurialRodBase != null)
-			 MercurialRodBase.register();
-		 
 	     MinecraftForge.EVENT_BUS.register(new ATEventHandler());
 	     
 	     TickRegistry.registerTickHandler(new ArcingDamageManager(), Side.SERVER);
+	     
+	     ForgeChunkManager.setForcedChunkLoadingCallback(instance, new ChunkLoadingClass());
 	    
      }
 	
 	 public static void log(String text)
 	 {
 	     logger.info(FMLCommonHandler.instance().getEffectiveSide().toString() + " " + text);
-	 }
-	 
-	 @SuppressWarnings("unchecked")
-	 public static void broadcastMessage(String text)
-	 {
-		 
-	     List<EntityPlayer> players;
-	     
-	     if (Minecraft.getMinecraft().theWorld.isRemote)
-	    	 players = Minecraft.getMinecraft().theWorld.playerEntities;
-	     else
-	    	 players = MinecraftServer.getServer().worldServers[0].playerEntities;
-	     
-	     for (int t = 0; t < players.size(); t++)
-	     {
-	         players.get(t).addChatMessage(text);
-	     }
 	 }
 	 
 	 @EventHandler
@@ -236,8 +227,32 @@ public class AdvThaum
 	 @EventHandler  
      public void postInit(FMLPostInitializationEvent event) 
      {
-		 proxy.registerAllTheThings();
-	 
+		 
+		 ResearchCategories.registerCategory("ADVTHAUM",
+				 new ResourceLocation("thaumcraft", "textures/items/thaumonomiconcheat.png"),
+				 new ResourceLocation("thaumcraft", "textures/gui/gui_researchback.png"));
+		 
+		 proxy.preRegister();
+			 
+	    if (config.get("Feature Control", "enable_mercurial_core", true).getBoolean(true))
+	     {
+	    	int capacity = 500;
+	    	for (WandRod rod : WandRod.rods.values())
+	    		capacity = Math.max(capacity, rod.getCapacity());
+	    	
+	    	int mercurialcoreid = config.getItem("ItemIDs", "mercurialcore", 13333).getInt();
+	    	int mercurialwandid = config.getItem("ItemIDs", "mercurialwand", 13334).getInt();
+		     
+	    	 MercurialRodBase = new ItemMercurialRodBase(mercurialcoreid);
+	    	 MercurialRod = new ItemMercurialRod(capacity);
+	    	 
+	    	 if (config.get("Feature Control", "enable_mercurial_wand", true).getBoolean(true))
+	    		 MercurialWand = new ItemMercurialWand(mercurialwandid);
+	     }
+		    
+		 if (MercurialRodBase != null)
+			 MercurialRodBase.register();
+		
 		 if (MercurialWand != null)
 			 MercurialWand.register();
 		 
@@ -256,8 +271,8 @@ public class AdvThaum
 		 if (EtherealJar != null && itemEtherealJar != null)
 			 EtherealJar.register();
 		 
-		 if (FluxDissipator != null)
-			 FluxDissipator.register();
+		 if (Microlith != null)
+			 Microlith.register();
 		  
 		 if (FocusVoidCage != null)
 			 FocusVoidCage.register();
@@ -265,8 +280,16 @@ public class AdvThaum
 		 if (AeroSphere != null)
 			 AeroSphere.register();
 		 
+		 if (ArcaneCrystal != null)
+			 ArcaneCrystal.register();
+		 
+		 if (EndstoneChunk != null)
+			 EndstoneChunk.register();
+
 		 //ThaumicInkwell.register();
 		 //ThaumicVulcanizer.register();
+		 
+		 proxy.postRegister();
 		 
 		 // implement bc related blocks if the api is detected
 		 new BCCompatChecker().register();
@@ -300,6 +323,16 @@ public class AdvThaum
 		 }
 			 
 		 config.save();
+		 
+		 LanguageRegistry.instance().addStringLocalization("tc.research_name.TESTBUILD", "en_US",  "Test Build Notes");
+		 ResearchItem ri = new ResearchItem("TESTBUILD", "ADVTHAUM", new AspectList(), 0, -2, 0, new ItemStack(CreativeNode));
+		 
+		 ri.setAutoUnlock();
+		 ri.setRound();
+		 
+		 ri.setPages(new ResearchPage("This build is for testing only.  You should NOT be using this on a live server / map.  Doing so will likely kill your world save.\nAny Research with an unset localized name (eg at.research.something.name) is likely something I haven't quite finished but it will be in the public release build.\n\n- Lycaon"));
+		 
+		 ri.registerResearchItem();
 		 
      }
 	 

@@ -14,4 +14,16 @@ public class TileEtherealJar extends TileJarFillable
 		this.maxAmount = maxAmt;
 	}
 	
+	@Override
+	public int getMinimumSuction()
+	{
+	    return super.getMinimumSuction() + 5;
+	}
+	
+	@Override
+	public int getSuctionAmount(ForgeDirection loc)
+	{
+	    return super.getSuctionAmount(loc) + 5;
+	}
+	
 }

@@ -8,10 +8,36 @@ tile.at.fertilizer.desc=Keeps a 8x8 area of farmland hydrated,|and randomly fert
 item.at.mercurialrod.name=Mercurial Rod
 item.at.mercurialrod.desc=A length of crystallized silverwood,|veined with gleaming rivulets|of solidified quicksilver.
 
+item.at.endstonechunk.name=Infused Endstone Chunk
+
 item.at.mercurialwand.name=Mercurial Crystal Wand
 item.Wand.mercurial.rod=Mercurial
 
 item.at.aerosphere.name=Aerosphere
+
+item.at.arcanecrystal.name=Arcane Crystal
+item.at.arcanecrystal.0.name=Inert Arcane Crystal
+item.at.arcanecrystal.1.name=Recharge Crystal
+item.at.arcanecrystal.2.name=Compound Drain Crystal
+item.at.arcanecrystal.3.name=Drain Multiplier Crystal
+item.at.arcanecrystal.4.name=Vis Discount Crystal
+item.at.arcanecrystal.5.name=Stabilizer Crystal [WIP]
+item.at.arcanecrystal.6.name=Potency Crystal
+
+item.at.arcanecrystal.20.name=Flux Dissipation Crystal
+item.at.arcanecrystal.21.name=Watchful Crystal
+
+at.microlith.0.name=Microlith Base
+at.microlith.1.name=Flux Dissipator
+at.microlith.2.name=Watchful Eye [WIP]
+at.microlith.3.name=Healing Sentry [WIP]
+at.microlith.4.name=Electrocution Sentry [WIP]
+at.microlith.5.name=Burning Sentry [WIP]
+at.microlith.6.name=Packed Ice Sentry [WIP]
+
+
+at.research.microlithflux.pg1=Drawing on the properties of both Entropy and Ordo, you've affixed a crystal that will evaporate nearby flux goo and gas.  When evaporating gas, there is a chance it will recover some of the taint in the form of Vitium.
+at.research.microlithwatcher.pg1=Imuing a crystal with Sensus has created a crystal that will keep an eye on chunks around it, chunkloading them.  It will load a 3x3 area around the chunk it is placed in.  Right click the Microlith to toggle a border outlining the loaded chunks.
 
 tile.at.creativenode.name=Creative Node
 tile.at.creativenode.desc=Places a node that contains 100 of each|primal aspect, and never drains.|Creative Only
@@ -23,20 +49,17 @@ tile.at.etherealjar.desc=A slightly advanced version of the|Warded Jar, capable 
 tile.at.essentiaengine.name=Essentia Engine
 tile.at.essentiaengine.desc=Consumes various types of essentia|from nearby jars to produce energy.
 
-tile.at.ventilator.name=Flux Ventilator
-tile.at.ventilator.desc=Breaks down flux goo into flux gas, and flux gas into harmless materials.  Sometimes, it can recover a bit of Vitium.
-
 item.at.voidcage.name=Wand Focus: Void Cage [test]
 
 at.research.mercurialcore.title=Mercurial Wand Core
 at.research.mercurialcore.desc=Five, five, five rods in one!
 at.research.mercurialcore.pg1=You've discovered a way to infuse a nether star, liquid quicksilver and the essence of multiple silverwood wand cores into a new core that can hold much larger amounts of vis.<BR><LINE><BR>"What a delightful find!  The Wither had in it's possession (I avoid thinking about what it's made of, exactly) an intricate, beautiful crystal of some sort.  After peering through  my Thaumometer at this jewel for days on end, I discovered a way to infuse the crystal and several silverwood cores, along with some quicksilver, into a remarkable"
-at.research.mercurialcore.pg2="wand core capable of storing vast amounts of vis.<BR>This will certainly make node collecting easier, as well as clear up some room in my already-crowded satchel.<BR>The creation process is marvelously complex; the infusion altar shuddered and nearly exploded upon my first attempt to craft this beauty.  The essentia required to stabilize the infusion is quite excessive; I must restock my supplies posthaste..."
+at.research.mercurialcore.pg2="wand core capable of storing vast amounts of vis.<BR>This will certainly make node collecting easier, as well as clear up some room in my already-crowded satchel.<BR>The creation process is marvelously complex; the infusion altar shuddered and nearly exploded upon my first attempt to craft this beauty.  The essentia required to stabilize the infusion is quite excessive; I must restock my supplies posthaste..."<BR><BR>"Addendum:  It appears that the fluid nature of the mercurial quicksilver allows this core to adapt its capacity to that of any wand core you've discovered, to a point.  Absolutely amazing, this thing is."
 
 at.research.mercurialwand.title=Mercurial Crystal Wand
 at.research.mercurialwand.desc=(Almost) all the vis!
-at.research.mercurialwand.pg1=The fruits of long hours of experimenting, resource collecting, and a significant amount of flux goo and gas cleanup, explosions, lightning zaps, and disintegrated caps gleams before you in all it's remarkable glory.  The Mercurial Wand, capable of storing enough vis to last the entire day.  Not only that, the wand can be enhanced and upgraded via various other infusion recipes.<BR><LINE><BR>"At last, it is done, and it is a breathtaking thing to behold.  Sunlight glints off of the gleaming crystal rod, and reflects sharply
-at.research.mercurialwand.pg2=off of the solidified quicksilver inlaid in intricate patterns upon the handle.  I am the envy of thaumaturgists everywhere, but I will not hoard this knowledge to myself.  Discoveries such as this can benefit everyone, and I am no knowledge hoarder."
+at.research.mercurialwand.pg1=The fruits of long hours of experimenting, resource collecting, and a significant amount of flux goo and gas cleanup, explosions, lightning zaps, and disintegrated caps gleams before you in all it's remarkable glory.  The Mercurial Wand, capable of storing enough vis to last the entire day.  Not only that, the wand can be enhanced and upgraded via various crystals.<BR><LINE><BR>"At last, it is done, and it is a breathtaking thing to behold.  Sunlight glints off of the gleaming crystal rod, and reflects sharply
+at.research.mercurialwand.pg2=off of the solidified quicksilver inlaid in intricate rune patterns upon the handle.  I am the envy of thaumaturgists everywhere, but I will not hoard this knowledge to myself.  Discoveries such as this can benefit everyone, and I am no knowledge hoarder."
 
 at.research.nodemodifier.title=Node Modifier
 at.research.nodemodifier.desc=They're not all bad...
@@ -60,3 +83,20 @@ at.research.voidcage.title=Wand Focus Void Cage
 at.research.voidcage.desc=?
 at.research.voidcage.withtt.pg1=Impressed by the usefulness of the Dislocation Focus, you have concocted a method to imbue one with enough magic to temporarily support life inside whatever space the focus crams a block into.<BR><LINE><BR>"Add a little Aer to allow the subject to breathe, some Messis and Aqua to support proper digestion, and X to slow the creature's metabolism to near nothing, so to preserve their life.  It's probably not a great idea to leave the subject inside the Focus for too long, the void seethes with Vitium and it tends to corrupt the target before too long."
 at.research.voidcage.nott.pg1=You have concocted a method to imbue a crystal with enough magic to temporarily support life inside a small pocket void.<BR><LINE><BR>"Add a little Aer to allow the subject to breathe, some Messis and Aqua to support proper digestion, and X to slow the creature's metabolism to near nothing, so to preserve their life.  It's probably not a great idea to leave the subject inside the Focus for too long, the void seethes with Vitium and it tends to corrupt the target before too long."
+
+at.research.arcanecrystal.title=Arcane Crystals
+at.research.arcanecrystal.desc=No such thing as overpowered.
+at.research.arcanecrystal.pg1=Damn placeholders
+at.research.arcanecrystal.pg2=Damn placeholders
+
+at.research.rechargeupgrade.pg1=By combining the recharging properties of the six basic wand cores and infusing them into an Arcane Crystal, you were able to fashion an upgrade for the Mercurial Wand that recharges the wand up to 15% of it's maximum capacity.<LINE>"There!  That should restore the wand's vis just enough for me to jar a node, if necessary."
+at.research.upgradecompound.pg1=Mixing some of the alien properties of ender pearls with a hodgepodge of seemingly random items into an Arcane Crystal results in a Mercurial Wand upgrade that somehow doubles the amount of vis received when tapping a node.<LINE>"This is quite nice.  This crystal allows the wand to drain one vis from a node, but receive two.  That'll cut recharge time in half.  I did find that surrounding a potato with nasty spider eyes quickly made it poisonous."
+at.research.upgradedrain.pg1=Infusing the properties of several arcane furnaces into an Arcane Crystal has resulted in a Mercurial Wand upgrade that can drain compound aspects from nodes and break them down into their primal aspects.  The amazing thing, however, is that the more complex the aspect, the more primal aspects you receive.<LINE>"Oh my...  I knew breaking down compound aspects would be amazing, but I had no idea you could net ten primal vis from one point of a compou  nd aspect."
+at.research.upgradediscount.pg1=Taking several pieces of Enchanted Fabric with it's natural ability to reduce vis cost, you add the stability of crystal clusters, and impart those qualities into an Arcane Crystal.  The result is an upgrade for the Mercurial Wand that gives a 10% vis discount.<LINE>"If we keep developing gear that imparts a vis discount, we will soon be able to recharge our wands simply by crafting items."
+at.research.upgradestabilizer.pg1=Drawing upon the properties of the purest Ordo clusters, you have imparted an Arcane Crystal with the ability to significantly reduce both the initial instability of an infusion, as well as limiting the rising instability caused by missing items in an infusion while you are close to the altar.<LINE>"Pssh, candles?  Skulls all over my floor?  I don't bother with that rot any more, I have THIS!"  *evil cackle which trails off into akward silence*
+at.research.upgradepotency.pg1=Combinng many of the properties of items used in various foci, you've created an Arcane Crystal that gives a built-in Potency II enchant that stacks with any actual enchantments alreadyt present on the wand.<LINE>"Potency III is fine.  But Potency V?" *cackles as he electrocute various things*
+
+at.research.microlith.title=The Microlith
+at.research.microlith.desc=?
+at.research.microlith.pg1=They randomly dot the landscape, a coalesced knot of dark energy tainting the nearby land.  To those who have access to other worlds, they occasionallt loom over the landscape, a much larger version that lacks the corrupt node inside.  Through diligent study and hard work, you have uncovered a way to both purify and harness these malignant energies, and repurpose them for dozens of uses.<LINE>Don't worry.  Many, MANY fun things to come! - Lycaon
+at.research.microlith.pg2="They make me sick, and send chills down my spine, but the energy they contain is immense.  Whipping out my trusty Pickaxe of the Core, I harvest the dark totem, careful to jar the node in the top for purification in the Node Modifier.  The totems and tiles... they can be repurposed.  While I cannot directly cleanse their taint, a properly fashioned crystal on the top should replace the old sinister node and redirect some of that awesome power."<BR>"For a while, I debated calling them microliths, but a fellow thaumaturge suggested Microliths, which seems less silly.  I did reply, though, 'You sure know how to kill a joke.'"

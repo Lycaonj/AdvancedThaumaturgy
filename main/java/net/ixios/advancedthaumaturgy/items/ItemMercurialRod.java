@@ -17,6 +17,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.ixios.advancedthaumaturgy.AdvThaum;
 import net.ixios.advancedthaumaturgy.misc.ATResearchItem;
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumRarity;
@@ -31,10 +32,10 @@ public class ItemMercurialRod extends WandRod
 
 	ResourceLocation texture = new ResourceLocation("advthaum:wand_rod_quicksilver");
 	
-	public ItemMercurialRod()
+	public ItemMercurialRod(int storage)
 	{
-		super("mercurial", 500, new ItemStack(AdvThaum.MercurialRodBase), 20);
-		AdvThaum.log("Adding mercurial wandrod");
+		//
+		super("mercurial", Math.max(500, Math.min(storage, 1000)), new ItemStack(AdvThaum.MercurialRodBase), 10);
 		setGlowing(true);
 		texture = new ResourceLocation("advthaum:textures/models/wand_rod_mercurial.png");
 	}

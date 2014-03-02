@@ -82,14 +82,14 @@ public class ItemFocusVoidCage extends ItemFocusBasic
 					float x = (float)((NBTTagDouble)pos.tagAt(0)).data;
 					float y = (float)((NBTTagDouble)pos.tagAt(1)).data;
 					float z = (float)((NBTTagDouble)pos.tagAt(2)).data;
-					AdvThaum.proxy.createSparkleBurst(world, x, y + 1, z, 5, 0xFFFF00FF);
+					AdvThaum.proxy.createSparkleBurst(world, x + 0.5F, y + 1, z + 0.5F, 15, 0xFFFF00FF);
 	    		}
 				else
 					player.swingItem();
 			}
     			
     	}
-		else if (tag.hasKey("classname"))
+		else if (tag.hasKey("classname") && mop != null)
 		{
 			EntityLivingBase entity = null;
 			String classname = tag.getString("classname");
@@ -136,7 +136,7 @@ public class ItemFocusVoidCage extends ItemFocusBasic
 			if (entity != null)
 			{
 				
-				AdvThaum.proxy.createSparkleBurst(world, mop.blockX + 0.5F, mop.blockY + 0.5F, mop.blockZ + 0.5F, 5, 0xFFFF00FF);
+				AdvThaum.proxy.createSparkleBurst(world, mop.blockX + 0.5F, mop.blockY + 1F, mop.blockZ + 0.5F, 15, 0xFFFF00FF);
 				if (!world.isRemote)
 					world.spawnEntityInWorld(entity);
 				else

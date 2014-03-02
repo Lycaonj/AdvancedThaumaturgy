@@ -1,5 +1,6 @@
 package net.ixios.advancedthaumaturgy.blocks;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -225,6 +226,12 @@ public class BlockEtherealJar extends BlockJar
 
        	}
    	    
+    }
+    
+    @Override
+    public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int meta, int fortune)
+    {
+        return new ArrayList<ItemStack>();
     }
     
     @Override

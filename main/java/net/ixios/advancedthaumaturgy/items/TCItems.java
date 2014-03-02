@@ -12,6 +12,15 @@ public class TCItems
 	public static ItemStack earthshard = new ItemStack(ConfigItems.itemShard, 1, 3);
 	public static ItemStack ordoshard = new ItemStack(ConfigItems.itemShard, 1, 5);
 	public static ItemStack entropyshard = new ItemStack(ConfigItems.itemShard, 1, 4);
+	public static ItemStack anyshard = new ItemStack(ConfigItems.itemShard, 1, 32767);
+	
+	public static ItemStack aircluster = new ItemStack(ConfigBlocks.blockCrystal, 1, 0);
+	public static ItemStack watercluster = new ItemStack(ConfigBlocks.blockCrystal, 1, 1);
+	public static ItemStack firecluster = new ItemStack(ConfigBlocks.blockCrystal, 1, 2);
+	public static ItemStack earthcluster = new ItemStack(ConfigBlocks.blockCrystal, 1, 3);
+	public static ItemStack ordocluster = new ItemStack(ConfigBlocks.blockCrystal, 1, 4);
+	public static ItemStack entropycluster = new ItemStack(ConfigBlocks.blockCrystal, 1, 5);
+	public static ItemStack anycluster = new ItemStack(ConfigBlocks.blockCrystal, 1, 32767);
 	
 	public static ItemStack alumentum = new ItemStack(ConfigItems.itemResource, 1, 0);
 	public static ItemStack nitor = new ItemStack(ConfigItems.itemResource, 1, 1);

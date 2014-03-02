@@ -1,11 +1,10 @@
 package net.ixios.advancedthaumaturgy.models;
 
 import org.lwjgl.util.Color;
-
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.ReadableColor;
 
-import net.ixios.advancedthaumaturgy.tileentities.TileMinilithBase;
+import net.ixios.advancedthaumaturgy.tileentities.TileMicrolithBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -39,9 +38,9 @@ public class ModelMinilith implements IModelContainer
 		
 		GL11.glTranslated(0f, h, 0f);
 		
-		if (te instanceof TileMinilithBase)
+		if (te instanceof TileMicrolithBase)
 		{
-			TileMinilithBase base = (TileMinilithBase)te;
+			TileMicrolithBase base = (TileMicrolithBase)te;
 			Color clr = base.getColor();
 			GL11.glColor4f(clr.getRed() / 255F, clr.getGreen() / 255F, clr.getBlue() / 255F, clr.getAlpha() / 255F);
 			model.renderOnly("Sphere");

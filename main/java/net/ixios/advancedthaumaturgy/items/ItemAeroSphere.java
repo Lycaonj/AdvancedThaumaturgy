@@ -3,14 +3,19 @@ package net.ixios.advancedthaumaturgy.items;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.aspects.AspectList;
+import thaumcraft.api.research.ResearchPage;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.ixios.advancedthaumaturgy.AdvThaum;
 import net.ixios.advancedthaumaturgy.blocks.BlockPlaceholder;
+import net.ixios.advancedthaumaturgy.misc.ATResearchItem;
 import net.ixios.advancedthaumaturgy.misc.Vector3;
 import net.ixios.advancedthaumaturgy.misc.Vector3F;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSand;
 import net.minecraft.block.BlockStationary;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -31,6 +36,30 @@ public class ItemAeroSphere extends Item
 	{
 		GameRegistry.registerItem(this, "aerosphere");
 		this.setCreativeTab(AdvThaum.tabAdvThaum);
+		
+		/* ATResearchItem ri = new ATResearchItem("AREOSPHERE", "ADVTHAUM",
+					(new AspectList()).add(Aspect.AIR, 1).add(Aspect.WATER, 1).add(Aspect.ORDER, 1),
+					-5, 0, 5,
+					new ItemStack(this));
+			ri.setTitle("at.research.aerosphere.title");
+			ri.setInfo("at.research.aerosphere.desc");
+			//ri.setParents("UPGRADECRYSTAL");
+			ri.setParentsHidden("INFUSION");
+			ri.setSiblings("ROD_mercurial", "MERCURIALWAND");
+			ri.setPages(new ResearchPage("at.research.mercurialcore.pg1"),
+					new ResearchPage("at.research.mercurialcore.pg2"),
+					new ResearchPage(recipe));
+			
+			ri.setConcealed();
+			
+			ri.registerResearchItem();*/
+			
+	}
+	
+	@Override
+	public void registerIcons(IconRegister ir)
+	{
+	    itemIcon = ir.registerIcon("advthaum:aerosphere");
 	}
 	
 	@Override
@@ -41,7 +70,7 @@ public class ItemAeroSphere extends Item
 		if (world.isRemote)
 			return;
 		
-	    if (!(entity instanceof EntityPlayer))
+	    if (!(entity instanceof EntityPlayer) || !holding)
 	    	return;
 	    
 	    EntityPlayer player = (EntityPlayer)entity;

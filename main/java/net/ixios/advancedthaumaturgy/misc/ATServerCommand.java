@@ -8,10 +8,14 @@ import java.util.List;
 import thaumcraft.api.research.ResearchCategories;
 import thaumcraft.api.research.ResearchCategoryList;
 import thaumcraft.api.research.ResearchItem;
+import thaumcraft.api.wands.WandCap;
+import thaumcraft.api.wands.WandRod;
 import thaumcraft.common.Thaumcraft;
+import thaumcraft.common.config.ConfigResearch;
 import thaumcraft.common.lib.research.ResearchManager;
 import net.ixios.advancedthaumaturgy.AdvThaum;
 import net.ixios.advancedthaumaturgy.tileentities.TileNodeModifier.Operation;
+import net.minecraft.client.Minecraft;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
@@ -84,6 +88,13 @@ public class ATServerCommand implements ICommand
 			AdvThaum.debug = !AdvThaum.debug;
 			player.addChatMessage("Debug mode is now: " + AdvThaum.debug);
 		}
+		else if (cmd.equals("test"))
+		{
+			for (String key : ConfigResearch.recipes.keySet())
+				if (key.startsWith("WAND_"))
+					player.addChatMessage(key);
+		        
+		}
 		else if (cmd.equals("research"))
 		{
 			if (params.length < 2)
@@ -97,21 +108,23 @@ public class ATServerCommand implements ICommand
 			
 			if (option.equals("add"))
 			{
-				Collection rc = ResearchCategories.researchCategories.values();
-                
-                for(Iterator i = rc.iterator(); i.hasNext();)
+				for (String categorykey : ResearchCategories.researchCategories.keySet())
                 {
-                    ResearchCategoryList cat = (ResearchCategoryList)i.next();
-                    Collection rl = cat.research.values();
-                    Iterator res = rl.iterator();
-                    while(res.hasNext()) 
-                    {
-                        ResearchItem ri = (ResearchItem)res.next();
-                        if(!ResearchManager.isResearchComplete(player.username, ri.key) && ri.key.equalsIgnoreCase(which))
-                        {
-                            Thaumcraft.proxy.getResearchManager().completeResearch(player, ri.key);
-                            player.addChatMessage("Added research: " + ri.getName());
-                        }
+                    ResearchCategoryList cat = ResearchCategories.researchCategories.get(categorykey);
+                    player.addChatMessage("Searching: " + categorykey);
+                    
+                    for (ResearchItem ri : cat.research.values())
+                    {       
+                    	if (!ri.key.equalsIgnoreCase(which))
+                    		continue;
+                    	
+	                    if(!ResearchManager.isResearchComplete(player.username, ri.key))
+	                    {
+	                        Thaumcraft.proxy.getResearchManager().completeResearch(player, ri.key);
+	                        player.addChatMessage("Added research: " + ri.getName());
+	                    }
+	                    else
+	                        player.addChatMessage("Research already complete: " + ri.key);
                     }
                 }
 	                

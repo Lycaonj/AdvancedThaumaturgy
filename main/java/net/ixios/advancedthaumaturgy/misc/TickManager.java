@@ -145,7 +145,7 @@ public class TickManager implements ITickHandler
 			if (dist > 6)
 			{
 				i.remove();
-				data.player.worldObj.setBlock(src.x,  src.y,  src.z, data.blockid, data.blockmeta, 2);
+				data.player.worldObj.setBlock(src.x,  src.y,  src.z, data.blockid, data.blockmeta, 3);
 			}
 		}
 	}
@@ -204,8 +204,10 @@ public class TickManager implements ITickHandler
 	{
 		if (aeroblocks.containsKey(vec.toString()))
 			return;
+		int meta = plr.worldObj.getBlockMetadata(vec.x,  vec.y,  vec.z);
 		plr.worldObj.setBlock(vec.x, vec.y, vec.z, BlockPlaceholder.blockID, 0, 2);
-		aeroblocks.put(vec.toString(), new AeroData(plr, vec, block.blockID, plr.worldObj.getBlockMetadata(vec.x,  vec.y,  vec.z)));
+		aeroblocks.put(vec.toString(), new AeroData(plr, vec, block.blockID, meta));
+		AdvThaum.log("Put block with ID " + block.blockID + " meta " + meta);
 	}
 	
 }

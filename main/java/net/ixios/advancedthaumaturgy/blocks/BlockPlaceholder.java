@@ -11,6 +11,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -86,6 +87,12 @@ public class BlockPlaceholder extends Block implements ITileEntityProvider
     public int getRenderType()
     {
     	return renderID;
+    }
+    
+    @Override
+    public void registerIcons(IconRegister ir)
+    {
+	     blockIcon = ir.registerIcon("thaumcraft:assets/thaumcraft/textures/aspects/_unknown.png");
     }
     
 }

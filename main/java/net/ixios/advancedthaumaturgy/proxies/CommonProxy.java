@@ -46,12 +46,17 @@ public class CommonProxy implements IGuiHandler, IPacketHandler
 
 	private TickManager tickmanager = null;
 	
-	public void registerAllTheThings() 
+	public void preRegister() 
 	{ 
 		tickmanager = new TickManager(); 
 		TickRegistry.registerTickHandler(tickmanager, Side.SERVER);
 		MinecraftForge.EVENT_BUS.register(tickmanager);
 	
+	}
+	
+	public void postRegister()
+	{
+		
 	}
 	
 	public void loadData()

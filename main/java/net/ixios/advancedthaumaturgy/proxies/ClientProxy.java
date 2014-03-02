@@ -18,7 +18,7 @@ import net.ixios.advancedthaumaturgy.AdvThaum;
 import net.ixios.advancedthaumaturgy.blocks.BlockCreativeNode;
 import net.ixios.advancedthaumaturgy.blocks.BlockEssentiaEngine;
 import net.ixios.advancedthaumaturgy.blocks.BlockEtherealJar;
-import net.ixios.advancedthaumaturgy.blocks.BlockMinilith;
+import net.ixios.advancedthaumaturgy.blocks.BlockMicrolith;
 import net.ixios.advancedthaumaturgy.blocks.BlockNodeModifier;
 import net.ixios.advancedthaumaturgy.blocks.BlockPlaceholder;
 import net.ixios.advancedthaumaturgy.blocks.BlockThaumicFertilizer;
@@ -43,7 +43,7 @@ import net.ixios.advancedthaumaturgy.renderers.ItemEtherealJarRenderer;
 import net.ixios.advancedthaumaturgy.renderers.ItemNodeRenderer;
 import net.ixios.advancedthaumaturgy.tileentities.TileEtherealJar;
 import net.ixios.advancedthaumaturgy.tileentities.TileFluxDissipator;
-import net.ixios.advancedthaumaturgy.tileentities.TileMinilithBase;
+import net.ixios.advancedthaumaturgy.tileentities.TileMicrolithBase;
 import net.ixios.advancedthaumaturgy.tileentities.TileNodeModifier;
 import net.ixios.advancedthaumaturgy.tileentities.TileNodeModifier.Operation;
 import net.ixios.advancedthaumaturgy.tileentities.TilePlaceholder;
@@ -66,14 +66,11 @@ public class ClientProxy extends CommonProxy
 {
 	
 	@Override
-	public void registerAllTheThings()
+	public void preRegister()
 	{
 		
-		super.registerAllTheThings();
+		super.preRegister();
 		
-		if (AdvThaum.MercurialWand != null)
-			MinecraftForgeClient.registerItemRenderer(AdvThaum.MercurialWand.itemID, new ItemWandRenderer());
-    	
         GenericRenderer renderer = new GenericRenderer(new ModelFertilizer());
         MinecraftForgeClient.registerItemRenderer(BlockThaumicFertilizer.blockID, renderer);
         ClientRegistry.bindTileEntitySpecialRenderer(TileThaumicFertilizer.class, renderer);
@@ -92,8 +89,8 @@ public class ClientProxy extends CommonProxy
 		ClientRegistry.bindTileEntitySpecialRenderer(TilePlaceholder.class, renderer);
         
         renderer = new GenericRenderer(new ModelMinilith());
-        MinecraftForgeClient.registerItemRenderer(BlockMinilith.blockID, renderer);
-        ClientRegistry.bindTileEntitySpecialRenderer(TileMinilithBase.class, renderer);
+        MinecraftForgeClient.registerItemRenderer(BlockMicrolith.blockID, renderer);
+        ClientRegistry.bindTileEntitySpecialRenderer(TileMicrolithBase.class, renderer);
         
         TileEntitySpecialRenderer special = new BlockEtherealJarRenderer();
 
@@ -105,6 +102,14 @@ public class ClientProxy extends CommonProxy
         
         MinecraftForgeClient.registerItemRenderer(BlockCreativeNode.blockID, new ItemNodeRenderer());
         
+	}
+	
+	@Override
+	public void postRegister()
+	{
+		if (AdvThaum.MercurialWand != null)
+			MinecraftForgeClient.registerItemRenderer(AdvThaum.MercurialWand.itemID, new ItemWandRenderer());
+    
 	}
 	
 	@Override

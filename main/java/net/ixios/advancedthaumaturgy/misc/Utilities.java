@@ -4,16 +4,22 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
+import cpw.mods.fml.client.FMLClientHandler;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.wands.IWandFocus;
+import thaumcraft.client.fx.FXScorch;
 import thaumcraft.common.items.wands.ItemWandCasting;
 import thaumcraft.common.tiles.TileJarFillable;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 public class Utilities
@@ -105,4 +111,43 @@ public class Utilities
 		return MinecraftServer.getServer().getConfigurationManager().getOps().contains(name);
 	}
 	
+	 @SuppressWarnings("unchecked")
+	 public static void broadcastMessage(String text)
+	 {
+		 
+	     List<EntityPlayer> players;
+	     
+	     if (Minecraft.getMinecraft().theWorld.isRemote)
+	    	 players = Minecraft.getMinecraft().theWorld.playerEntities;
+	     else
+	    	 players = MinecraftServer.getServer().worldServers[0].playerEntities;
+	     
+	     for (int t = 0; t < players.size(); t++)
+	     {
+	         players.get(t).addChatMessage(text);
+	     }
+	 }
+	 
+	 public static void shootFireInDirection(World world, Vec3 direction)
+	{
+		Vec3 dir = direction.normalize();
+	
+		if (!world.isRemote)
+			return;
+		
+        for(int q = 0; q < 3; q++)
+        {
+            FXScorch ef = new FXScorch(world, direction.xCoord, direction.yCoord, direction.zCoord, dir, 17);
+            ef.posX += direction.xCoord * 0.30000001192092896D;
+            ef.posY += direction.yCoord * 0.30000001192092896D;
+            ef.posZ += direction.zCoord * 0.30000001192092896D;
+            ef.prevPosX = ef.posX;
+            ef.prevPosY = ef.posY;
+            ef.prevPosZ = ef.posZ;
+            ef.posX += direction.xCoord * 0.30000001192092896D;
+            ef.posY += direction.yCoord * 0.30000001192092896D;
+            ef.posZ += direction.zCoord * 0.30000001192092896D;
+            FMLClientHandler.instance().getClient().effectRenderer.addEffect(ef);
+        }
+	}
 }

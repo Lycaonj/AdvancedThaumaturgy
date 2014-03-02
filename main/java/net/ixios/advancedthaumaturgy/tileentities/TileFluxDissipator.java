@@ -7,25 +7,32 @@ import org.lwjgl.util.Color;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.aspects.IAspectContainer;
+import thaumcraft.api.aspects.IEssentiaContainerItem;
 import thaumcraft.common.config.ConfigBlocks;
+import thaumcraft.common.config.ConfigItems;
+import thaumcraft.common.items.ItemEssence;
 import net.ixios.advancedthaumaturgy.AdvThaum;
 import net.ixios.advancedthaumaturgy.misc.Vector3F;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.common.ForgeDirection;
 
-public class TileFluxDissipator extends TileMinilithBase implements IAspectContainer
+public class TileFluxDissipator extends TileMicrolithBase implements IAspectContainer
 {
 	private int tickcount = 0;
 	private AspectList aspects = new AspectList().add(Aspect.TAINT, 0);
 	
 	public TileFluxDissipator()
 	{
-		super(new Color(255, 0, 255, 255 / 3));
+		super(new Color(255, 0, 255));
 	}
 	
 	@Override
@@ -189,5 +196,50 @@ public class TileFluxDissipator extends TileMinilithBase implements IAspectConta
 		}
 		return success;
 	}
+
+	@Override
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX,
+	        float hitY, float hitZ)
+    {
+		ItemStack helditem = player.getHeldItem();
+	    TileEntity te = world.getBlockTileEntity(x,  y,  z);
+	    
+	    if (helditem == null || !(helditem.getItem() instanceof IEssentiaContainerItem))
+	    	return false;
+	 
+	    if (!(te instanceof TileFluxDissipator))
+	    	return false;
+	    
+	    TileFluxDissipator fd = (TileFluxDissipator)te;
+	 
+	    if (helditem.getItemDamage() == 0)
+	    {
+	         if (fd.doesContainerContainAmount(Aspect.TAINT, 8)) 
+	         {
+	            if (world.isRemote) 
+	            {
+	               player.swingItem();
+	               return false;
+	            }
+
+	            if (fd.takeFromContainer(Aspect.TAINT, 8))
+	            {
+	               --helditem.stackSize;
+	               ItemStack stack = new ItemStack(ConfigItems.itemEssence, 1, 1);
+	               ((ItemEssence)helditem.getItem()).setAspects(stack, (new AspectList()).add(Aspect.TAINT, 8));
+	               if (!player.inventory.addItemStackToInventory(stack)) 
+	               {
+	                  world.spawnEntityInWorld(new EntityItem(world, (double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), stack));
+	               }
+
+	               world.playSoundAtEntity(player, "liquid.swim", 0.25F, 1.0F);
+	               player.inventoryContainer.detectAndSendChanges();
+	               return true;
+	            }
+	         }
+	      }
+	    
+	    return false;
+    }
 	
 }

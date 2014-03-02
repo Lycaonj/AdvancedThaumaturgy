@@ -32,7 +32,7 @@ import cpw.mods.fml.common.Optional.Method;
 @Optional.InterfaceList({
 	@Optional.Interface(modid = "BuildCraft|Energy", iface = "IPipeConnection"), 
 	@Optional.Interface(modid = "BuildCraft|Energy", iface = "IPowerEmitter")})
-public class TileEssentiaEngine extends TileEntity implements IPowerEmitter, IPipeConnection
+public class TileEssentiaEngine extends TileEntity implements IPowerEmitter, IPipeConnection //, IEssentiaTransport
 {
 	//private final double costperRF = 1D / x;
 	//private final double costperEU = 1D / 4000D;
