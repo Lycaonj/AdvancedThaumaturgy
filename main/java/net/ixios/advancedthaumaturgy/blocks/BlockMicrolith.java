@@ -108,7 +108,8 @@ public class BlockMicrolith extends BlockContainer implements IWailaBlock
         
         ConfigResearch.recipes.put("MICROLITH", recipe);
         
-        ATResearchItem ri = new ATResearchItem("MINILITHBASE", "ADVTHAUM", new AspectList(), 0, 10, 0, new ItemStack(this, 1, 0));
+        ATResearchItem ri = new ATResearchItem("MINILITHBASE", "ADVTHAUM",
+        		new AspectList().add(Aspect.TAINT, 16).add(Aspect.ORDER, 8).add(Aspect.MAGIC, 8), 0, 10, 0, new ItemStack(this, 1, 0));
         
         ri.setTitle("at.research.microlith.title");
         ri.setInfo("at.research.microlith.desc");
