@@ -174,7 +174,7 @@ public class ItemArcaneCrystal extends Item
 	
 		 NBTTagInt tag = new NBTTagInt("upgrade", Upgrades.Recharge.getFlag());
 		 InfusionRecipe upgrade = ThaumcraftApi.addInfusionCraftingRecipe("UPGRADERECHARGE", tag, 4, 
-				 new AspectList().add(Aspect.MAGIC, 1), ItemMercurialWand.AnyWand, 
+				 new AspectList().add(Aspect.MAGIC, 8), ItemMercurialWand.AnyWand, 
 				 new ItemStack[] { new ItemStack(this, 1, 1) });
 		 ConfigResearch.recipes.put("WANDUPGRADEREHARGE", recipe);
 		 
@@ -206,7 +206,7 @@ public class ItemArcaneCrystal extends Item
 		
 		NBTTagInt tag = new NBTTagInt("upgrade", Upgrades.MultiplyDrain.getFlag());
 		InfusionRecipe upgrade = ThaumcraftApi.addInfusionCraftingRecipe("UPGRADEDRAIN", tag, 4, 
-				 new AspectList().add(Aspect.MAGIC, 1), ItemMercurialWand.AnyWand, 
+				 new AspectList().add(Aspect.MAGIC, 8), ItemMercurialWand.AnyWand, 
 				 new ItemStack[] { new ItemStack(this, 1, 3) });
 		 ConfigResearch.recipes.put("WANDUPGRADEDRAIN", recipe);
 		 
@@ -252,7 +252,7 @@ public class ItemArcaneCrystal extends Item
 		
 		 NBTTagInt tag = new NBTTagInt("upgrade", Upgrades.CompoundDrain.getFlag());
 		 InfusionRecipe upgrade = ThaumcraftApi.addInfusionCraftingRecipe("UPGRADECOMPOUND", tag, 4, 
-				 new AspectList().add(Aspect.MAGIC, 1), ItemMercurialWand.AnyWand, 
+				 new AspectList().add(Aspect.MAGIC, 8), ItemMercurialWand.AnyWand, 
 				 new ItemStack[] { new ItemStack(this, 1, 2) });
 		 
 		 ConfigResearch.recipes.put("WANDUPGRADECOMPOUND", recipe);
@@ -288,7 +288,7 @@ public class ItemArcaneCrystal extends Item
 		
 		 NBTTagInt tag = new NBTTagInt("upgrade", Upgrades.Discount.getFlag());
 		 InfusionRecipe upgrade = ThaumcraftApi.addInfusionCraftingRecipe("UPGRADEDISCOUNT", tag, 4, 
-				 new AspectList().add(Aspect.MAGIC, 1), ItemMercurialWand.AnyWand, 
+				 new AspectList().add(Aspect.MAGIC, 8), ItemMercurialWand.AnyWand, 
 				 new ItemStack[] { new ItemStack(this, 1, 4) });
 		 
 		 ConfigResearch.recipes.put("WANDUPGRADEDISCOUNT", recipe);
@@ -322,7 +322,7 @@ public class ItemArcaneCrystal extends Item
 	
 		 NBTTagInt tag = new NBTTagInt("upgrade", Upgrades.Stabilizer.getFlag());
 		 InfusionRecipe upgrade = ThaumcraftApi.addInfusionCraftingRecipe("UPGRADESTABILIZER", tag, 4, 
-				 new AspectList().add(Aspect.MAGIC, 1), ItemMercurialWand.AnyWand, 
+				 new AspectList().add(Aspect.MAGIC, 8), ItemMercurialWand.AnyWand, 
 				 new ItemStack[] { new ItemStack(this, 1, 5) });
 		 
 		 ConfigResearch.recipes.put("WANDUPGRADESTABILIZER", recipe);
@@ -355,7 +355,7 @@ public class ItemArcaneCrystal extends Item
 	
 		 NBTTagInt tag = new NBTTagInt("upgrade", Upgrades.Potent.getFlag());
 		 InfusionRecipe upgrade = ThaumcraftApi.addInfusionCraftingRecipe("UPGRADEPOTENCY", tag, 4, 
-				 new AspectList().add(Aspect.MAGIC, 1), ItemMercurialWand.AnyWand, 
+				 new AspectList().add(Aspect.MAGIC, 8), ItemMercurialWand.AnyWand, 
 				 new ItemStack[] { new ItemStack(this, 1, 6) });
 		 
 		 ConfigResearch.recipes.put("WANDUPGRADEPOTENCY", recipe);
