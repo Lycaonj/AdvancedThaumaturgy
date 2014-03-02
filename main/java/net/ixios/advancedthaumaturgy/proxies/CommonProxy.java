@@ -22,6 +22,7 @@ import thaumcraft.common.tiles.TileJarFillable;
 import thaumcraft.common.tiles.TilePedestal;
 import net.ixios.advancedthaumaturgy.AdvThaum;
 import net.ixios.advancedthaumaturgy.blocks.BlockEssentiaEngine;
+import net.ixios.advancedthaumaturgy.compat.energy.EnergyCompatBase;
 import net.ixios.advancedthaumaturgy.gui.ContainerNodeModifier;
 import net.ixios.advancedthaumaturgy.gui.GuiNodeModifier;
 import net.ixios.advancedthaumaturgy.misc.TickManager;
@@ -46,17 +47,11 @@ public class CommonProxy implements IGuiHandler, IPacketHandler
 
 	private TickManager tickmanager = null;
 	
-	public void preRegister() 
-	{ 
+	public void register()
+	{
 		tickmanager = new TickManager(); 
 		TickRegistry.registerTickHandler(tickmanager, Side.SERVER);
 		MinecraftForge.EVENT_BUS.register(tickmanager);
-	
-	}
-	
-	public void postRegister()
-	{
-		
 	}
 	
 	public void loadData()
