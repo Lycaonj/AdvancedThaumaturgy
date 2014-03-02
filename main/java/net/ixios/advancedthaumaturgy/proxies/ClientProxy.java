@@ -6,6 +6,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -23,6 +24,7 @@ import net.ixios.advancedthaumaturgy.blocks.BlockNodeModifier;
 import net.ixios.advancedthaumaturgy.blocks.BlockPlaceholder;
 import net.ixios.advancedthaumaturgy.blocks.BlockThaumicFertilizer;
 import net.ixios.advancedthaumaturgy.blocks.BlockThaumicVulcanizer;
+import net.ixios.advancedthaumaturgy.compat.energy.EnergyCompatBase;
 import net.ixios.advancedthaumaturgy.fx.ColorableSparkleFX;
 import net.ixios.advancedthaumaturgy.fx.CustomParticleFX;
 import net.ixios.advancedthaumaturgy.fx.EntityOrbiterFX;
@@ -67,12 +69,11 @@ public class ClientProxy extends CommonProxy
 {
 	
 	@Override
-	public void preRegister()
+	public void register()
 	{
+		super.register();
 		
-		super.preRegister();
-		
-        GenericRenderer renderer = new GenericRenderer(new ModelFertilizer());
+		GenericRenderer renderer = new GenericRenderer(new ModelFertilizer());
         MinecraftForgeClient.registerItemRenderer(BlockThaumicFertilizer.blockID, renderer);
         ClientRegistry.bindTileEntitySpecialRenderer(TileThaumicFertilizer.class, renderer);
 
@@ -93,6 +94,13 @@ public class ClientProxy extends CommonProxy
         MinecraftForgeClient.registerItemRenderer(BlockMicrolith.blockID, renderer);
         ClientRegistry.bindTileEntitySpecialRenderer(TileMicrolithBase.class, renderer);
         
+		if (EnergyCompatBase.isPresent())
+		{
+			renderer = new GenericRenderer(new ModelEngine());
+			MinecraftForgeClient.registerItemRenderer(BlockEssentiaEngine.blockID, renderer);
+			ClientRegistry.bindTileEntitySpecialRenderer(TileEssentiaEngine.class, renderer);	
+		}
+		
         TileEntitySpecialRenderer special = new BlockEtherealJarRenderer();
 
         if (AdvThaum.itemEtherealJar != null)
@@ -101,16 +109,11 @@ public class ClientProxy extends CommonProxy
         	ClientRegistry.bindTileEntitySpecialRenderer(TileEtherealJar.class, special);
         }
         
-        MinecraftForgeClient.registerItemRenderer(BlockCreativeNode.blockID, new ItemNodeRenderer());
-        
-	}
-	
-	@Override
-	public void postRegister()
-	{
-		if (AdvThaum.MercurialWand != null)
+    	if (AdvThaum.MercurialWand != null)
 			MinecraftForgeClient.registerItemRenderer(AdvThaum.MercurialWand.itemID, new ItemWandRenderer());
     
+        MinecraftForgeClient.registerItemRenderer(BlockCreativeNode.blockID, new ItemNodeRenderer());
+        
 	}
 	
 	@Override

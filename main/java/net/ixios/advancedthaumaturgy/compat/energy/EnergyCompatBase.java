@@ -12,31 +12,20 @@ import net.ixios.advancedthaumaturgy.tileentities.TileEssentiaEngine;
 import net.minecraft.block.material.Material;
 import net.minecraftforge.client.MinecraftForgeClient;
 
-public class EnergyCompatBase 
+public abstract class EnergyCompatBase 
 {
-	private boolean hasregistered = false;
+	protected static boolean ispresent = false;
 	
-	public void register()
+	public abstract void register();
+	
+	public static boolean isPresent()
 	{
-		AdvThaum.log("Energy mod not found, skipping integration.");
+		return ispresent;
 	}
 	
-	public void forceRegister(String modname)
+	public static void forceEnable()
 	{
-		int essentiaengineid = AdvThaum.config.getBlock("BlockIDs", "essentiaengine", 3436).getInt();
-    	
-    	if (!AdvThaum.config.get("Feature Control", "enable_engine", true).getBoolean(true))
-    		return;
-
-		AdvThaum.EssentiaEngine = new BlockEssentiaEngine(essentiaengineid, Material.rock);
-		AdvThaum.EssentiaEngine.register();
-
-		if (FMLCommonHandler.instance().getEffectiveSide() != Side.CLIENT)
-			return;
-		
-		GenericRenderer renderer = new GenericRenderer(new ModelEngine());
-		MinecraftForgeClient.registerItemRenderer(BlockEssentiaEngine.blockID, renderer);
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEssentiaEngine.class, renderer);	
+		ispresent = true;
 	}
 	
 }

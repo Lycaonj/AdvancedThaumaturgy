@@ -18,7 +18,6 @@ import net.ixios.advancedthaumaturgy.blocks.BlockPlaceholder;
 import net.ixios.advancedthaumaturgy.blocks.BlockThaumicFertilizer;
 import net.ixios.advancedthaumaturgy.blocks.BlockThaumicVulcanizer;
 import net.ixios.advancedthaumaturgy.compat.energy.EnergyCompatBase;
-//import net.ixios.advancedthaumaturgy.compat.energy.TECompatChecker;
 import net.ixios.advancedthaumaturgy.compat.energy.BCCompatChecker;
 import net.ixios.advancedthaumaturgy.items.ItemAeroSphere;
 import net.ixios.advancedthaumaturgy.items.ItemArcaneCrystal;
@@ -155,6 +154,7 @@ public class AdvThaum
 	     int nodemodifierid = config.getBlock("BlockIDs", "nodemodifier", 3433).getInt();
 	     int thaumicfertilizerid = config.getBlock("BlockIDs", "thaumicfertilizer", 3434).getInt();
 	     int creativenodeid = config.getBlock("BlockIDs", "creativenode", 3435).getInt();
+	     int essentiaengineid = AdvThaum.config.getBlock("BlockIDs", "essentiaengine", 3436).getInt();
 	     int vulcanizerid = config.getBlock("BlockIDs", "vulcanizer", 3437).getInt();
 	     int placeholderid = config.getBlock("BlockIDs", "placeholder", 3438).getInt();
 	     int etherealjarid = config.getBlock("BlockIDs", "etherealjar", 3439).getInt();
@@ -203,10 +203,19 @@ public class AdvThaum
 	    	 ArcaneCrystal = new ItemArcaneCrystal(wandcrystalid);	    
 	    	 EndstoneChunk = new ItemEndstoneChunk(endstonechunk);
 	     }
-	     
+	     	
+	     if (AdvThaum.config.get("Feature Control", "enable_engine", true).getBoolean(true))
+	    	 AdvThaum.EssentiaEngine = new BlockEssentiaEngine(essentiaengineid, Material.rock);
+		
 	     Placeholder = new BlockPlaceholder(placeholderid, Material.air);
-	     
-	     registerStuff();
+	  
+	     // these must be done before proxy.register
+		 new BCCompatChecker().register();
+	
+		 if (config.get("Feature Control", "force_enable_essentia_engine", false).getBoolean(false))
+			 EnergyCompatBase.forceEnable();
+	
+	     proxy.register();
 	  
 	     LanguageRegistry.instance().addStringLocalization("itemGroup.advthaum", "en_US", "Advanced Thaumaturgy");
 	     LanguageRegistry.instance().addStringLocalization("tc.research_category.ADVTHAUM", "en_US", "Advanced Thaumaturgy");
@@ -221,6 +230,9 @@ public class AdvThaum
 	
 	 private void registerStuff()
 	 {
+		if (EnergyCompatBase.isPresent())
+			AdvThaum.EssentiaEngine.register();
+			
 		 if (InfusedThaumium != null)
 			 InfusedThaumium.register();
 		 
@@ -253,6 +265,7 @@ public class AdvThaum
 
 		 if (AltarDeployer != null)
 			 AltarDeployer.register();
+		 
 	 }
 	 
 	 public static void log(String text)
@@ -273,9 +286,9 @@ public class AdvThaum
 		 ResearchCategories.registerCategory("ADVTHAUM",
 				 new ResourceLocation("thaumcraft", "textures/items/thaumonomiconcheat.png"),
 				 new ResourceLocation("thaumcraft", "textures/gui/gui_researchback.png"));
-		 
-		 proxy.preRegister();
-			 
+		 	 
+	     registerStuff();
+
 	    if (config.get("Feature Control", "enable_mercurial_core", true).getBoolean(true))
 	     {
 	    	int capacity = 500;
@@ -300,15 +313,6 @@ public class AdvThaum
 		 
 		 //ThaumicInkwell.register();
 		 //ThaumicVulcanizer.register();
-		 
-		 proxy.postRegister();
-		 
-		 // implement bc related blocks if the api is detected
-		 new BCCompatChecker().register();
-		 //new TECompatChecker().register();
-		 
-		 if (config.get("Feature Control", "force_enable_essentia_engine", false).getBoolean(false))
-			 new EnergyCompatBase().forceRegister("Force registration");
 		 
 		 // enable activating node in a jar by wanding the top wood slabs
 		 WandTriggerRegistry.registerWandBlockTrigger(Thaumcraft.proxy.wandManager, 4, Block.woodSingleSlab.blockID, -1);
