@@ -4,9 +4,12 @@ import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.crafting.InfusionRecipe;
+import thaumcraft.api.research.ResearchCategories;
+import thaumcraft.api.research.ResearchCategoryList;
 import thaumcraft.api.research.ResearchPage;
 import thaumcraft.common.config.ConfigBlocks;
 import thaumcraft.common.config.ConfigResearch;
+import thaumcraft.common.lib.research.ResearchManager;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -14,6 +17,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.ixios.advancedthaumaturgy.AdvThaum;
 import net.ixios.advancedthaumaturgy.items.ItemEngine;
 import net.ixios.advancedthaumaturgy.misc.ATResearchItem;
+import net.ixios.advancedthaumaturgy.misc.Utilities;
 import net.ixios.advancedthaumaturgy.tileentities.TileEssentiaEngine;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
@@ -60,24 +64,23 @@ public class BlockEssentiaEngine extends Block implements ITileEntityProvider
 	                new ItemStack[] { obsidian, cluster, obsidian, cluster, obsidian, cluster, obsidian, cluster });
 	        
 	        
-	        ConfigResearch.recipes.put("EssentiaEngine", recipe);
-	    
-	        // add research
-	         ATResearchItem ri = new ATResearchItem("ESSENTIAENGINE", "ARTIFICE",
-	                (new AspectList()).add(Aspect.STONE, 1).add(Aspect.FIRE, 1).add(Aspect.MAGIC, 1).add(Aspect.TREE, 1),
-	                -6, 0, 2,
-	                new ItemStack(this));
-	        ri.setTitle("at.research.essentiaengine.title");
-	        ri.setInfo("at.research.essentiaengine.desc");
-	        ri.setParents("INFERNALFURNACE");
-	        ri.setParentsHidden("INFUSION");
-	        ri.setPages(new ResearchPage("at.research.essentiaengine.pg1"),
-	                new ResearchPage(recipe));
-	        
-	        ri.setConcealed();
-	        	        
-	        ri.registerResearchItem();
-	        
+        ConfigResearch.recipes.put("EssentiaEngine", recipe);
+    
+        // add research
+         ATResearchItem ri = new ATResearchItem("ESSENTIAENGINE", "ARTIFICE",
+                (new AspectList()).add(Aspect.STONE, 1).add(Aspect.FIRE, 1).add(Aspect.MAGIC, 1).add(Aspect.TREE, 1),
+                -5, 1, 2,
+                new ItemStack(this));
+        ri.setTitle("at.research.essentiaengine.title");
+        ri.setInfo("at.research.essentiaengine.desc");
+        ri.setParents("INFERNALFURNACE");
+        ri.setParentsHidden("INFUSION");
+        ri.setPages(new ResearchPage("at.research.essentiaengine.pg1"), new ResearchPage(recipe));
+        
+        ri.setConcealed();
+        	        
+        ri.registerResearchItem();
+	
 	}
 
 	@Override
