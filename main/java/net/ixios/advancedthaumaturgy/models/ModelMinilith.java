@@ -1,6 +1,6 @@
 package net.ixios.advancedthaumaturgy.models;
 
-import org.lwjgl.util.Color;
+import java.awt.Color;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.ReadableColor;
 

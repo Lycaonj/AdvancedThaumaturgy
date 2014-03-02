@@ -6,7 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 
-import org.lwjgl.util.Color;
+import java.awt.Color;
 
 import thaumcraft.common.items.wands.ItemWandCasting;
 

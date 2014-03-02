@@ -1,8 +1,6 @@
 package net.ixios.advancedthaumaturgy.tileentities;
 
-
-
-import org.lwjgl.util.Color;
+import java.awt.Color;
 
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;

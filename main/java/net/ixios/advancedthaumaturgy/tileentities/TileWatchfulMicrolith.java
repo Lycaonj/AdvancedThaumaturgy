@@ -1,6 +1,6 @@
 package net.ixios.advancedthaumaturgy.tileentities;
 
-import org.lwjgl.util.Color;
+import java.awt.Color;
 
 import net.ixios.advancedthaumaturgy.AdvThaum;
 import net.minecraft.entity.player.EntityPlayer;
