@@ -19,7 +19,7 @@ public class ATResearchItem extends ResearchItem
 	@Override
 	public String getName() 
 	{
-		return StatCollector.translateToLocal(this.title);
+		return (category == "ADVTHAUM" ? "" : "[AT] ") + StatCollector.translateToLocal(this.title);
 	}
 
 	@Override
