@@ -90,10 +90,9 @@ public class ATServerCommand implements ICommand
 		}
 		else if (cmd.equals("test"))
 		{
-			for (String key : ConfigResearch.recipes.keySet())
-				if (key.startsWith("WAND_"))
-					player.addChatMessage(key);
-		        
+			ResearchItem ri = Utilities.findResearch("ESSENTIAENGINE");
+			if (ri != null)
+				player.addChatMessage(ri.displayColumn + ":" + ri.displayRow);
 		}
 		else if (cmd.equals("research"))
 		{
