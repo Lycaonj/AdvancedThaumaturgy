@@ -84,7 +84,7 @@ import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry.EntityRegistration;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid="AdvancedThaumaturgy", version="0.0.23", name="Advanced Thaumaturgy", 
+@Mod(modid="AdvancedThaumaturgy", version="0.0.24", name="Advanced Thaumaturgy", 
 	dependencies="required-after:Thaumcraft", acceptedMinecraftVersions="1.6.4")
 @NetworkMod(clientSideRequired=true, channels={"AdvThaum"}, packetHandler = CommonProxy.class)
 
@@ -206,7 +206,7 @@ public class AdvThaum
 	     
 	     Placeholder = new BlockPlaceholder(placeholderid, Material.air);
 	     
-	     //ThaumicInkwell = new ItemThaumInkwell(thaumicwellid);
+	     registerStuff();
 	  
 	     LanguageRegistry.instance().addStringLocalization("itemGroup.advthaum", "en_US", "Advanced Thaumaturgy");
 	     LanguageRegistry.instance().addStringLocalization("tc.research_category.ADVTHAUM", "en_US", "Advanced Thaumaturgy");
@@ -219,6 +219,42 @@ public class AdvThaum
 	    
      }
 	
+	 private void registerStuff()
+	 {
+		 if (InfusedThaumium != null)
+			 InfusedThaumium.register();
+		 
+		 if (NodeModifier != null)
+			 NodeModifier.register();
+		 
+		 if (ThaumicFertilizer != null)
+			 ThaumicFertilizer.register();
+		 
+		 if (CreativeNode != null)
+			 CreativeNode.register();
+		 
+		 if (EtherealJar != null && itemEtherealJar != null)
+			 EtherealJar.register();
+		 
+		 if (Microlith != null)
+			 Microlith.register();
+		  
+		 if (FocusVoidCage != null)
+			 FocusVoidCage.register();
+		 
+		 if (AeroSphere != null)
+			 AeroSphere.register();
+		 
+		 if (ArcaneCrystal != null)
+			 ArcaneCrystal.register();
+		 
+		 if (EndstoneChunk != null)
+			 EndstoneChunk.register();
+
+		 if (AltarDeployer != null)
+			 AltarDeployer.register();
+	 }
+	 
 	 public static void log(String text)
 	 {
 	     logger.info(FMLCommonHandler.instance().getEffectiveSide().toString() + " " + text);
@@ -261,39 +297,6 @@ public class AdvThaum
 		
 		 if (MercurialWand != null)
 			 MercurialWand.register();
-		 
-		 if (InfusedThaumium != null)
-			 InfusedThaumium.register();
-		 
-		 if (NodeModifier != null)
-			 NodeModifier.register();
-		 
-		 if (ThaumicFertilizer != null)
-			 ThaumicFertilizer.register();
-		 
-		 if (CreativeNode != null)
-			 CreativeNode.register();
-		 
-		 if (EtherealJar != null && itemEtherealJar != null)
-			 EtherealJar.register();
-		 
-		 if (Microlith != null)
-			 Microlith.register();
-		  
-		 if (FocusVoidCage != null)
-			 FocusVoidCage.register();
-		 
-		 if (AeroSphere != null)
-			 AeroSphere.register();
-		 
-		 if (ArcaneCrystal != null)
-			 ArcaneCrystal.register();
-		 
-		 if (EndstoneChunk != null)
-			 EndstoneChunk.register();
-
-		 if (AltarDeployer != null)
-			 AltarDeployer.register();
 		 
 		 //ThaumicInkwell.register();
 		 //ThaumicVulcanizer.register();
