@@ -99,7 +99,6 @@ public class Utilities
         return findEssentiaJar(world, aspect, src.xCoord, src.yCoord, src.zCoord, xrange, yrange, zrange);
     }
    
-
 	public static IWandFocus getEquippedFocus(ItemStack stack)
 	{
 		 if ((stack == null) || !(stack.getItem() instanceof ItemWandCasting))
@@ -134,29 +133,6 @@ public class Utilities
 	         players.get(t).addChatMessage(text);
 	     }
 	 }
-	 
-	 public static void shootFireInDirection(World world, Vec3 direction)
-	{
-		Vec3 dir = direction.normalize();
-	
-		if (!world.isRemote)
-			return;
-		
-        for(int q = 0; q < 3; q++)
-        {
-            FXScorch ef = new FXScorch(world, direction.xCoord, direction.yCoord, direction.zCoord, dir, 17);
-            ef.posX += direction.xCoord * 0.30000001192092896D;
-            ef.posY += direction.yCoord * 0.30000001192092896D;
-            ef.posZ += direction.zCoord * 0.30000001192092896D;
-            ef.prevPosX = ef.posX;
-            ef.prevPosY = ef.posY;
-            ef.prevPosZ = ef.posZ;
-            ef.posX += direction.xCoord * 0.30000001192092896D;
-            ef.posY += direction.yCoord * 0.30000001192092896D;
-            ef.posZ += direction.zCoord * 0.30000001192092896D;
-            FMLClientHandler.instance().getClient().effectRenderer.addEffect(ef);
-        }
-	}
 	 
 	 public static boolean removeResearch(EntityPlayer player, String research)
 	 {

@@ -5,12 +5,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 import thaumcraft.client.fx.FXEssentiaTrail;
+import thaumcraft.client.fx.FXScorch;
 import thaumcraft.client.fx.FXSparkle;
 import thaumcraft.client.renderers.item.ItemWandRenderer;
 import thaumcraft.common.Thaumcraft;
@@ -59,6 +61,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -257,4 +260,28 @@ public class ClientProxy extends CommonProxy
     	catch (IOException io) { }
     }
 
+    @Override
+    public void shootFireInDirection(World world, Vec3 direction)
+	{
+		Vec3 dir = direction.normalize();
+	
+		if (!world.isRemote)
+			return;
+		
+        for(int q = 0; q < 3; q++)
+        {
+            FXScorch ef = new FXScorch(world, direction.xCoord, direction.yCoord, direction.zCoord, dir, 17);
+            ef.posX += direction.xCoord * 0.30000001192092896D;
+            ef.posY += direction.yCoord * 0.30000001192092896D;
+            ef.posZ += direction.zCoord * 0.30000001192092896D;
+            ef.prevPosX = ef.posX;
+            ef.prevPosY = ef.posY;
+            ef.prevPosZ = ef.posZ;
+            ef.posX += direction.xCoord * 0.30000001192092896D;
+            ef.posY += direction.yCoord * 0.30000001192092896D;
+            ef.posZ += direction.zCoord * 0.30000001192092896D;
+            FMLClientHandler.instance().getClient().effectRenderer.addEffect(ef);
+        }
+	}
+    
 }

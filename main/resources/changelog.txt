@@ -1,3 +1,7 @@
+Build 25
+Moved [AT] tag to the right spot
+Fixed server crash related to EntityFX (damn you, classloader!)
+
 Build 24
 Fixed server crash regarding a NCDFE for lwjgl's Color class.
 Added an aspect price to the Node Modifer research to make it obtainable.
